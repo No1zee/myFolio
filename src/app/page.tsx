@@ -12,6 +12,7 @@ import Asteroid from "@/components/Asteroid";
 import StickyNav from "@/components/StickyNav";
 import MobileNav from "@/components/MobileNav";
 import TechStack from "@/components/TechStack";
+import CustomSolutions from "@/components/CustomSolutions";
 import { getServices, getProjects, getCertifications, getJournalEntries } from "./actions/portfolio";
 
 export const revalidate = 3600; // Revalidate every hour
@@ -42,6 +43,7 @@ export default async function Home() {
       <Certifications certs={certs} />
       <Resume />
       <TechStack />
+      <CustomSolutions />
       <Journal logs={logs} />
       <Footer />
     </main>
