@@ -13,7 +13,8 @@ import StickyNav from "@/components/StickyNav";
 import TechStack from "@/components/TechStack";
 import { getServices, getProjects, getCertifications, getJournalEntries } from "./actions/portfolio";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
+
 
 export default async function Home() {
   const services = await getServices();
