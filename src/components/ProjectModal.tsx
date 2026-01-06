@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 interface ProjectModalProps {
     project: any | null;
@@ -132,10 +133,10 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                                                 <ArrowTopRightOnSquareIcon className="w-4 h-4" />
                                             </a>
                                         )}
-                                        <a href="#contact" onClick={onClose} className="flex items-center gap-2 bg-brand-primary text-white px-6 py-3 rounded-full font-bold hover:bg-blue-600 transition-colors">
-                                            <span>Start Similar Project</span>
+                                        <Link href={`/projects/${project.id}`} onClick={onClose} className="flex items-center gap-2 bg-brand-primary text-white px-6 py-3 rounded-full font-bold hover:bg-blue-600 transition-colors">
+                                            <span>Read Case Study</span>
                                             <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

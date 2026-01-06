@@ -10,6 +10,7 @@ export type Project = {
     tags: string;
     category: string;
     imageUrl: string | null;
+    content: string | null;
     order: number;
 }
 
@@ -20,6 +21,7 @@ export default function ProjectManager({ initialProjects }: { initialProjects: P
         description: "",
         tags: "",
         category: "Achievement",
+        content: "",
         imageUrl: "bg-blue" // Using for Color
     });
 
@@ -30,6 +32,7 @@ export default function ProjectManager({ initialProjects }: { initialProjects: P
             description: proj.description,
             tags: proj.tags, // CSV
             category: proj.category,
+            content: proj.content || "",
             imageUrl: proj.imageUrl || "bg-blue"
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -37,7 +40,7 @@ export default function ProjectManager({ initialProjects }: { initialProjects: P
 
     const handleCancelEdit = () => {
         setEditingId(null);
-        setFormData({ title: "", description: "", tags: "", category: "Achievement", imageUrl: "bg-blue" });
+        setFormData({ title: "", description: "", tags: "", category: "Achievement", content: "", imageUrl: "bg-blue" });
     };
 
     return (
@@ -117,6 +120,17 @@ export default function ProjectManager({ initialProjects }: { initialProjects: P
                             required
                             rows={3}
                             className="mt-1 w-full px-4 py-2 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Case Study Content (Markdown)</label>
+                        <textarea
+                            name="content"
+                            value={formData.content}
+                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                            rows={10}
+                            placeholder="# The Challenge... \n\n# The Solution..."
+                            className="mt-1 w-full px-4 py-2 border rounded-lg font-mono text-sm"
                         />
                     </div>
                     <button type="submit" className={`text-white px-6 py-2 rounded-lg font-medium transition-colors ${editingId ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}>

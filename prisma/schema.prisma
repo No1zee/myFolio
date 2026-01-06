@@ -44,6 +44,7 @@ model Project {
   id          String   @id @default(uuid())
   title       String   @unique
   description String
+  content     String?  // Markdown content for case study
   imageUrl    String?
   demoUrl     String?
   repoUrl     String?

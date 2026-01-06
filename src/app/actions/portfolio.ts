@@ -161,9 +161,10 @@ export async function createProject(data: FormData) {
     const tags = data.get("tags") as string;
     const category = data.get("category") as string;
     const imageUrl = data.get("imageUrl") as string;
+    const content = data.get("content") as string;
 
     await prisma.project.create({
-        data: { title, description, tags, category, imageUrl }
+        data: { title, description, tags, category, imageUrl, content }
     });
     revalidatePath("/admin");
     revalidatePath("/");
@@ -175,10 +176,11 @@ export async function updateProject(id: string, data: FormData) {
     const tags = data.get("tags") as string;
     const category = data.get("category") as string;
     const imageUrl = data.get("imageUrl") as string;
+    const content = data.get("content") as string;
 
     await prisma.project.update({
         where: { id },
-        data: { title, description, tags, category, imageUrl }
+        data: { title, description, tags, category, imageUrl, content }
     });
     revalidatePath("/admin");
     revalidatePath("/");
