@@ -16,6 +16,7 @@ type CertData = {
     color: string;
     category: string;
     tech: string | null;
+    order: number;
 }
 
 import {

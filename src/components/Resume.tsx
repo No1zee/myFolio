@@ -301,7 +301,7 @@ const Resume = () => {
                                     <div className="bg-brand-surface p-8 rounded-3xl text-white border border-gray-800 shadow-2xl">
                                         <h3 className="font-bold text-2xl mb-6 text-brand-heading">Verified Expertise</h3>
                                         <ul className="space-y-4 mb-8">
-                                            {certifications.filter(c => c.category === 'Core').map((cert, index) => (
+                                            {certifications.filter(c => c.category !== 'Experimental').map((cert, index) => (
                                                 <li key={index} className="flex items-start gap-3 group bg-brand-card-light rounded-xl p-3 shadow-md hover:scale-[1.02] transition-transform">
                                                     <span className="mt-1 flex-shrink-0 w-8 h-8 bg-brand-success/10 text-brand-success rounded-full flex items-center justify-center border border-brand-success/20">
                                                         <ShieldCheckIcon className="w-5 h-5 stroke-2" />
