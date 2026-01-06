@@ -1,6 +1,8 @@
 
 import ResumeImporter from '@/components/admin/ResumeImporter';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminDashboard() {
     return (
         <div className="space-y-8">

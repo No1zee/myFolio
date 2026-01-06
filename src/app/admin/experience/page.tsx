@@ -2,6 +2,8 @@
 import { getExperiences } from "@/app/actions/portfolio";
 import ExperienceManager from "./ExperienceManager";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminExperiencePage() {
     const experiences = await getExperiences();
 
