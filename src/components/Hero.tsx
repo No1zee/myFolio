@@ -92,7 +92,7 @@ const Hero = () => {
                         whileTap={{ scale: 0.95 }}
                         className="gravity-repulse bg-brand-primary text-white px-10 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-xl hover:bg-blue-600 min-w-[200px]"
                     >
-                        Book Consultation
+                        Contact Me
                     </motion.a>
                     <motion.a
                         href="#projects"
