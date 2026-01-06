@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Hardcode key as fallback if env fail
-const apiKey = process.env.GEMINI_API_KEY || "AIzaSyCQw7ztsd21BUZMdaJElAhne23pZSpjYZc";
+// Hardcode removed for security. STRICTLY use env vars.
+const apiKey = process.env.GEMINI_API_KEY || "";
+if (!apiKey) console.error("FATAL: GEMINI_API_KEY is not set.");
 const genAI = new GoogleGenerativeAI(apiKey);
 
 console.log(`API Key Configured: ${apiKey ? "YES (Length: " + apiKey.length + ")" : "NO"}`);
