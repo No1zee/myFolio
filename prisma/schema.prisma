@@ -102,6 +102,7 @@ model JournalEntry {
   id        String   @id @default(uuid())
   title     String   @unique
   content   String
+  imageUrl  String?  // Cover image URL
   category  String
   tags      String   // JSON string of tags
   stardate  String

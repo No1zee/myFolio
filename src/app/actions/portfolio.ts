@@ -240,10 +240,11 @@ export async function createJournalEntry(data: FormData) {
     const content = data.get("content") as string;
     const category = data.get("category") as string;
     const stardate = data.get("stardate") as string;
+    const imageUrl = data.get("imageUrl") as string;
     const tags = data.get("tags") as string; // JSON
 
     await prisma.journalEntry.create({
-        data: { title, content, category, stardate, tags }
+        data: { title, content, category, stardate, imageUrl, tags }
     });
     revalidatePath("/admin");
     revalidatePath("/");
@@ -254,11 +255,12 @@ export async function updateJournalEntry(id: string, data: FormData) {
     const content = data.get("content") as string;
     const category = data.get("category") as string;
     const stardate = data.get("stardate") as string;
+    const imageUrl = data.get("imageUrl") as string;
     const tags = data.get("tags") as string;
 
     await prisma.journalEntry.update({
         where: { id },
-        data: { title, content, category, stardate, tags }
+        data: { title, content, category, stardate, imageUrl, tags }
     });
     revalidatePath("/admin");
     revalidatePath("/");
