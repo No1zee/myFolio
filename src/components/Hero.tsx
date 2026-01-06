@@ -51,11 +51,7 @@ const Hero = () => {
                 className="flex-1 text-center lg:text-left z-10"
             >
 
-                <div className="inline-block animate-fade-in">
-                    <span className="py-1 px-4 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-bold mb-6 border border-brand-primary/20 tracking-widest">
-                        IT INFRASTRUCTURE EXPERT
-                    </span>
-                </div>
+                {/* REMOVED TAG: IT INFRASTRUCTURE EXPERT */}
 
                 <h1 className="gravity-repulse inline-block text-4xl md:text-7xl font-bold mb-6 tracking-tight text-brand-body-light leading-[1.1] animate-fade-in-up">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-400">
@@ -63,31 +59,47 @@ const Hero = () => {
                     </span>
                 </h1>
 
-                <p className="gravity-repulse inline-block text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-6 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <p className="gravity-repulse inline-block text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-8 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     {desc}
                 </p>
 
-
+                {/* Outcome Bullets */}
+                <motion.ul
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="space-y-3 mb-10 text-gray-300 font-mono text-sm sm:text-base animate-fade-in-up"
+                    style={{ animationDelay: '0.4s' }}
+                >
+                    <li className="flex items-center gap-3">
+                        <span className="text-brand-success">✔</span> 30% network downtime reduction
+                    </li>
+                    <li className="flex items-center gap-3">
+                        <span className="text-brand-success">✔</span> Org-wide IT policy revamp & audit
+                    </li>
+                    <li className="flex items-center gap-3">
+                        <span className="text-brand-success">✔</span> Certified: Azure, Google Cloud, Cybersecurity
+                    </li>
+                </motion.ul>
 
                 <motion.div
                     variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                    className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                    className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center"
                 >
                     <motion.a
                         href="#contact"
                         whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(29 78 216 / 0.4)" }}
                         whileTap={{ scale: 0.95 }}
-                        className="gravity-repulse bg-brand-primary text-white px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:bg-blue-600"
+                        className="gravity-repulse bg-brand-primary text-white px-10 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-xl hover:bg-blue-600 min-w-[200px]"
                     >
                         Book Consultation
                     </motion.a>
                     <motion.a
                         href="#projects"
-                        whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(255 255 255 / 0.1)" }}
-                        whileTap={{ scale: 0.95 }}
-                        className="gravity-repulse bg-white/5 backdrop-blur-sm text-gray-200 border border-white/10 px-8 py-4 rounded-full font-bold transition-all hover:bg-white/10 hover:text-white"
+                        whileHover={{ x: 5 }}
+                        className="gravity-repulse text-gray-400 hover:text-white font-medium transition-colors border-b border-transparent hover:border-brand-primary pb-0.5"
                     >
-                        View Case Studies
+                        View Case Studies →
                     </motion.a>
                 </motion.div>
             </motion.div>
