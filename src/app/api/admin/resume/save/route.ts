@@ -33,7 +33,9 @@ export async function POST(req: NextRequest) {
                             startDate: new Date(exp.startDate || new Date()), // Fallback
                             endDate: exp.endDate ? new Date(exp.endDate) : null,
                             isCurrent: !!exp.isCurrent,
-                            description: exp.description || '',
+                            description: Array.isArray(exp.description)
+                                ? exp.description.map((d: string) => `- ${d}`).join('\n')
+                                : (exp.description || ''),
                             order: order++
                         }
                     });

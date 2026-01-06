@@ -140,49 +140,122 @@ const ResumeImporter = () => {
                         key="review"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="space-y-6"
+                        className="space-y-8"
                     >
-                        <div className="flex justify-between items-center bg-gray-800 p-4 rounded-xl">
-                            <span className="text-green-400 flex items-center gap-2">
-                                <CheckCircleIcon className="w-5 h-5" /> Analysis Complete
+                        <div className="flex justify-between items-center bg-gray-800 p-4 rounded-xl border border-gray-700">
+                            <span className="text-green-400 flex items-center gap-2 font-bold">
+                                <CheckCircleIcon className="w-6 h-6" /> Analysis Complete
                             </span>
-                            <button onClick={() => setParsedData(null)} className="text-gray-400 hover:text-white">Cancel</button>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-6">
-                            {/* Summary */}
-                            <div className="md:col-span-2 bg-gray-900/50 p-6 rounded-2xl border border-gray-800">
-                                <h3 className="text-brand-primary font-bold mb-2">New Bio</h3>
-                                <p className="text-gray-300 italic">"{parsedData.bio}"</p>
-                            </div>
-
-                            {/* Stats */}
-                            <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700">
-                                <h4 className="text-gray-400 text-xs uppercase uppercase mb-1">Experience Items</h4>
-                                <div className="text-3xl font-bold text-white">{parsedData.experience?.length || 0}</div>
-                            </div>
-                            <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700">
-                                <h4 className="text-gray-400 text-xs uppercase uppercase mb-1">Skills Found</h4>
-                                <div className="text-3xl font-bold text-white">
-                                    {parsedData.skills?.reduce((acc: number, cat: any) => acc + cat.items.length, 0) || 0}
-                                </div>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setParsedData(null)}
+                                    className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                                >
+                                    Discard
+                                </button>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={handleSave}
+                                    disabled={saveStatus === 'saving'}
+                                    className={`px-6 py-2 rounded-lg font-bold flex items-center gap-2 ${saveStatus === 'success' ? 'bg-green-500' : 'bg-brand-primary'
+                                        } text-white shadow-lg shadow-brand-primary/25`}
+                                >
+                                    {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : 'Confirm & Save'}
+                                </motion.button>
                             </div>
                         </div>
 
-                        <div className="flex justify-end pt-6">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleSave}
-                                disabled={saveStatus === 'saving'}
-                                className={`px-8 py-4 rounded-full font-bold flex items-center gap-2 ${saveStatus === 'success' ? 'bg-green-500' : 'bg-brand-primary'
-                                    } text-white`}
-                            >
-                                {saveStatus === 'saving' ? 'Committing to Database...' : saveStatus === 'success' ? 'Database Updated!' : 'Confirm & Updates Portfolio'}
-                            </motion.button>
-                        </div>
-                        {saveStatus === 'error' && <p className="text-red-400 text-right mt-2">Update failed. Check console.</p>}
+                        <div className="space-y-6">
+                            {/* Bio Editor */}
+                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
+                                <h3 className="text-brand-primary font-bold mb-4 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-brand-primary rounded-full"></span>
+                                    Professional Summary
+                                </h3>
+                                <textarea
+                                    value={parsedData.bio || ''}
+                                    onChange={(e) => setParsedData({ ...parsedData, bio: e.target.value })}
+                                    className="w-full bg-black/50 border border-gray-700 rounded-xl p-4 text-gray-300 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none min-h-[100px]"
+                                    placeholder="Enter professional bio..."
+                                />
+                            </div>
 
+                            {/* Experience Editor */}
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-bold text-white pl-2">Experience</h3>
+                                {parsedData.experience?.map((exp: any, index: number) => (
+                                    <div key={index} className="bg-gray-900 border border-gray-800 p-6 rounded-2xl relative group hover:border-gray-700 transition-colors">
+                                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Role</label>
+                                                <input
+                                                    type="text"
+                                                    value={exp.role || ''}
+                                                    onChange={(e) => {
+                                                        const newExp = [...(parsedData.experience || [])];
+                                                        newExp[index] = { ...newExp[index], role: e.target.value };
+                                                        setParsedData({ ...parsedData, experience: newExp });
+                                                    }}
+                                                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-brand-primary outline-none"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Company</label>
+                                                <input
+                                                    type="text"
+                                                    value={exp.company || ''}
+                                                    onChange={(e) => {
+                                                        const newExp = [...(parsedData.experience || [])];
+                                                        newExp[index] = { ...newExp[index], company: e.target.value };
+                                                        setParsedData({ ...parsedData, experience: newExp });
+                                                    }}
+                                                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-brand-primary outline-none"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Description (Markdown)</label>
+                                            <textarea
+                                                value={Array.isArray(exp.description) ? exp.description.map((d: string) => `- ${d}`).join('\n') : (exp.description || '')}
+                                                onChange={(e) => {
+                                                    const newExp = [...(parsedData.experience || [])];
+                                                    newExp[index] = { ...newExp[index], description: e.target.value };
+                                                    setParsedData({ ...parsedData, experience: newExp });
+                                                }}
+                                                className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-gray-300 focus:border-brand-primary outline-none min-h-[120px] font-mono text-sm"
+                                            />
+                                        </div>
+
+                                        <button
+                                            onClick={() => {
+                                                const newExp = parsedData.experience.filter((_, i) => i !== index);
+                                                setParsedData({ ...parsedData, experience: newExp });
+                                            }}
+                                            className="absolute top-4 right-4 text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <XCircleIcon className="w-6 h-6" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => setParsedData({
+                                        ...parsedData,
+                                        experience: [{ role: 'New Role', company: 'Company', description: '', startDate: new Date().toISOString() }, ...parsedData.experience]
+                                    })}
+                                    className="w-full py-3 border-2 border-dashed border-gray-800 rounded-xl text-gray-500 hover:border-brand-primary/50 hover:text-brand-primary transition-colors font-bold"
+                                >
+                                    + Add Role
+                                </button>
+                            </div>
+                        </div>
+
+                        {saveStatus === 'error' && (
+                            <div className="bg-red-500/10 border border-red-500/50 text-red-200 p-4 rounded-xl text-center">
+                                Something went wrong saving the resume. Please check the console.
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
