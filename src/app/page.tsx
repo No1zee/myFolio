@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import Asteroid from "@/components/Asteroid";
 import StickyNav from "@/components/StickyNav";
+import MobileNav from "@/components/MobileNav";
 import TechStack from "@/components/TechStack";
 import { getServices, getProjects, getCertifications, getJournalEntries } from "./actions/portfolio";
 
@@ -31,6 +32,7 @@ export default async function Home() {
       <ParticlesBackground />
       <Asteroid />
       <StickyNav />
+      <MobileNav />
       <DiagnosticsOverlay />
       <MissionHUD />
 
