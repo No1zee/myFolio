@@ -115,7 +115,7 @@ const Hero = () => {
                     {/* Internal Display */}
                     <div className="text-center z-10 relative">
                         <motion.div
-                            className="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-6 rounded-full overflow-hidden border-4 shadow-[0_0_30px_rgba(59,130,246,0.6)] cursor-pointer z-50"
+                            className="gravity-repulse relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-6 rounded-full overflow-hidden border-4 shadow-[0_0_30px_rgba(59,130,246,0.6)] cursor-pointer z-50"
                             style={{ borderColor: "rgba(59, 130, 246, 0.5)" }}
                             whileHover={{ scale: 1.05, borderColor: "rgba(59, 130, 246, 0.8)" }}
                             whileTap={{ scale: 0.95 }}
