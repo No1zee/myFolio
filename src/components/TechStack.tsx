@@ -80,10 +80,7 @@ const TechStack = () => {
                     viewport={{ once: true }}
                     className="mb-16 text-center"
                 >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-primary/10 border border-brand-primary/20 rounded-full text-brand-primary text-xs font-bold uppercase tracking-wider mb-4">
-                        <CpuChipIcon className="w-4 h-4" />
-                        System Architecture
-                    </div>
+                    {/* REMOVED TAG: System Architecture */}
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                         I Built This With <span className="text-brand-primary">Next-Gen Tech</span>
                     </h2>

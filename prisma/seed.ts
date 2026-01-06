@@ -180,40 +180,59 @@ async function main() {
     const projects = [
         {
             title: "Global Logistics Cloud Migration",
-            description: "**Reduced downtime by 40%**\nLed the end-to-end migration of mission-critical logistics systems to a hybrid Azure environment. Implemented redundant connectivity and automated failover, saving the company $50k/year in downtime costs.",
+            description: "**Environment:** 50+ Servers, 12 Custom Apps\n**Role:** Lead Architect\n**Result:** Migrated legacy logistics systems to Hybrid Azure. Implemented redundant connectivity (ExpressRoute + VPN) and auto-failover, resulting in **30% reduction in downtime** and zero data loss during regional outages.",
             tags: "Azure, Hybrid Cloud, Migration",
             imageUrl: "from-blue-500 to-cyan-400",
             category: "Infrastructure"
         },
         {
             title: "Zero Trust Security Framework",
-            description: "**ISO 27001 Readiness**\nDesigned and rolled out a comprehensive Zero Trust architecture. Secured 500+ endpoints and strictly defined access controls, successfully clearing the path for ISO 27001 certification.",
+            description: "**Scope:** 500+ Endpoints, 200 Users\n**Role:** Security Lead\n**Result:** Deployed comprehensive Zero Trust guidelines. Passed ISO 27001 audit with **zero major non-conformities**. Successfully thwarted 3 ransomware attempts via new EDR protocols.",
             tags: "Security, Compliance, Zero Trust",
             imageUrl: "from-purple-500 to-pink-500",
             category: "Security"
         },
         {
             title: "Enterprise Network Optimization",
-            description: "**99.9% Uptime Achieved**\nOverhauled the network infrastructure for Sybyl's regional branches. Deployed SD-WAN and optimized routing protocols to ensure seamless connectivity for high-volume transaction processing.",
+            description: "**Scale:** 4 Regional Sites, SD-WAN\n**Role:** Ops Manager\n**Result:** Overhauled network for Sybyl's branches. Optimized routing for SAP/VoIP traffic, achieving **99.99% network availability** and reducing inter-branch latency by 40ms.",
             tags: "Networking, SD-WAN, Cisco",
             imageUrl: "from-orange-400 to-red-500",
             category: "Network"
         },
         {
             title: "Virtualization & Automation",
-            description: "**60% Hardware Footprint Reduction**\nVirtualized physical server estate using VMware vSphere. Developed bespoke PowerShell automation for user provisioning and system maintenance, saving 200+ engineering hours annually.",
+            description: "**Stack:** VMware vSphere, PowerShell\n**Result:** Virtualized 60% of physical estate. Automated user provisioning saves **20+ hours/week**. Reduced server energy footprint by ~45%.",
             tags: "VMware, Automation, PowerShell",
             imageUrl: "from-green-400 to-emerald-500",
             category: "Systems"
         },
         {
             title: "Real Time Capital Pawn System",
-            description: "A comprehensive ERP system for the pawn industry digitizing loan origination, inventory management, and public auctions. Features role-based access for customers/employees and real-time bidding engines.",
+            description: "**Stack:** Next.js 14, Prisma, Postgres\n**Result:** Full-stack ERP for the pawn industry. Digitized loan origination and public auctions. Handles **real-time bidding** with sub-second latency via Vercel Edge functions.",
             category: "FinTech Platform",
             imageUrl: "from-emerald-600 to-green-500",
-            tags: "Next.js, TypeScript, Prisma, Postgres, Tailwind",
+            tags: "Next.js, TypeScript, PostgreSQL",
             demoUrl: "https://real-time-capital.vercel.app",
             order: 1
+        },
+        // NEW COMPACT CARDS
+        {
+            title: "Microsoft 365 Hardening",
+            description: "**Result:** Secured tenants for 150-seat SME. Enforced MFA, conditional access policies, and Intune device management.",
+            category: "Security",
+            imageUrl: "from-blue-600 to-indigo-600",
+            tags: "M365, Intune, Security",
+            demoUrl: "",
+            order: 2
+        },
+        {
+            title: "VMware Consolidation",
+            description: "**Result:** Consolidating 3 legacy clusters into a unified high-availability HCI cluster. Reduced licensing costs by 20%.",
+            category: "Infrastructure",
+            imageUrl: "from-gray-600 to-gray-500",
+            tags: "VMware, HCI, Storage",
+            demoUrl: "",
+            order: 3
         }
     ];
 
