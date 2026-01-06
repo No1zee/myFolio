@@ -4,7 +4,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 // --- CONFIGURATION ---
-const ASTEROID_COUNT = 20;
+const ASTEROID_COUNT = 12; // Reduced for performance
+const FPS_LIMIT = 30;
+const FRAME_INTERVAL = 1000 / FPS_LIMIT;
 
 interface AsteroidEntity {
     id: number;
@@ -86,8 +88,17 @@ const Asteroids = () => {
 
     // --- PHYSICS LOOP ---
     useEffect(() => {
-        const update = () => {
+        let lastTime = 0;
+        const update = (time: number) => {
             if (!containerRef.current) return;
+
+            const deltaTime = time - lastTime;
+            if (deltaTime < FRAME_INTERVAL) {
+                animationRef.current = requestAnimationFrame(update);
+                return;
+            }
+            lastTime = time - (deltaTime % FRAME_INTERVAL);
+
             const { innerWidth, innerHeight } = window;
 
             setAsteroids(prev => {

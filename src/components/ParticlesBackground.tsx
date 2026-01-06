@@ -34,7 +34,7 @@ const ParticlesBackground = () => {
                     value: "transparent", // Use page background
                 },
             },
-            fpsLimit: 120,
+            fpsLimit: 60,
             interactivity: {
                 events: {
                     onClick: {
