@@ -149,7 +149,7 @@ async function main() {
     const projects = [
         {
             title: "Critical Infrastructure Overhaul",
-            description: "**Context:** Aviation Ground Services (Harare)\n**Role:** Systems Support Officer\n**Impact:** Led a complete network infrastructure overhaul, achieving a **30% reduction in downtime**. Implemented a Disaster Recovery Plan that reduced potential data loss risk by 40% using Sophos and Dynamics NAV.",
+            description: "**Scope:** High-Availability Enterprise Network\n**Impact:** Led a complete network infrastructure overhaul, achieving a **30% reduction in downtime**. Implemented a Disaster Recovery Plan that reduced potential data loss risk by 40% using Sophos and Dynamics NAV.",
             tags: "Infrastructure, Security, DR Plans",
             imageUrl: "from-blue-600 to-cyan-500",
             category: "Infrastructure",
@@ -157,16 +157,16 @@ async function main() {
         },
         {
             title: "Real-Time Pawn Auction Platform",
-            description: "**Context:** Antigravity Project\n**Stack:** Next.js 14, Prisma, Postgres, Vercel Edge\n**Impact:** Full-stack ERP for the pawn industry digitizing loan origination. Handles **real-time bidding** with sub-second latency, showcasing high-performance web architecture.",
+            description: "**Stack:** Next.js 14, Prisma, Postgres, Vercel Edge\n**Impact:** Full-stack ERP digitizing loan origination and public auctions. Handles **real-time bidding** with sub-second latency, showcasing high-performance web architecture.",
             tags: "Next.js, FinTech, Real-time",
             imageUrl: "from-emerald-600 to-green-500",
             category: "Web Development",
-            demoUrl: "https://real-time-capital.vercel.app", // Keeping if valid, or remove if not
+            demoUrl: "https://real-time-capital.vercel.app",
             order: 2
         },
         {
             title: "AI Social Media Agent",
-            description: "**Context:** Antigravity Project\n**Stack:** n8n, Gemini Pro, Agentic Workflows\n**Impact:** Designed an autonomous agent capable of observing trends, planning campaigns, and generating content. Demonstrates advanced **LLM orchestration** and automation capabilities.",
+            description: "**Stack:** n8n, LLM Orchestration, Agentic Workflows\n**Impact:** Designed an autonomous agent capable of observing trends, planning campaigns, and generating content. Demonstrates advanced capabilities in automating complex social media workflows.",
             tags: "AI, Automation, LLMs",
             imageUrl: "from-purple-600 to-pink-500",
             category: "AI & Automation",
@@ -174,7 +174,7 @@ async function main() {
         },
         {
             title: "Financial Systems Optimization",
-            description: "**Context:** FinSys Zimbabwe / Vernomas\n**Role:** Technical Consultant\n**Impact:** Conducted comprehensive hardware/software analysis to optimize system performance. Aligned technical solutions with organizational goals for multiple enterprise clients.",
+            description: "**Scope:** Multi-Client Consultancy\n**Impact:** Conducted comprehensive hardware/software analysis to optimize system performance. Aligned technical solutions with organizational goals for multiple enterprise clients.",
             tags: "Consultancy, Optimization, Analysis",
             imageUrl: "from-orange-500 to-red-500",
             category: "Consultancy",
