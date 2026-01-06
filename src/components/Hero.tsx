@@ -51,34 +51,21 @@ const Hero = () => {
                 className="flex-1 text-center lg:text-left z-10"
             >
 
-                <motion.div
-                    variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                    className="inline-block"
-                >
+                <div className="inline-block animate-fade-in">
                     <span className="py-1 px-4 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-bold mb-6 border border-brand-primary/20 tracking-widest">
                         IT INFRASTRUCTURE EXPERT
                     </span>
-                </motion.div>
+                </div>
 
-                <motion.h1
-                    layout
-                    variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-                    className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-brand-body-light leading-[1.1]"
-                >
-
+                <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-brand-body-light leading-[1.1] animate-fade-in-up">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-400">
                         {title}
                     </span>
-                </motion.h1>
+                </h1>
 
-                <motion.p
-                    layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-6 max-w-2xl"
-                >
+                <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-6 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     {desc}
-                </motion.p>
+                </p>
 
 
 
