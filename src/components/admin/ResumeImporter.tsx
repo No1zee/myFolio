@@ -9,6 +9,8 @@ interface ExtractedData {
     experience: any[];
     skills: any[];
     certifications: any[];
+    services: any[];
+    projects: any[];
 }
 
 const ResumeImporter = () => {
@@ -119,6 +121,14 @@ const ResumeImporter = () => {
             if (newExp[index]) {
                 newExp[index] = { ...newExp[index], [field]: newValue };
                 setParsedData({ ...parsedData, experience: newExp });
+            }
+        } else if (fieldId.startsWith('proj-')) {
+            const [_, indexStr, field] = fieldId.split('-');
+            const index = parseInt(indexStr);
+            const newProj = [...(parsedData.projects || [])];
+            if (newProj[index]) {
+                newProj[index] = { ...newProj[index], [field]: newValue };
+                setParsedData({ ...parsedData, projects: newProj });
             }
         }
         setSuggestion(null);
@@ -405,6 +415,105 @@ const ResumeImporter = () => {
                                     + Add Role
                                 </button>
                             </div>
+
+                            {/* Services Editor */}
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-bold text-white pl-2">Capabilities (Services)</h3>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {parsedData.services?.map((svc: any, index: number) => (
+                                        <div key={index} className="bg-gray-900 border border-gray-800 p-4 rounded-xl relative group hover:border-brand-primary/50 transition-colors">
+                                            <input
+                                                type="text"
+                                                value={svc.title || ''}
+                                                onChange={(e) => {
+                                                    const newSvc = [...(parsedData.services || [])];
+                                                    newSvc[index] = { ...newSvc[index], title: e.target.value };
+                                                    setParsedData({ ...parsedData, services: newSvc });
+                                                }}
+                                                className="w-full bg-transparent font-bold text-white mb-2 border-b border-transparent focus:border-brand-primary outline-none"
+                                                placeholder="Service Title"
+                                            />
+                                            <textarea
+                                                value={svc.description || ''}
+                                                onChange={(e) => {
+                                                    const newSvc = [...(parsedData.services || [])];
+                                                    newSvc[index] = { ...newSvc[index], description: e.target.value };
+                                                    setParsedData({ ...parsedData, services: newSvc });
+                                                }}
+                                                className="w-full bg-black/30 rounded p-2 text-sm text-gray-400 min-h-[60px] outline-none focus:ring-1 focus:ring-brand-primary"
+                                                placeholder="Description..."
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    const newSvc = parsedData.services.filter((_, i) => i !== index);
+                                                    setParsedData({ ...parsedData, services: newSvc });
+                                                }}
+                                                className="absolute top-2 right-2 text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <XCircleIcon className="w-5 h-5" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Projects Editor */}
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-bold text-white pl-2">Achievements (Projects)</h3>
+                                {parsedData.projects?.map((proj: any, index: number) => (
+                                    <div key={index} className="bg-gray-900 border border-gray-800 p-6 rounded-2xl relative group hover:border-gray-700 transition-colors">
+                                        <div className="flex justify-between mb-2">
+                                            <input
+                                                type="text"
+                                                value={proj.title || ''}
+                                                onChange={(e) => {
+                                                    const newProj = [...(parsedData.projects || [])];
+                                                    newProj[index] = { ...newProj[index], title: e.target.value };
+                                                    setParsedData({ ...parsedData, projects: newProj });
+                                                }}
+                                                className="bg-transparent font-bold text-lg text-white border-b border-transparent focus:border-brand-primary outline-none"
+                                                placeholder="Project Title"
+                                            />
+                                            <button
+                                                onClick={() => handlePolish(proj.description || '', 'description', `proj-${index}-desc`)}
+                                                disabled={polishingField === `proj-${index}-desc`}
+                                                className="text-brand-primary hover:text-white px-2 py-1 flex items-center gap-1 text-[10px] uppercase font-bold"
+                                            >
+                                                <SparklesIcon className={`w-3 h-3 ${polishingField === `proj-${index}-desc` ? 'animate-spin' : ''}`} />
+                                                Polish
+                                            </button>
+                                        </div>
+                                        <div className="relative">
+                                            <textarea
+                                                value={proj.description || ''}
+                                                onChange={(e) => {
+                                                    const newProj = [...(parsedData.projects || [])];
+                                                    newProj[index] = { ...newProj[index], description: e.target.value };
+                                                    setParsedData({ ...parsedData, projects: newProj });
+                                                }}
+                                                className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-gray-300 focus:border-brand-primary outline-none min-h-[80px] text-sm"
+                                                placeholder="Project details..."
+                                            />
+                                            {/* Project Bubble */}
+                                            <AnimatePresence>
+                                                {suggestion?.fieldId === `proj-${index}-desc` && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        className="absolute z-20 top-full left-0 mt-2 w-full bg-gray-800 border border-green-500/50 shadow-xl rounded-xl p-3"
+                                                    >
+                                                        <p className="text-white text-sm mb-2">{suggestion.text}</p>
+                                                        <div className="flex gap-2 justify-end">
+                                                            <button onClick={() => setSuggestion(null)} className="text-xs text-gray-400">Discard</button>
+                                                            <button onClick={() => applySuggestion(`proj-${index}-desc`, suggestion.text)} className="text-xs bg-green-500 text-white font-bold px-2 py-1 rounded">Apply</button>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         {saveStatus === 'error' && (
@@ -415,7 +524,7 @@ const ResumeImporter = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

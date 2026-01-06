@@ -33,12 +33,16 @@ export async function POST(req: NextRequest) {
         Your goal is to extract structured data for a Portfolio Database.
 
         EXTRACT THE FOLLOWING SECTIONS INTO VALID JSON:
-        1. "experience": Array of objects { role, company, location, startDate, endDate (or null if present), isCurrent (bool), description }.
+        1. "experience": Array of objects { role, company, location, startDate, endDate (or null), isCurrent (bool), description }.
            - For "description": Summarize key achievements into a markdown bullet list.
         2. "skills": Array of objects { category, items: string[] }.
            - Group skills logically (e.g., "Languages", "Frameworks", "Tools").
         3. "certifications": Array of objects { name, issuer, year, category (default "Core") }.
         4. "bio": A short professional summary (2-3 sentences based on the resume).
+        5. "services": Array of objects { title, description, features: string[] }.
+           - Infer "Capabilities" I can offer based on my skills/experience (e.g., "Full Stack Development", "AI Integration").
+        6. "projects": Array of objects { title, description, tags: string[], category }.
+           - Extract concrete projects mentioned in experience or specific project sections.
 
         Return ONLY the raw JSON object. Do not include markdown formatting like \`\`\`json.
         `;

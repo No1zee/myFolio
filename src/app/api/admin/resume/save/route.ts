@@ -77,6 +77,41 @@ export async function POST(req: NextRequest) {
             // 5. Update Bio (Optional, usually stored in a Profile/About model or hardcoded)
             // If we had a Profile model, we'd update it here.
 
+            // 5. Insert Services (Capabilities)
+            if (data.services && Array.isArray(data.services)) {
+                await tx.service.deleteMany({});
+                let order = 1;
+                for (const svc of data.services) {
+                    await tx.service.create({
+                        data: {
+                            title: svc.title,
+                            description: svc.description || '',
+                            icon: 'CpuChipIcon', // Default icon
+                            features: JSON.stringify(svc.features || []),
+                            color: 'bg-brand-primary', // Default
+                            order: order++
+                        }
+                    });
+                }
+            }
+
+            // 6. Insert Projects (Achievements)
+            if (data.projects && Array.isArray(data.projects)) {
+                await tx.project.deleteMany({});
+                let order = 1;
+                for (const proj of data.projects) {
+                    await tx.project.create({
+                        data: {
+                            title: proj.title,
+                            description: proj.description || '',
+                            tags: Array.isArray(proj.tags) ? proj.tags.join(',') : (proj.tags || ''),
+                            category: proj.category || 'Web App',
+                            order: order++
+                        }
+                    });
+                }
+            }
+
         });
 
         return NextResponse.json({ success: true });
