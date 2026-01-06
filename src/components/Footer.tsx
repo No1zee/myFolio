@@ -125,14 +125,7 @@ const Footer = () => {
                             </div>
 
                             <div className="flex gap-4 pt-4">
-                                <div className="flex items-center gap-2 text-gray-500 hover:text-brand-primary transition-colors">
-                                    <EnvelopeIcon className="w-5 h-5" />
-                                    <span className="text-sm">encrypted@edwardmagejo.com</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-500 hover:text-brand-primary transition-colors">
-                                    <PhoneIcon className="w-5 h-5" />
-                                    <span className="text-sm">+263 700 000 000</span>
-                                </div>
+                                {/* Placeholders removed to avoid confusion with primary contact info */}
                             </div>
                         </div>
 
@@ -151,7 +144,7 @@ const Footer = () => {
                                         </div>
                                         <h3 className="text-xl font-bold text-white mb-2">Transmission Received</h3>
                                         <p className="text-gray-400 text-sm mb-6">
-                                            Stand by for response sequence.
+                                            I'll get back to you shortly.
                                         </p>
                                         <a href="#projects" className="text-sm font-bold text-brand-primary hover:text-white transition-colors border-b border-brand-primary/30 pb-1">
                                             While you wait, explore case studies →
@@ -174,7 +167,7 @@ const Footer = () => {
                                                 className="w-full bg-black/40 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all peer pt-5 pb-2"
                                             />
                                             <label className="absolute left-4 top-3 text-gray-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-brand-primary pointer-events-none">
-                                                Identity / Name
+                                                Name
                                             </label>
                                         </div>
                                         <div className="relative group/input">
@@ -186,7 +179,7 @@ const Footer = () => {
                                                 className="w-full bg-black/40 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all peer pt-5 pb-2"
                                             />
                                             <label className="absolute left-4 top-3 text-gray-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-brand-primary pointer-events-none">
-                                                Comms Frequency / Email
+                                                Email Address
                                             </label>
                                         </div>
                                         <div className="relative group/input">
@@ -198,7 +191,7 @@ const Footer = () => {
                                                 className="w-full bg-black/40 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all peer pt-5 pb-2 resize-none"
                                             ></textarea>
                                             <label className="absolute left-4 top-3 text-gray-500 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-brand-primary pointer-events-none">
-                                                Mission Parameter / Message
+                                                Message
                                             </label>
                                         </div>
 
