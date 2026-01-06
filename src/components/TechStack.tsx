@@ -8,7 +8,10 @@ import {
     CodeBracketIcon,
     CircleStackIcon,
     CommandLineIcon,
-    SparklesIcon
+    SparklesIcon,
+    BoltIcon,
+    CurrencyDollarIcon,
+    ScaleIcon
 } from '@heroicons/react/24/outline';
 
 const TechItem = ({ name, description, icon: Icon, delay }: { name: string, description: string, icon: any, delay: number }) => (
@@ -82,10 +85,10 @@ const TechStack = () => {
                         System Architecture
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Powered by <span className="text-brand-primary">Next-Gen Tech</span>
+                        I Built This With <span className="text-brand-primary">Next-Gen Tech</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
-                        Built on a foundation of modern web technologies, AI integration, and robust infrastructure.
+                        I designed this portfolio to be a living demonstration of my full-stack capabilities—fusing robust engineering with raw AI power.
                     </p>
                 </motion.div>
 
@@ -107,6 +110,45 @@ const TechStack = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Benefits Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-20 pt-16 border-t border-gray-800"
+                >
+                    <h3 className="text-2xl font-bold text-white mb-10 text-center">Why This Stack?</h3>
+                    <div className="grid md:grid-cols-3 gap-8 text-center">
+                        <div className="p-6 rounded-2xl bg-gray-900/30 border border-gray-800">
+                            <div className="mx-auto w-12 h-12 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mb-4">
+                                <BoltIcon className="w-6 h-6" />
+                            </div>
+                            <h4 className="text-white font-bold mb-2">Blazing Speed</h4>
+                            <p className="text-gray-400 text-sm">
+                                Static generation & Edge caching ensure mostly <span className="text-amber-500 font-bold">&lt;100ms</span> load times globally.
+                            </p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-gray-900/30 border border-gray-800">
+                            <div className="mx-auto w-12 h-12 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-4">
+                                <CurrencyDollarIcon className="w-6 h-6" />
+                            </div>
+                            <h4 className="text-white font-bold mb-2">Cost Efficient</h4>
+                            <p className="text-gray-400 text-sm">
+                                Serverless architecture means I pay <span className="text-green-500 font-bold">$0</span> for idle time, scaling only with active usage.
+                            </p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-gray-900/30 border border-gray-800">
+                            <div className="mx-auto w-12 h-12 bg-blue-500/10 text-blue-500 rounded-full flex items-center justify-center mb-4">
+                                <ScaleIcon className="w-6 h-6" />
+                            </div>
+                            <h4 className="text-white font-bold mb-2">Infinite Scale</h4>
+                            <p className="text-gray-400 text-sm">
+                                From 10 to 10M visitors, the Vercel Edge Network auto-scales infrastructure instantly.
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
