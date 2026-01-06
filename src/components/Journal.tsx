@@ -24,6 +24,7 @@ type JournalData = {
     title: string;
     category: string;
     content: string;
+    imageUrl?: string | null;
     tags: string; // JSON
 }
 
@@ -95,40 +96,44 @@ const Journal = ({ logs }: { logs: JournalData[] }) => {
                                     whileTap={{ scale: 0.98 }}
                                     className="cursor-pointer"
                                 >
-                                    <div className="p-6 h-full flex flex-col relative">
-                                        {/* Reading Progress Buffer (Simulated) */}
-                                        <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-brand-primary to-blue-400 w-0 group-hover:w-full transition-all duration-[2s] ease-linear z-20"></div>
-
-                                        {/* Category Accent Line */}
-                                        <div className={`absolute left-0 top-0 bottom-0 w-1 ${log.category === 'Updates' ? 'bg-brand-success' : 'bg-brand-primary'} opacity-50 group-hover:opacity-100 transition-opacity`}></div>
-
-                                        {/* Timeline Dot */}
-                                        <div className="absolute -left-[5px] top-3 w-2 h-2 rounded-full bg-gray-800 group-hover:bg-brand-primary transition-colors text-white z-30"></div>
-
-                                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-1">
-                                            <span className="text-xs font-mono text-gray-500">
-                                                {new Date(log.stardate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                                            </span>
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="text-lg font-bold text-gray-300 group-hover:text-brand-primary transition-colors">
-                                                    {log.title}
-                                                </h3>
-                                                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 border border-gray-700">
-                                                    {log.category}
-                                                </span>
+                                    <div className="p-0 h-full flex flex-col relative">
+                                        {/* Image Header */}
+                                        {log.imageUrl && (
+                                            <div className="w-full h-40 bg-gray-900 overflow-hidden relative">
+                                                <img src={log.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                                             </div>
-                                        </div>
+                                        )}
 
+                                        <div className="p-6 flex-1 flex flex-col">
+                                            {/* Reading Progress Buffer (Simulated) */}
+                                            <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-brand-primary to-blue-400 w-0 group-hover:w-full transition-all duration-[2s] ease-linear z-20"></div>
 
-                                        {/* Hover Excerpt */}
-                                        <div
-                                            onClick={() => completeTask('readLog')}
-                                            className="text-sm text-gray-500 h-6 overflow-hidden group-hover:h-auto group-hover:text-gray-400 transition-all duration-300 ease-in-out cursor-pointer"
-                                        >
-                                            <p className="line-clamp-1 group-hover:line-clamp-none">
-                                                {/* Simulating excerpt since DB might not have it, or using first sentence */}
-                                                Top-tier insight regarding {log.category.toLowerCase()} protocols and the implications of recent updates. Click to read the full analysis.
-                                            </p>
+                                            {/* Category Accent Line */}
+                                            <div className={`absolute left-0 top-0 bottom-0 w-1 ${log.category === 'Updates' ? 'bg-brand-success' : 'bg-brand-primary'} opacity-50 group-hover:opacity-100 transition-opacity`}></div>
+
+                                            <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-2">
+                                                <span className="text-xs font-mono text-gray-500">
+                                                    {new Date(log.stardate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                                </span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 border border-gray-700">
+                                                        {log.category}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h3 className="text-lg font-bold text-gray-300 group-hover:text-brand-primary transition-colors mb-3">
+                                                {log.title}
+                                            </h3>
+
+                                            {/* Hover Excerpt */}
+                                            <div
+                                                onClick={() => completeTask('readLog')}
+                                                className="text-sm text-gray-500 line-clamp-3 group-hover:text-gray-300 transition-colors"
+                                            >
+                                                {log.content.substring(0, 120)}...
+                                            </div>
                                         </div>
                                     </div>
                                 </StarCard>
