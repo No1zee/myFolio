@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import Asteroid from "@/components/Asteroid";
 import StickyNav from "@/components/StickyNav";
+import TechStack from "@/components/TechStack";
 import { getServices, getProjects, getCertifications, getJournalEntries } from "./actions/portfolio";
 
 export const dynamic = 'force-dynamic';
@@ -37,6 +38,7 @@ export default async function Home() {
       <Projects projects={projects} />
       <Certifications certs={certs} />
       <Resume />
+      <TechStack />
       <Journal logs={logs} />
       <Footer />
     </main>
