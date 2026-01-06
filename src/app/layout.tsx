@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Outfit } from "next/font/google";
 import Noise from "@/components/Noise";
 import "./globals.css";
@@ -55,6 +56,7 @@ export default function RootLayout({
           }}
         />
         <Noise />
+        <SpeedInsights />
         {children}
       </body>
     </html>
