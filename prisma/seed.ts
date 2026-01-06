@@ -9,60 +9,78 @@ async function main() {
     // Note: We removed deleteMany to prevent data loss.
     // This script now focuses on ensuring DEFAULT data exists.
 
+    // --- CLEANUP ---
+    // Remove incorrect "persona" data if it exists
+    await prisma.experience.deleteMany({
+        where: {
+            company: { in: ['AGS (Global Logistics)', 'Sybyl (Enterprise IT)', 'Vard Engineering', 'Independent Research'] }
+        }
+    });
+
     // --- EXPERIENCE ---
-    // Experience is complex to upsert. We will only create defaults if the table is empty.
-    // --- EXPERIENCE ---
-    // Update logic: Upsert based on role+company to allow updating existing entries
     const experiences = [
         {
-            role: 'Head of IT & Infrastructure',
-            company: 'AGS (Global Logistics)',
+            role: 'IT and Operations Manager',
+            company: 'Advance Medical Africa',
             location: 'Harare, Zimbabwe',
-            startDate: new Date('2023-01-01'),
+            startDate: new Date('2025-02-01'),
             endDate: null,
             isCurrent: true,
             order: 1,
-            description: `Tags: Leadership, Cloud, Strategy
-- **Strategic Modernization**: Orchestrated the transition to a hybrid cloud model, directly aligning IT capability with 200% business growth.
-- **Resilience Architecture**: Designed the Business Continuity Plan (BCP) that maintained 100% operational uptime during national grid failures.
-- **Budget & Team**: Managed $500k annual budget and a 15-person distributed technical team.`
+            description: `Tags: Operations, Infrastructure, Leadership
+- **Organizational Integration**: Oversees IT infrastructure and operational processes to ensure seamless integration and efficiency across organizational departments.
+- **Process Optimization**: Streamlining operational workflows to support scaling business requirements.`
         },
         {
-            role: 'Antigravity Engineer',
-            company: 'Independent Research',
-            location: 'The Void',
-            startDate: new Date('2024-01-01'),
+            role: 'Technical Consultant',
+            company: 'FinSys Zimbabwe',
+            location: 'Harare, Zimbabwe',
+            startDate: new Date('2025-02-01'),
             endDate: null,
             isCurrent: true,
             order: 2,
-            description: `Tags: Agentic AI, R&D
-- Developing autonomous system architectures using React Server Components and LLM orchestration.
-- Researching novel UX patterns for AI-human collaboration.`
+            description: `Tags: Analysis, Training, Optimization
+- **System Analysis**: Conduct comprehensive analyses on hardware, software, and network capabilities to optimize system performance.
+- **Strategic Alignment**: Collaborate with management to align technical solutions with organizational goals.
+- **User Training**: Train end-users on hardware functionality and software programs, performing diagnostic tests to maintain system integrity.`
         },
         {
-            role: 'IT Manager',
-            company: 'Sybyl (Enterprise IT)',
+            role: 'Technical Consultant',
+            company: 'Vernomas ICT Solutions',
             location: 'Harare, Zimbabwe',
-            startDate: new Date('2021-01-01'),
-            endDate: new Date('2022-12-31'),
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-12-31'),
             isCurrent: false,
             order: 3,
-            description: `Tags: Operations, SD-WAN, ITIL
-- **Operational turnaround**: Reduced ticket resolution time by 50% via ITIL workflow implementation.
-- **Vendor Management**: Renegotiated supplier contracts, reclaiming 15% of the annual hardware budget.
-- **M365 Migration**: Led the seamless migration of 200+ users to Microsoft 365.`
+            description: `Tags: Hardware, Server Solutions
+- **Custom Solutions**: Delivered customized hardware and server solutions, enhancing system capabilities for specific client requirements.
+- **Infrastructure Improvements**: Collaborated with clients to assess needs and implemented improvements that increased operational efficiency.
+- **Integration Support**: Offered technical support and guidance to facilitate the smooth integration of new technologies.`
         },
         {
-            role: 'Systems Administrator',
-            company: 'Vard Engineering',
+            role: 'Systems Support Officer',
+            company: 'Aviation Ground Services',
             location: 'Harare, Zimbabwe',
-            startDate: new Date('2019-01-01'),
-            endDate: new Date('2020-12-31'),
+            startDate: new Date('2020-01-01'),
+            endDate: new Date('2022-12-31'),
             isCurrent: false,
             order: 4,
-            description: `Tags: Linux, VMware
-- **System Hardening**: Managed patching and security policies for mixed Linux/Windows server estate.
-- **Efficiency**: Virtualized legacy hardware, reducing power/cooling costs by ~40%.`
+            description: `Tags: Network Security, DR, Policy
+- **Network Overhaul**: Led a network infrastructure overhaul, achieving a **30% reduction in downtime** and enhancing security measures.
+- **Disaster Recovery**: Coordinated a team of 10 to implement a disaster recovery plan that reduced potential data loss by 40%.
+- **Policy Revamp**: Initiated an organization-wide audit to align with industry frameworks, utilizing Sophos and Dynamics NAV.`
+        },
+        {
+            role: 'Systems Support Intern',
+            company: 'Aviation Ground Services',
+            location: 'Harare, Zimbabwe',
+            startDate: new Date('2019-01-01'),
+            endDate: new Date('2019-12-31'),
+            isCurrent: false,
+            order: 5,
+            description: `Tags: Support, Maintenance
+- **Operational Reliability**: Assisted in maintaining IT systems and resolving technical issues.
+- **Training support**: Contributed to the creation of user guides and training materials for staff.`
         }
     ];
 
@@ -76,30 +94,47 @@ async function main() {
     }
 
 
-    // ... SKILLS (Keep existing logic) ...
-    // ... (Skipping Skills block for brevity, assuming no changes needed there) ...
-    // RE-INSERTING SKILLS LOGIC TO KEEP FILE VALID IF NEEDED, BUT EDIT WAS ONLY FOR SECTION CHANGE
-    // Assuming file structure allows partial replace if context matches. 
-    // Wait, the previous tool call showed "if (experienceCount === 0)" logic. 
-    // I need to REPLACE that block with the upsert logic above.
+    // --- SKILLS ---
+    const skillCategories = [
+        { category: "Operating Systems", items: ["Microsoft 365 Administration", "Linux"] },
+        { category: "Network Tools", items: ["Sophos", "Dynamics NAV", "Emirates SkyChain"] },
+        { category: "Programming", items: ["Python", "VB.NET", "Java", "Visual C++", "JavaScript", "TypeScript"] },
+        { category: "Software", items: ["Splunk", "Wireshark", "VMware", "Active Directory", "Docker", "Git"] },
+        { category: "Security", items: ["ISO/IEC 27001", "Network Security", "Cybersecurity", "Compliance"] }
+    ];
 
+    for (const cat of skillCategories) {
+        for (const item of cat.items) {
+            const exists = await prisma.skill.findFirst({ where: { name: item } });
+            if (!exists) {
+                await prisma.skill.create({
+                    data: {
+                        name: item,
+                        category: cat.category,
+                    }
+                })
+            }
+        }
+    }
 
     // --- CERTIFICATIONS ---
+    // Clear old experimental ones if needed, or just upsert
     const certifications = [
         // Flagships (Order 1-4)
-        { name: "Certified Information Systems Auditor (CISA)", issuer: "ISACA", year: "2024", category: "Security", tech: "Auditing", color: "border-blue-500", order: 1 },
-        { name: "Cisco Certified Network Associate (CCNA)", issuer: "Cisco", year: "2023", category: "Infrastructure", tech: "Networking", color: "border-teal-500", order: 2 },
-        { name: "Google Cloud Associate", issuer: "Google", year: "2024", color: "from-yellow-400 to-orange-400", category: "Cloud", tech: "[\"GCP\", \"Cloud Architecture\"]", order: 3 },
-        { name: "Cisco CyberOps Associate", issuer: "Cisco", year: "2023", color: "from-blue-600 to-cyan-500", category: "Security", tech: "[\"Network Security\", \"Incident Response\"]", order: 4 },
+        { name: "Google Cloud Associate Engineer", issuer: "Google", year: "Present", category: "Cloud", tech: "[\"GCP\", \"Cloud Architecture\"]", color: "from-yellow-400 to-orange-400", order: 1 },
+        { name: "Certified Cybersecurity Technician", issuer: "EC Council", year: "Present", category: "Security", tech: "[\"Ethical Hacking\", \"Pen Testing\"]", color: "from-red-600 to-orange-500", order: 2 },
+        { name: "ISO/IEC 27001 Info Security Associate", issuer: "Skillshare", year: "2024", category: "Security", tech: "[\"Compliance\", \"Risk Mgmt\"]", color: "from-purple-500 to-indigo-500", order: 3 },
+        { name: "Azure Fundamentals (AZ-900)", issuer: "Microsoft", year: "2024", category: "Cloud", tech: "[\"Azure\", \"Cloud Basics\"]", color: "from-blue-500 to-blue-300", order: 4 },
 
         // Others
-        { name: "Certified Cybersecurity Technician", issuer: "EC Council", year: "2023", color: "from-red-600 to-orange-500", category: "Security", tech: "[\"Ethical Hacking\", \"Pen Testing\"]", order: 10 },
-        { name: "Azure Fundamentals", issuer: "Microsoft", year: "2023", color: "from-blue-500 to-blue-300", category: "Cloud", tech: "[\"Cloud Computing\", \"Azure AD\"]", order: 11 },
-        { name: "ISO/IEC 27001 Foundation", issuer: "Skillshare", year: "2023", color: "from-purple-500 to-indigo-500", category: "Security", tech: "[\"Compliance\", \"Risk Mgmt\"]", order: 12 },
+        { name: "Google IT Support", issuer: "Google", year: "2022", color: "from-blue-400 to-green-400", category: "Core", tech: "[\"IT Support\", \"Troubleshooting\"]", order: 10 },
+        { name: "Google Cybersecurity Professional", issuer: "Coursera", year: "2024", color: "from-blue-600 to-blue-800", category: "Security", tech: "[\"Security\", \"Network Defense\"]", order: 11 },
+        { name: "Cybersecurity Compliance and Framework", issuer: "IBM", year: "2025", color: "from-blue-800 to-indigo-900", category: "Security", tech: "[\"Compliance\", \"Frameworks\"]", order: 12 },
+        { name: "Oracle Cloud Foundations Associate", issuer: "Oracle", year: "2025", color: "from-red-500 to-orange-600", category: "Cloud", tech: "[\"OCI\", \"Cloud\"]", order: 13 },
+        { name: "Blockchain Fundamentals", issuer: "Chainlink", year: "2025", color: "from-indigo-500 to-purple-600", category: "Experimental", tech: "[\"Web3\", \"Smart Contracts\"]", order: 14 },
 
-        // Experimental
-        { name: "Antigravity Engineer", issuer: "Google DeepMind", year: "2024", color: "from-pink-500 to-purple-500", category: "Experimental", tech: "[\"Agentic AI\", \"Prompt Engineering\"]", order: 90 },
-        { name: "Blockchain Fundamentals", issuer: "Chainlink", year: "2024", color: "from-indigo-500 to-purple-600", category: "Experimental", tech: "[\"Web3\", \"Smart Contracts\"]", order: 91 },
+        // Keep Antigravity as a hidden/fun one
+        { name: "Antigravity Engineer", issuer: "Google DeepMind", year: "2024", color: "from-pink-500 to-purple-500", category: "Experimental", tech: "[\"Agentic AI\", \"Prompt Engineering\"]", order: 99 },
     ];
 
     for (const cert of certifications) {
