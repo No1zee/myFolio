@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+// export const runtime = 'edge'; // Removed to silence SSG warning
 
 export const alt = 'Edward Magejo - Technical Consultant & Systems Specialist';
 export const size = {
