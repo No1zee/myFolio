@@ -28,7 +28,7 @@ const MissionHUD = () => {
         <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">
             <motion.div
                 layout
-                className={`bg-gray-900/90 backdrop-blur-md border border-gray-700 rounded-lg overflow-hidden shadow-2xl w-64 transition-all duration-300 ${isOpen ? 'h-auto' : 'h-12'}`}
+                className={`gravity-repulse bg-gray-900/90 backdrop-blur-md border border-gray-700 rounded-lg overflow-hidden shadow-2xl w-64 transition-all duration-300 ${isOpen ? 'h-auto' : 'h-12'}`}
             >
                 {/* Header / Toggle */}
                 <div

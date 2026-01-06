@@ -75,7 +75,7 @@ export default function MobileNav() {
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                     className="fixed bottom-6 left-4 right-4 z-50 lg:hidden"
                 >
-                    <nav className="bg-brand-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                    <nav className="gravity-repulse bg-brand-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                         <ul className="flex justify-between items-center px-2 py-3">
                             {navItems.map((item) => {
                                 const isActive = activeSection === item.id;
