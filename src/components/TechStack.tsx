@@ -87,7 +87,7 @@ const TechStack = () => {
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                         I Built This With <span className="text-brand-primary">Next-Gen Tech</span>
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-white max-w-2xl mx-auto">
                         I designed this portfolio to be a living demonstration of my full-stack capabilities—fusing robust engineering with raw AI power.
                     </p>
                 </motion.div>
