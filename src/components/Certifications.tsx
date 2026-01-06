@@ -37,29 +37,34 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 };
 
 const Certifications = ({ certs }: { certs: CertData[] }) => {
-    // Separate Core and Experimental
-    const coreCerts = certs.filter(c => c.category !== 'Experimental');
-    const labCerts = certs.filter(c => c.category === 'Experimental');
+    // Flagships are top ordered (1-4)
+    const flagships = certs.filter(c => (c.order > 0 && c.order <= 4));
 
-    // Helper to get icon
+    // Group others by category
+    const others = certs.filter(c => c.order > 4 || c.order === 0);
+    const groups = {
+        "Security & Compliance": others.filter(c => c.category === 'Security'),
+        "Cloud Infrastructure": others.filter(c => c.category === 'Cloud' || c.category === 'Infrastructure'),
+        "Experimental": others.filter(c => c.category === 'Experimental')
+    };
+
     const getIcon = (cert: CertData) => {
-        // Try mapping by specific category first, then fallback to general
-        if (cert.tech?.includes("Security") || cert.name.includes("Cyber")) return CATEGORY_ICONS["Cybersecurity"];
-        if (cert.tech?.includes("Cloud") || cert.name.includes("Cloud") || cert.name.includes("Azure")) return CATEGORY_ICONS["Cloud"];
-        if (cert.tech?.includes("Compliance") || cert.name.includes("ISO")) return CATEGORY_ICONS["Compliance"];
+        if (cert.category === "Security") return CATEGORY_ICONS["Cybersecurity"];
+        if (cert.category === "Cloud") return CATEGORY_ICONS["Cloud"];
+        if (cert.category === "Infrastructure") return CATEGORY_ICONS["Core"];
         if (cert.category === "Experimental") return CATEGORY_ICONS["Experimental"];
         return CATEGORY_ICONS["Core"];
     };
 
     return (
-        <section id="certifications" className="py-32 px-6 relative z-10 backdrop-blur-sm">
+        <section id="certifications" className="py-24 px-6 relative z-10 backdrop-blur-sm">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl font-bold mb-4 text-brand-surface-alt"
+                        className="text-3xl md:text-4xl font-bold mb-4 text-brand-surface-alt"
                     >
                         Verified Expertise
                     </motion.h2>
@@ -68,68 +73,49 @@ const Certifications = ({ certs }: { certs: CertData[] }) => {
                     </p>
                 </div>
 
-                {/* CORE GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-                    {coreCerts.map((cert) => {
-                        let tech: string[] = [];
-                        try { tech = JSON.parse(cert.tech || "[]"); } catch { tech = []; }
-
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4 }}
-                                key={cert.id || cert.name}
-                                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-brand-primary/20 transition-all group flex gap-4 items-start"
-                            >
-                                <div className={`shrink-0 w-12 h-12 rounded-xl bg-brand-primary/5 text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-colors duration-300`}>
-                                    {getIcon(cert)}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900 leading-tight mb-1">{cert.name}</h3>
-                                    <p className="text-sm text-gray-500 mb-3">{cert.issuer} • {cert.year}</p>
-
-                                    <div className="flex flex-wrap gap-1">
-                                        {tech.slice(0, 2).map(t => (
-                                            <span key={t} className="text-[10px] uppercase tracking-wider font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md">
-                                                {t}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )
-                    })}
+                {/* FLAGSHIP GRID */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    {flagships.map((cert) => (
+                        <motion.div
+                            key={cert.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="bg-white rounded-xl p-6 shadow-md border-t-4 border-brand-primary"
+                        >
+                            <div className="mb-4 text-brand-primary">{getIcon(cert)}</div>
+                            <h3 className="font-bold text-gray-900 leading-tight mb-1 h-12 flex items-center">{cert.name}</h3>
+                            <p className="text-xs text-gray-500 uppercase tracking-widest">{cert.issuer}</p>
+                        </motion.div>
+                    ))}
                 </div>
 
-                {/* LABS / EXPERIMENTAL */}
-                {labCerts.length > 0 && (
-                    <div className="border-t border-gray-200 pt-12">
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="h-px bg-gray-200 flex-1"></div>
-                            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
-                                <BeakerIcon className="w-4 h-4" />
-                                Labs & Experiments
+                {/* GROUPED LISTS */}
+                <div className="grid md:grid-cols-3 gap-12 border-t border-gray-200 pt-12">
+                    {Object.entries(groups).map(([groupName, groupCerts]) => (
+                        <div key={groupName}>
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6 flex items-center gap-2">
+                                {groupName === "Security & Compliance" && <ShieldCheckIcon className="w-5 h-5" />}
+                                {groupName === "Cloud Infrastructure" && <CloudIcon className="w-5 h-5" />}
+                                {groupName === "Experimental" && <BeakerIcon className="w-5 h-5" />}
+                                {groupName}
                             </h3>
-                            <div className="h-px bg-gray-200 flex-1"></div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                            {labCerts.map((cert) => (
-                                <div key={cert.id || cert.name} className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
-                                    <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400">
-                                        {getIcon(cert)}
+                            <div className="space-y-4">
+                                {groupCerts.map((cert) => (
+                                    <div key={cert.id} className="group flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <div className="mt-1 text-gray-300 group-hover:text-brand-primary transition-colors">
+                                            {getIcon(cert)}
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-gray-700 text-sm group-hover:text-brand-primary transition-colors">{cert.name}</h4>
+                                            <p className="text-xs text-gray-500">{cert.issuer} • {cert.year}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-gray-700 text-sm">{cert.name}</h4>
-                                        <p className="text-xs text-gray-500">{cert.issuer} • {cert.year}</p>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    ))}
+                </div>
             </div>
         </section>
     );
