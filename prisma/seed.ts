@@ -180,26 +180,7 @@ async function main() {
     }
 
     // --- CERTIFICATIONS ---
-    const certifications = [
-        { name: "Cisco CyberOps Associate", issuer: "Cisco", year: "2023", color: "from-blue-600 to-cyan-500", category: "Core", tech: "[\"Network Security\", \"Incident Response\"]" },
-        { name: "Certified Cybersecurity Technician", issuer: "EC Council", year: "2023", color: "from-red-600 to-orange-500", category: "Core", tech: "[\"Ethical Hacking\", \"Pen Testing\"]" },
-        { name: "Azure Fundamentals", issuer: "Microsoft", year: "2023", color: "from-blue-500 to-blue-300", category: "Core", tech: "[\"Cloud Computing\", \"Azure AD\"]" },
-        { name: "Google Cloud Associate", issuer: "Google", year: "2024", color: "from-yellow-400 to-orange-400", category: "Core", tech: "[\"GCP\", \"Cloud Architecture\"]" },
-        { name: "ISO/IEC 27001 Foundation", issuer: "Skillshare", year: "2023", color: "from-purple-500 to-indigo-500", category: "Core", tech: "[\"Compliance\", \"Risk Mgmt\"]" },
-        { name: "Antigravity Engineer", issuer: "Google DeepMind", year: "2024", color: "from-pink-500 to-purple-500", category: "Experimental", tech: "[\"Agentic AI\", \"Prompt Engineering\"]" },
-        { name: "Blockchain Fundamentals", issuer: "Chainlink", year: "2024", color: "from-indigo-500 to-purple-600", category: "Experimental", tech: "[\"Web3\", \"Smart Contracts\"]" },
-        { name: "Certified Information Systems Auditor (CISA)", issuer: "ISACA", year: "2024", category: "Core", tech: "Auditing", color: "border-blue-500", order: 1 },
-        { name: "Cisco Certified Network Associate (CCNA)", issuer: "Cisco", year: "2023", category: "Core", tech: "Networking", color: "border-teal-500", order: 2 }
-    ];
-
-    for (const cert of certifications) {
-        const existing = await prisma.certification.findFirst({ where: { name: cert.name } });
-        if (existing) {
-            await prisma.certification.update({ where: { id: existing.id }, data: cert });
-        } else {
-            await prisma.certification.create({ data: cert });
-        }
-    }
+    // (Moved to top of file)
 
     // --- JOURNAL ---
     const journals = [
