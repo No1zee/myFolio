@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheckIcon, BeakerIcon } from '@heroicons/react/24/outline';
-import { getExperiences, getSkills, getCertifications } from '@/app/actions/portfolio';
+import { getExperiences, getSkills, getCertifications, getProfile } from '@/app/actions/portfolio';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 
 // Types for UI mapping
 interface UIExperience {
@@ -36,6 +37,7 @@ const Resume = () => {
     const [experience, setExperience] = useState<UIExperience[]>([]);
     const [skills, setSkills] = useState<UISkillCategory[]>([]);
     const [certifications, setCertifications] = useState<UICertification[]>([]);
+    const [resumeUrl, setResumeUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     const colors = [
@@ -64,17 +66,26 @@ const Resume = () => {
                     const bullets = lines.filter(line => !line.trim().startsWith('Tags:')).map(line => line.replace(/^- /, ''));
                     const tags = tagLine ? tagLine.replace('Tags:', '').split(',').map(t => t.trim()) : [];
 
+                    const isHighlight = exp.role.toLowerCase().includes('antigravity') || exp.company.toLowerCase().includes('antigravity'); // Easter Egg Logic
+
                     return {
                         role: exp.role,
                         company: exp.company,
                         period: period,
-                        color: colorScheme.border,
-                        dot: colorScheme.dot,
+                        color: isHighlight ? 'border-amber-400' : colorScheme.border,
+                        dot: isHighlight ? 'bg-amber-400 shadow-amber-500/50' : colorScheme.dot,
+                        isHighlight,
                         details: bullets,
-                        tags: tags // Added tags back for UI
+                        tags: tags
                     };
                 });
                 setExperience(mappedExp);
+
+                // Fetch Profile for Resume URL
+                const profile = await getProfile();
+                if (profile && profile.resumeUrl) {
+                    setResumeUrl(profile.resumeUrl);
+                }
 
                 // Fetch Skills
                 const skillData = await getSkills();
@@ -142,6 +153,20 @@ const Resume = () => {
                             </button>
                         ))}
                     </div>
+
+                    {resumeUrl && (
+                        <div className="mt-6 flex justify-center">
+                            <a
+                                href={resumeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center gap-2 px-5 py-2 rounded-full border border-brand-primary/30 text-brand-primary hover:bg-brand-primary hover:text-white transition-all text-sm font-medium"
+                            >
+                                <ArrowDownTrayIcon className="w-4 h-4" />
+                                <span>Download CV</span>
+                            </a>
+                        </div>
+                    )}
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -172,7 +197,12 @@ const Resume = () => {
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true, margin: "-50px" }}
                                             transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-                                            className={`relative pl-8 border-l-4 ${job.color} rounded-r-2xl overflow-hidden p-6 mb-8 group bg-brand-surface shadow-2xl`}
+                                            className={`relative pl-8 border-l-4 ${job.color} rounded-r-2xl overflow-hidden p-6 mb-8 group shadow-2xl transition-transform hover:scale-[1.01] ${
+                                                // @ts-ignore
+                                                job.isHighlight
+                                                    ? 'bg-gradient-to-r from-amber-900/20 to-black border-y border-r border-amber-500/30'
+                                                    : 'bg-brand-surface'
+                                                }`}
                                         >
                                             {/* MILKY WAY BACKGROUND */}
                                             <div className="absolute inset-0 z-0 bg-brand-surface">
@@ -191,15 +221,34 @@ const Resume = () => {
                                                     style={{ backgroundSize: "200% 200%" }}
                                                 />
                                                 {/* Gradient Overlay for Readability */}
-                                                <div className="absolute inset-0 bg-gradient-to-r from-brand-surface/90 via-brand-surface/70 to-transparent"></div>
+                                                <div className={`absolute inset-0 bg-gradient-to-r ${
+                                                    // @ts-ignore
+                                                    job.isHighlight
+                                                        ? 'from-amber-900/40 via-black/80 to-transparent'
+                                                        : 'from-brand-surface/90 via-brand-surface/70 to-transparent'
+                                                    }`}></div>
                                             </div>
 
                                             {/* CONTENT (z-10) */}
                                             <div className="relative z-10">
-                                                <div className={`absolute -left-[35px] top-6 w-6 h-6 ${job.dot} rounded-full border-4 border-brand-bg shadow-[0_0_15px_rgba(29,78,216,0.3)]`}></div>
-                                                <span className={`text-sm font-bold tracking-wider text-gray-400`}>{job.period}</span>
-                                                <h3 className="text-2xl font-bold mt-1 text-brand-heading group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-primary group-hover:to-blue-400 transition-all">{job.role}</h3>
-                                                <h4 className="text-lg text-gray-300 mb-4 font-medium">{job.company}</h4>
+                                                <div className={`absolute -left-[35px] top-6 w-6 h-6 ${job.dot} rounded-full border-4 border-brand-bg shadow-[0_0_15px_rgba(29,78,216,0.3)]`}>
+                                                    {/* @ts-ignore */}
+                                                    {job.isHighlight && <div className="absolute inset-0 rounded-full animate-ping bg-amber-400 opacity-75"></div>}
+                                                </div>
+                                                <span className={`text-sm font-bold tracking-wider ${
+                                                    // @ts-ignore
+                                                    job.isHighlight ? 'text-amber-400' : 'text-gray-400'
+                                                    }`}>{job.period}</span>
+                                                <h3 className={`text-2xl font-bold mt-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all ${
+                                                    // @ts-ignore
+                                                    job.isHighlight
+                                                        ? 'text-white group-hover:from-amber-200 group-hover:to-orange-400'
+                                                        : 'text-brand-heading group-hover:from-brand-primary group-hover:to-blue-400'
+                                                    }`}>{job.role}</h3>
+                                                <h4 className={`text-lg mb-4 font-medium ${
+                                                    // @ts-ignore
+                                                    job.isHighlight ? 'text-amber-200/80' : 'text-gray-300'
+                                                    }`}>{job.company}</h4>
                                                 <ul className="list-disc list-outside ml-4 text-brand-body-dark leading-relaxed space-y-2 mb-4">
                                                     {job.details.map((point, i) => (
                                                         <li key={i}>{point}</li>
@@ -208,7 +257,12 @@ const Resume = () => {
                                                 {job.tags && job.tags.length > 0 && (
                                                     <div className="flex flex-wrap gap-2 mt-4 ml-1">
                                                         {job.tags.map(t => (
-                                                            <span key={t} className="text-xs bg-brand-surface-alt text-brand-primary px-2 py-1 rounded border border-gray-700 font-mono">
+                                                            <span key={t} className={`text-xs px-2 py-1 rounded border font-mono ${
+                                                                // @ts-ignore
+                                                                job.isHighlight
+                                                                    ? 'bg-amber-900/30 text-amber-300 border-amber-500/30'
+                                                                    : 'bg-brand-surface-alt text-brand-primary border-gray-700'
+                                                                }`}>
                                                                 {t}
                                                             </span>
                                                         ))}
