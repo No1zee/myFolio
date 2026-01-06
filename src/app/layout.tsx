@@ -9,6 +9,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://edwardmagejo.com"),
   title: "Edward Magejo | Technical Consultant & Systems Specialist",
   description: "Portfolio of Edward Magejo, a Technical Consultant and Systems Support Specialist based in Harare, Zimbabwe. Expert in Network Security and Infrastructure.",
   keywords: ["Edward Magejo", "Technical Consultant", "Systems Support", "Network Security", "IT Infrastructure", "Harare", "Zimbabwe"],
@@ -32,6 +33,27 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} antialiased relative`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Edward Magejo",
+              jobTitle: "Technical Consultant & Systems Specialist",
+              url: "https://edwardmagejo.com",
+              sameAs: [
+                "https://github.com/No1zee",
+                "https://linkedin.com/in/edward-magejo",
+              ],
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Harare",
+                addressCountry: "Zimbabwe",
+              },
+            }),
+          }}
+        />
         <Noise />
         {children}
       </body>
