@@ -148,64 +148,43 @@ async function main() {
 
     const projects = [
         {
-            title: "Global Logistics Cloud Migration",
-            description: "**Environment:** 50+ Servers, 12 Custom Apps\n**Role:** Lead Architect\n**Result:** Migrated legacy logistics systems to Hybrid Azure. Implemented redundant connectivity (ExpressRoute + VPN) and auto-failover, resulting in **30% reduction in downtime** and zero data loss during regional outages.",
-            tags: "Azure, Hybrid Cloud, Migration",
-            imageUrl: "from-blue-500 to-cyan-400",
-            category: "Infrastructure"
-        },
-        {
-            title: "Zero Trust Security Framework",
-            description: "**Scope:** 500+ Endpoints, 200 Users\n**Role:** Security Lead\n**Result:** Deployed comprehensive Zero Trust guidelines. Passed ISO 27001 audit with **zero major non-conformities**. Successfully thwarted 3 ransomware attempts via new EDR protocols.",
-            tags: "Security, Compliance, Zero Trust",
-            imageUrl: "from-purple-500 to-pink-500",
-            category: "Security"
-        },
-        {
-            title: "Enterprise Network Optimization",
-            description: "**Scale:** 4 Regional Sites, SD-WAN\n**Role:** Ops Manager\n**Result:** Overhauled network for Sybyl's branches. Optimized routing for SAP/VoIP traffic, achieving **99.99% network availability** and reducing inter-branch latency by 40ms.",
-            tags: "Networking, SD-WAN, Cisco",
-            imageUrl: "from-orange-400 to-red-500",
-            category: "Network"
-        },
-        {
-            title: "Virtualization & Automation",
-            description: "**Stack:** VMware vSphere, PowerShell\n**Result:** Virtualized 60% of physical estate. Automated user provisioning saves **20+ hours/week**. Reduced server energy footprint by ~45%.",
-            tags: "VMware, Automation, PowerShell",
-            imageUrl: "from-green-400 to-emerald-500",
-            category: "Systems"
-        },
-        {
-            title: "Real Time Capital Pawn System",
-            description: "**Stack:** Next.js 14, Prisma, Postgres\n**Result:** Full-stack ERP for the pawn industry. Digitized loan origination and public auctions. Handles **real-time bidding** with sub-second latency via Vercel Edge functions.",
-            category: "FinTech Platform",
-            imageUrl: "from-emerald-600 to-green-500",
-            tags: "Next.js, TypeScript, PostgreSQL",
-            demoUrl: "https://real-time-capital.vercel.app",
+            title: "Critical Infrastructure Overhaul",
+            description: "**Context:** Aviation Ground Services (Harare)\n**Role:** Systems Support Officer\n**Impact:** Led a complete network infrastructure overhaul, achieving a **30% reduction in downtime**. Implemented a Disaster Recovery Plan that reduced potential data loss risk by 40% using Sophos and Dynamics NAV.",
+            tags: "Infrastructure, Security, DR Plans",
+            imageUrl: "from-blue-600 to-cyan-500",
+            category: "Infrastructure",
             order: 1
         },
-        // NEW COMPACT CARDS
         {
-            title: "Microsoft 365 Hardening",
-            description: "**Result:** Secured tenants for 150-seat SME. Enforced MFA, conditional access policies, and Intune device management.",
-            category: "Security",
-            imageUrl: "from-blue-600 to-indigo-600",
-            tags: "M365, Intune, Security",
-            demoUrl: "",
+            title: "Real-Time Pawn Auction Platform",
+            description: "**Context:** Antigravity Project\n**Stack:** Next.js 14, Prisma, Postgres, Vercel Edge\n**Impact:** Full-stack ERP for the pawn industry digitizing loan origination. Handles **real-time bidding** with sub-second latency, showcasing high-performance web architecture.",
+            tags: "Next.js, FinTech, Real-time",
+            imageUrl: "from-emerald-600 to-green-500",
+            category: "Web Development",
+            demoUrl: "https://real-time-capital.vercel.app", // Keeping if valid, or remove if not
             order: 2
         },
         {
-            title: "VMware Consolidation",
-            description: "**Result:** Consolidating 3 legacy clusters into a unified high-availability HCI cluster. Reduced licensing costs by 20%.",
-            category: "Infrastructure",
-            imageUrl: "from-gray-600 to-gray-500",
-            tags: "VMware, HCI, Storage",
-            demoUrl: "",
+            title: "AI Social Media Agent",
+            description: "**Context:** Antigravity Project\n**Stack:** n8n, Gemini Pro, Agentic Workflows\n**Impact:** Designed an autonomous agent capable of observing trends, planning campaigns, and generating content. Demonstrates advanced **LLM orchestration** and automation capabilities.",
+            tags: "AI, Automation, LLMs",
+            imageUrl: "from-purple-600 to-pink-500",
+            category: "AI & Automation",
             order: 3
+        },
+        {
+            title: "Financial Systems Optimization",
+            description: "**Context:** FinSys Zimbabwe / Vernomas\n**Role:** Technical Consultant\n**Impact:** Conducted comprehensive hardware/software analysis to optimize system performance. Aligned technical solutions with organizational goals for multiple enterprise clients.",
+            tags: "Consultancy, Optimization, Analysis",
+            imageUrl: "from-orange-500 to-red-500",
+            category: "Consultancy",
+            order: 4
         }
     ];
 
     for (const p of projects) {
+        // Cleanup old generic ones to avoid clutter if feasible, but update upsert ensures new ones appear
+        // We will just upsert these specific ones.
         const existing = await prisma.project.findFirst({ where: { title: p.title } });
         if (existing) {
             await prisma.project.update({ where: { id: existing.id }, data: p });
@@ -213,6 +192,13 @@ async function main() {
             await prisma.project.create({ data: p });
         }
     }
+
+    // Optional: Clean up old generic titles if we want to be strict
+    await prisma.project.deleteMany({
+        where: {
+            title: { in: ["Global Logistics Cloud Migration", "Zero Trust Security Framework", "Enterprise Network Optimization", "Virtualization & Automation", "Microsoft 365 Hardening", "VMware Consolidation"] }
+        }
+    });
 
     // --- CERTIFICATIONS ---
     // (Moved to top of file)
