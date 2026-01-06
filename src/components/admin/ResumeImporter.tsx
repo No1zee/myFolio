@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpTrayIcon, DocumentTextIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowUpTrayIcon, DocumentTextIcon, CheckCircleIcon, XCircleIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 interface ExtractedData {
     bio?: string;
@@ -17,6 +17,10 @@ const ResumeImporter = () => {
     const [parsedData, setParsedData] = useState<ExtractedData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+
+    // Polish State
+    const [polishingField, setPolishingField] = useState<string | null>(null); // Field ID being polished
+    const [suggestion, setSuggestion] = useState<{ fieldId: string, text: string } | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -80,6 +84,46 @@ const ResumeImporter = () => {
             setSaveStatus('error');
         }
     };
+
+    const handlePolish = async (text: string, fieldType: string, fieldId: string) => {
+        if (!text) return;
+        setPolishingField(fieldId);
+        setSuggestion(null);
+
+        try {
+            const res = await fetch('/api/admin/polish', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, fieldType }), // Send fieldType for better prompt
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSuggestion({ fieldId, text: data.polishedText });
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setPolishingField(null);
+        }
+    };
+
+    const applySuggestion = (fieldId: string, newValue: string) => {
+        if (!parsedData) return;
+
+        if (fieldId === 'bio') {
+            setParsedData({ ...parsedData, bio: newValue });
+        } else if (fieldId.startsWith('exp-')) {
+            const [_, indexStr, field] = fieldId.split('-');
+            const index = parseInt(indexStr);
+            const newExp = [...(parsedData.experience || [])];
+            if (newExp[index]) {
+                newExp[index] = { ...newExp[index], [field]: newValue };
+                setParsedData({ ...parsedData, experience: newExp });
+            }
+        }
+        setSuggestion(null);
+    };
+
 
     return (
         <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 max-w-4xl mx-auto">
@@ -158,8 +202,8 @@ const ResumeImporter = () => {
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleSave}
                                     disabled={saveStatus === 'saving'}
-                                    className={`px-6 py-2 rounded-lg font-bold flex items-center gap-2 ${saveStatus === 'success' ? 'bg-green-500' : 'bg-brand-primary'
-                                        } text-white shadow-lg shadow-brand-primary/25`}
+                                    className={`px - 6 py - 2 rounded - lg font - bold flex items - center gap - 2 ${saveStatus === 'success' ? 'bg-green-500' : 'bg-brand-primary'
+                                        } text - white shadow - lg shadow - brand - primary / 25`}
                                 >
                                     {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : 'Confirm & Save'}
                                 </motion.button>
@@ -168,17 +212,64 @@ const ResumeImporter = () => {
 
                         <div className="space-y-6">
                             {/* Bio Editor */}
-                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-                                <h3 className="text-brand-primary font-bold mb-4 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-brand-primary rounded-full"></span>
-                                    Professional Summary
-                                </h3>
-                                <textarea
-                                    value={parsedData.bio || ''}
-                                    onChange={(e) => setParsedData({ ...parsedData, bio: e.target.value })}
-                                    className="w-full bg-black/50 border border-gray-700 rounded-xl p-4 text-gray-300 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none min-h-[100px]"
-                                    placeholder="Enter professional bio..."
-                                />
+                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl relative">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="text-brand-primary font-bold flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-brand-primary rounded-full"></span>
+                                        Professional Summary
+                                    </h3>
+                                    <button
+                                        onClick={() => handlePolish(parsedData.bio || '', 'bio', 'bio')}
+                                        disabled={polishingField === 'bio'}
+                                        className="bg-brand-primary/10 hover:bg-brand-primary text-brand-primary hover:text-white px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-xs uppercase font-bold"
+                                    >
+                                        <SparklesIcon className={`w-4 h-4 ${polishingField === 'bio' ? 'animate-spin' : ''}`} />
+                                        {polishingField === 'bio' ? 'Polishing...' : 'Polish with AI'}
+                                    </button>
+                                </div>
+                                <div className="relative">
+                                    <textarea
+                                        value={parsedData.bio || ''}
+                                        onChange={(e) => setParsedData({ ...parsedData, bio: e.target.value })}
+                                        className="w-full bg-black/50 border border-gray-700 rounded-xl p-4 text-gray-300 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none min-h-[100px]"
+                                        placeholder="Enter professional bio..."
+                                    />
+                                    {/* Suggestion Bubble */}
+                                    <AnimatePresence>
+                                        {suggestion?.fieldId === 'bio' && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 10 }}
+                                                className="absolute z-10 bottom-full left-0 mb-2 w-full bg-gray-800 border border-brand-primary/50 shadow-xl rounded-xl p-4"
+                                            >
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <span className="text-brand-primary text-xs font-bold uppercase flex items-center gap-1">
+                                                        <SparklesIcon className="w-3 h-3" /> AI Suggestion
+                                                    </span>
+                                                    <button onClick={() => setSuggestion(null)} className="text-gray-500 hover:text-white"><XCircleIcon className="w-5 h-5" /></button>
+                                                </div>
+                                                <p className="text-white text-sm mb-4">{suggestion.text}</p>
+                                                <div className="flex gap-2 justify-end">
+                                                    <button
+                                                        onClick={() => setSuggestion(null)}
+                                                        className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 rounded-lg"
+                                                    >
+                                                        Discard
+                                                    </button>
+                                                    <button
+                                                        onClick={() => applySuggestion('bio', suggestion.text)}
+                                                        className="px-3 py-1.5 text-xs bg-brand-primary text-white font-bold rounded-lg shadow-lg shadow-brand-primary/20"
+                                                    >
+                                                        Apply Suggestion
+                                                    </button>
+                                                </div>
+                                                {/* Arrow */}
+                                                <div className="absolute top-full left-8 w-3 h-3 bg-gray-800 border-r border-b border-brand-primary/50 transform rotate-45 -mt-1.5"></div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
 
                             {/* Experience Editor */}
@@ -188,17 +279,45 @@ const ResumeImporter = () => {
                                     <div key={index} className="bg-gray-900 border border-gray-800 p-6 rounded-2xl relative group hover:border-gray-700 transition-colors">
                                         <div className="grid md:grid-cols-2 gap-4 mb-4">
                                             <div>
-                                                <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Role</label>
-                                                <input
-                                                    type="text"
-                                                    value={exp.role || ''}
-                                                    onChange={(e) => {
-                                                        const newExp = [...(parsedData.experience || [])];
-                                                        newExp[index] = { ...newExp[index], role: e.target.value };
-                                                        setParsedData({ ...parsedData, experience: newExp });
-                                                    }}
-                                                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-brand-primary outline-none"
-                                                />
+                                                <div className="flex justify-between mb-1">
+                                                    <label className="text-xs text-gray-500 uppercase font-bold ml-1 block">Role</label>
+                                                    <button
+                                                        onClick={() => handlePolish(exp.role || '', 'role', `exp-${index}-role`)}
+                                                        disabled={polishingField === `exp-${index}-role`}
+                                                        className="text-brand-primary hover:text-white hover:bg-brand-primary/20 px-2 py-1 rounded transition-colors flex items-center gap-1 text-[10px] uppercase font-bold"
+                                                    >
+                                                        <SparklesIcon className={`w-3 h-3 ${polishingField === `exp-${index}-role` ? 'animate-spin' : ''}`} />
+                                                        Polish
+                                                    </button>
+                                                </div>
+                                                <div className="relative">
+                                                    <input
+                                                        type="text"
+                                                        value={exp.role || ''}
+                                                        onChange={(e) => {
+                                                            const newExp = [...(parsedData.experience || [])];
+                                                            newExp[index] = { ...newExp[index], role: e.target.value };
+                                                            setParsedData({ ...parsedData, experience: newExp });
+                                                        }}
+                                                        className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-brand-primary outline-none"
+                                                    />
+                                                    {/* Role Bubble */}
+                                                    <AnimatePresence>
+                                                        {suggestion?.fieldId === `exp-${index}-role` && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                                animate={{ opacity: 1, scale: 1 }}
+                                                                className="absolute z-20 top-full left-0 mt-2 w-64 bg-gray-800 border border-brand-primary/50 shadow-xl rounded-xl p-3"
+                                                            >
+                                                                <p className="text-white text-sm mb-2">{suggestion.text}</p>
+                                                                <div className="flex gap-2 justify-end">
+                                                                    <button onClick={() => setSuggestion(null)} className="text-xs text-gray-400">Cancel</button>
+                                                                    <button onClick={() => applySuggestion(`exp-${index}-role`, suggestion.text)} className="text-xs text-brand-primary font-bold">Apply</button>
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
                                             </div>
                                             <div>
                                                 <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Company</label>
@@ -216,16 +335,53 @@ const ResumeImporter = () => {
                                         </div>
 
                                         <div>
-                                            <label className="text-xs text-gray-500 uppercase font-bold ml-1 mb-1 block">Description (Markdown)</label>
-                                            <textarea
-                                                value={Array.isArray(exp.description) ? exp.description.map((d: string) => `- ${d}`).join('\n') : (exp.description || '')}
-                                                onChange={(e) => {
-                                                    const newExp = [...(parsedData.experience || [])];
-                                                    newExp[index] = { ...newExp[index], description: e.target.value };
-                                                    setParsedData({ ...parsedData, experience: newExp });
-                                                }}
-                                                className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-gray-300 focus:border-brand-primary outline-none min-h-[120px] font-mono text-sm"
-                                            />
+                                            <div className="flex justify-between mb-1">
+                                                <label className="text-xs text-gray-500 uppercase font-bold ml-1 block">Description (Markdown)</label>
+                                                <button
+                                                    onClick={() => {
+                                                        const desc = Array.isArray(exp.description) ? exp.description.map((d: string) => `- ${d}`).join('\n') : (exp.description || '');
+                                                        handlePolish(desc, 'description', `exp-${index}-desc`);
+                                                    }}
+                                                    disabled={polishingField === `exp-${index}-desc`}
+                                                    className="bg-brand-primary/10 hover:bg-brand-primary text-brand-primary hover:text-white px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-[10px] uppercase font-bold"
+                                                >
+                                                    <SparklesIcon className={`w-3 h-3 ${polishingField === `exp-${index}-desc` ? 'animate-spin' : ''}`} />
+                                                    Polish Points
+                                                </button>
+                                            </div>
+                                            <div className="relative">
+                                                <textarea
+                                                    value={Array.isArray(exp.description) ? exp.description.map((d: string) => `- ${d}`).join('\n') : (exp.description || '')}
+                                                    onChange={(e) => {
+                                                        const newExp = [...(parsedData.experience || [])];
+                                                        newExp[index] = { ...newExp[index], description: e.target.value };
+                                                        setParsedData({ ...parsedData, experience: newExp });
+                                                    }}
+                                                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-gray-300 focus:border-brand-primary outline-none min-h-[120px] font-mono text-sm"
+                                                />
+                                                {/* Description Bubble */}
+                                                <AnimatePresence>
+                                                    {suggestion?.fieldId === `exp-${index}-desc` && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            className="absolute z-20 bottom-full left-0 mb-2 w-full bg-gray-800 border border-green-500/50 shadow-xl rounded-xl p-4"
+                                                        >
+                                                            <div className="flex justify-between items-start mb-2">
+                                                                <span className="text-green-400 text-xs font-bold uppercase flex items-center gap-1">
+                                                                    <SparklesIcon className="w-3 h-3" /> Polished Version
+                                                                </span>
+                                                                <button onClick={() => setSuggestion(null)} className="text-gray-500 hover:text-white"><XCircleIcon className="w-5 h-5" /></button>
+                                                            </div>
+                                                            <p className="text-white text-sm mb-4 whitespace-pre-line max-h-40 overflow-y-auto">{suggestion.text}</p>
+                                                            <div className="flex gap-2 justify-end">
+                                                                <button onClick={() => setSuggestion(null)} className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 rounded-lg">Discard</button>
+                                                                <button onClick={() => applySuggestion(`exp-${index}-desc`, suggestion.text)} className="px-3 py-1.5 text-xs bg-green-500 text-white font-bold rounded-lg shadow-lg">Apply</button>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
                                         </div>
 
                                         <button
