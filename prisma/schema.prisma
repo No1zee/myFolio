@@ -1,0 +1,131 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./portfolio.db"
+}
+
+// Core Profile Info (Intro, About, etc.)
+model Profile {
+  id          String   @id @default(uuid())
+  name        String
+  title       String
+  bio         String
+  email       String
+  phone       String?
+  location    String?
+  avatarUrl   String?
+  resumeUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Job Experience
+model Experience {
+  id             String   @id @default(uuid())
+  role           String
+  company        String
+  location       String?
+  startDate      DateTime
+  endDate        DateTime? // Null = Present
+  description    String   // Markdown supported
+  isCurrent      Boolean  @default(false)
+  order          Int      @default(0) // For sorting
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Portfolio Projects
+model Project {
+  id          String   @id @default(uuid())
+  title       String   @unique
+  description String
+  imageUrl    String?
+  demoUrl     String?
+  repoUrl     String?
+  tags        String   // Comma separated tags e.g. "React,Next.js"
+  category    String   // e.g. "Web", "System", "Cloud"
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Skills (for "Capabilities" section)
+model Skill {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // e.g. "Frontend", "Backend", "DevOps"
+  proficiency Int?     // 1-100 (optional)
+  icon        String?  // lucide icon name or url
+  order       Int      @default(0)
+}
+
+// Social Links (GitHub, LinkedIn, etc.)
+model SocialLink {
+  id        String   @id @default(uuid())
+  platform  String
+  url       String
+  icon      String?
+  order     Int      @default(0)
+}
+
+// Knowledge Base for the Chatbot (replacing knowledge.ts)
+model KnowledgeEntry {
+  id        String   @id @default(uuid())
+  topic     String
+  keywords  String   // JSON string or comma-separated
+  responses String   // JSON string of array
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Capabilities (Services)
+model Service {
+  id          String   @id @default(uuid())
+  title       String   @unique
+  description String
+  icon        String
+  features    String   // JSON string of features array
+  color       String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Captain's Log (Journal)
+model JournalEntry {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  content   String
+  category  String
+  tags      String   // JSON string of tags
+  stardate  String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Verified Expertise (Certifications)
+model Certification {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  issuer    String
+  year      String
+  category  String
+  color     String
+  tech      String?  // JSON string of tech stack
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Legacy Guestbook (keeping just in case)
+model GuestbookEntry {
+  id        String   @id @default(uuid())
+  name      String
+  message   String
+  createdAt DateTime @default(now())
+}
