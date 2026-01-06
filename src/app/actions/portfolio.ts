@@ -13,6 +13,10 @@ export async function getExperiences() {
     });
 }
 
+export async function getProfile() {
+    return await prisma.profile.findFirst();
+}
+
 export async function getSkills() {
     const skills = await prisma.skill.findMany({
         orderBy: {
