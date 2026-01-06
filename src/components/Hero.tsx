@@ -57,13 +57,13 @@ const Hero = () => {
                     </span>
                 </div>
 
-                <h1 className="text-4xl md:text-7xl font-bold mb-6 tracking-tight text-brand-body-light leading-[1.1] animate-fade-in-up">
+                <h1 className="gravity-repulse inline-block text-4xl md:text-7xl font-bold mb-6 tracking-tight text-brand-body-light leading-[1.1] animate-fade-in-up">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-400">
                         {title}
                     </span>
                 </h1>
 
-                <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-6 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <p className="gravity-repulse inline-block text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-6 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     {desc}
                 </p>
 
@@ -77,7 +77,7 @@ const Hero = () => {
                         href="#contact"
                         whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(29 78 216 / 0.4)" }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-brand-primary text-white px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:bg-blue-600"
+                        className="gravity-repulse bg-brand-primary text-white px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:bg-blue-600"
                     >
                         Book Consultation
                     </motion.a>
@@ -85,7 +85,7 @@ const Hero = () => {
                         href="#projects"
                         whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(255 255 255 / 0.1)" }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-white/5 backdrop-blur-sm text-gray-200 border border-white/10 px-8 py-4 rounded-full font-bold transition-all hover:bg-white/10 hover:text-white"
+                        className="gravity-repulse bg-white/5 backdrop-blur-sm text-gray-200 border border-white/10 px-8 py-4 rounded-full font-bold transition-all hover:bg-white/10 hover:text-white"
                     >
                         View Case Studies
                     </motion.a>
