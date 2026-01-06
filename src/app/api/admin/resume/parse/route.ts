@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
         console.log(`PDF read. Size: ${buffer.length} bytes`);
 
         // 2. Prompt Gemini (Multimodal)
-        console.log("Sending PDF to Gemini 1.5 Flash...");
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        console.log("Sending PDF to Gemini 3.0 Flash...");
+        const model = genAI.getGenerativeModel({ model: "gemini-3.0-flash" });
 
         const prompt = `
         You are a Resume Parser Agent. I have attached a PDF resume.
