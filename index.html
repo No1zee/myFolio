@@ -572,8 +572,8 @@
       pointer-events: none !important;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-16px);
-      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(-14px);
+      transition: opacity 0.70s cubic-bezier(0.16, 1, 0.3, 1), transform 0.70s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     header.header--visible {
@@ -626,6 +626,9 @@
       background: transparent !important;
       border: none !important;
       outline: none !important;
+      mix-blend-mode: difference;
+      will-change: transform;
+      transition: opacity 0.25s ease;
     }
 
     /* Header navigation strip removed - only standalone letter E remains */
@@ -2302,7 +2305,7 @@
   <header>
     <div class="container-custom">
       <div class="nav_content">
-        <a href="#" class="brand-logo" data-cursor-hover data-cursor-text="Home" aria-label="Edward Magejo">
+        <a href="#" class="brand-logo" data-magnetic data-cursor-hover data-cursor-text="Home" aria-label="Edward Magejo">
           <span class="brand-monogram">E</span>
         </a>
       </div>
