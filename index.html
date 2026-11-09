@@ -275,13 +275,7 @@
       }
     }
 
-    /* Monogram Header Initial Staging */
-    header {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateY(-24px);
-    }
+
   </style>
 
 
@@ -576,7 +570,16 @@
       border: none !important;
       box-shadow: none !important;
       pointer-events: none !important;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-16px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    header.header--visible {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(0) !important;
     }
 
     header.header--hidden {
@@ -3047,7 +3050,7 @@
         if (!heroSection) return;
 
         // Ensure clean initial state
-        if (header) gsap.set(header, { autoAlpha: 0, y: -24, pointerEvents: 'none' });
+        if (header) gsap.set(header, { autoAlpha: 0, y: -16, pointerEvents: 'none' });
         if (posterImg) gsap.set(posterImg, { opacity: 1, visibility: 'visible' });
         if (freezeImg) gsap.set(freezeImg, { opacity: 0, visibility: 'hidden' });
         if (phrase1) gsap.set(phrase1, { autoAlpha: 0, y: 28 });
@@ -3093,69 +3096,67 @@
               }
             });
           }
-
-          // Reveal Monogram Header softly
-          if (header) {
-            header.style.transition = 'none';
-            gsap.to(header, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.85,
-              ease: 'back.out(1.2)',
-              onComplete: () => {
-                gsap.set(header, { clearProps: 'opacity,visibility,transform' });
-                void header.offsetHeight;
-                header.style.transition = '';
-              }
-            });
-          }
         }
         window.__freezeHero = freezeHero;
 
-        // Skip on Escape key: snap immediately to settled state
+        // Reveal header helper softly
+        function revealHeader() {
+          if (header) {
+            header.classList.add('header--visible');
+          }
+        }
+
+        // Skip on Escape key
         function onKeySkip(e) {
           if (e.key === 'Escape') {
             window.removeEventListener('keydown', onKeySkip);
             window.removeEventListener('scroll', onScrollSkip);
             if (tl) tl.pause();
             freezeHero();
+            revealHeader();
             if (phrase1) gsap.set(phrase1, { autoAlpha: 0 });
             if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
           }
         }
         window.addEventListener('keydown', onKeySkip);
 
-        // Natural scroll auto-settle: if visitor scrolls down into document flow, settle immediately
+        // Natural scroll auto-settle
         function onScrollSkip() {
           if (window.scrollY > 120) {
             window.removeEventListener('scroll', onScrollSkip);
             freezeHero();
+            revealHeader();
             if (phrase1) gsap.set(phrase1, { autoAlpha: 0 });
             if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
           }
         }
         window.addEventListener('scroll', onScrollSkip, { passive: true });
 
-        // Prime video playback immediately on load
+        // Start video playback from 0:00 normally with zero cuts
         if (video) {
+          video.currentTime = 0;
           video.muted = true;
           video.defaultMuted = true;
           video.playsInline = true;
           video.playbackRate = 1.0;
-          gsap.set(video, { opacity: 1 }); // video is ready behind posterImg
-          
+          gsap.set(video, { opacity: 1 });
+
+          // When video begins playing from frame 0, smoothly dissolve poster immediately
+          video.addEventListener('playing', () => {
+            if (posterImg) {
+              gsap.to(posterImg, { opacity: 0, duration: 0.45, ease: 'power2.out' });
+            }
+          }, { once: true });
+
           const attemptPlay = () => {
             if (video && video.paused && !isFrozen) {
               const p = video.play();
-              if (p && p.catch) {
-                p.catch(() => {});
-              }
+              if (p && p.catch) p.catch(() => {});
             }
           };
 
           attemptPlay();
 
-          // Non-invasive universal touch fallback for strict iOS Low Power Mode
           ['touchstart', 'touchend', 'pointerdown', 'click'].forEach(evt => {
             window.addEventListener(evt, attemptPlay, { once: true, passive: true });
           });
@@ -3164,35 +3165,23 @@
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
         window.__heroTimeline = tl;
 
-        // 1. Phrase 1 enters while on static image (T = 0.35s)
+        // 1. Phrase 1 ("Hi, I'm Edward") enters smoothly right as video begins (T = 0.25s)
         tl.to(phrase1, {
           autoAlpha: 1,
           y: 0,
           duration: 0.85,
           ease: 'power3.out'
-        }, 0.35);
+        }, 0.25);
 
-        // 2. Phrase 1 dissolves softly at T = 2.40s
+        // 2. Phrase 1 dissolves softly at T = 2.10s
         tl.to(phrase1, {
           autoAlpha: 0,
-          y: -20,
-          duration: 0.55,
+          y: -18,
+          duration: 0.50,
           ease: 'power2.in'
-        }, 2.40);
+        }, 2.10);
 
-        // 3. Buttery smooth crossfade: poster dissolves to unveil living video at T = 2.50s
-        tl.to(posterImg, {
-          opacity: 0,
-          duration: 0.85,
-          ease: 'power2.inOut',
-          onStart: () => {
-            if (video && video.paused && !isFrozen) {
-              video.play().catch(() => {});
-            }
-          }
-        }, 2.50);
-
-        // 4. Phrase 2 / Permanent Statement enters as video blooms into full motion at T = 3.20s
+        // 3. Phrase 2 ("I like building things that work") enters seamlessly at T = 2.65s
         tl.to(statementWrapper, {
           autoAlpha: 1,
           y: 0,
@@ -3201,7 +3190,10 @@
           onComplete: () => {
             if (statementWrapper) statementWrapper.style.pointerEvents = 'auto';
           }
-        }, 3.20);
+        }, 2.65);
+
+        // 4. Reveal Monogram Header "E" at T = 3.20s in sync with statement
+        tl.call(revealHeader, null, 3.20);
 
         // 5. Video deceleration curve and freeze frame synchronization
         if (video) {
@@ -3222,8 +3214,8 @@
           video.addEventListener('ended', freezeHero);
         }
 
-        // 6. Master safety settle at 14.5s
-        tl.addLabel('freezeHeroFallback', 14.5);
+        // Master safety settle at 12.5s
+        tl.addLabel('freezeHeroFallback', 12.5);
         tl.call(() => {
           if (!isFrozen) freezeHero();
         }, null, 'freezeHeroFallback');
