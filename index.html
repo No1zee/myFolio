@@ -80,9 +80,7 @@
       will-change: opacity;
     }
 
-    .hero_video-element.video-playing {
-      opacity: 1;
-    }
+    /* video opacity controlled seamlessly via GSAP */
 
     .hero_scrim {
       position: absolute;
@@ -277,62 +275,15 @@
       }
     }
 
-    /* Delayed Navigation Strip rules */
-    html.intro-active header {
+    /* Monogram Header Initial Staging */
+    header {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transform: translateY(-24px);
     }
-
-    /* Return visit zero-wait settled rules */
-    html.intro-seen header {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    html.intro-seen .hero_section {
-      background-image: url('./assets/edward_freeze_frame.jpg');
-    }
-    html.intro-seen .hero_video-poster {
-      display: none !important;
-    }
-    html.intro-seen .hero_video-element {
-      display: none !important;
-    }
-    html.intro-seen .hero_freeze-frame {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-    html.intro-seen .hero_phrase--intro {
-      display: none !important;
-    }
-    html.intro-seen .hero_statement-wrapper {
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-      pointer-events: auto !important;
-    }
-    html.intro-seen .hero_actions {
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-      pointer-events: auto !important;
-    }
   </style>
-  <script>
-    (function () {
-      try {
-        if (sessionStorage.getItem('edward_intro_seen') === '1') {
-          document.documentElement.classList.add('intro-seen');
-        } else {
-          document.documentElement.classList.add('intro-active');
-        }
-      } catch (e) {
-        document.documentElement.classList.add('intro-active');
-      }
-    })();
-  </script>
+
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2361,7 +2312,7 @@
       <div class="hero_video-wrap">
         <img src="./assets/edward_intro_poster.jpg" alt="Edward Tanaka Magejo" class="hero_video-poster" id="heroPoster" />
         <img src="./assets/edward_freeze_frame.jpg" alt="Edward Tanaka Magejo" class="hero_freeze-frame" id="heroFreezeFrame" />
-        <video id="heroVideo" class="hero_video-element" poster="./assets/edward_intro_poster.jpg" playsinline webkit-playsinline muted preload="auto" disablePictureInPicture disableRemotePlayback>
+        <video id="heroVideo" class="hero_video-element" poster="./assets/edward_intro_poster.jpg" autoplay muted playsinline webkit-playsinline preload="auto" disablePictureInPicture disableRemotePlayback>
           <source src="./assets/edward_intro.mp4" type="video/mp4">
         </video>
         <div class="hero_scrim" aria-hidden="true"></div>
@@ -3095,64 +3046,16 @@
         const header = document.querySelector('header');
         if (!heroSection) return;
 
-        const isReturnVisit = sessionStorage.getItem('edward_intro_seen') === '1';
-
-        function applySettledState() {
-          document.documentElement.classList.remove('intro-active');
-          document.documentElement.classList.add('intro-seen');
-          try {
-            sessionStorage.setItem('edward_intro_seen', '1');
-          } catch (e) {}
-
-          if (posterImg) gsap.set(posterImg, { opacity: 0 });
-          if (video) {
-            video.pause();
-            gsap.set(video, { opacity: 0 });
-          }
-          if (freezeImg) gsap.set(freezeImg, { opacity: 1, visibility: 'visible' });
-          if (phrase1) gsap.set(phrase1, { autoAlpha: 0, y: -24 });
-          if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
-          if (actionsGroup) gsap.set(actionsGroup, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
-          if (header) {
-            header.style.transition = 'none';
-            gsap.set(header, { autoAlpha: 1, y: 0 });
-            void header.offsetHeight;
-            header.style.transition = '';
-          }
-        }
-
-        // Return visit: instant settled state with zero waiting
-        if (isReturnVisit) {
-          applySettledState();
-          return;
-        }
-
-        // Ensure initial staging
-        document.documentElement.classList.add('intro-active');
+        // Ensure clean initial state
         if (header) gsap.set(header, { autoAlpha: 0, y: -24, pointerEvents: 'none' });
-        if (posterImg) gsap.set(posterImg, { opacity: 1 });
-        if (freezeImg) gsap.set(freezeImg, { opacity: 0 });
-        if (phrase1) gsap.set(phrase1, { autoAlpha: 0, y: 32 });
+        if (posterImg) gsap.set(posterImg, { opacity: 1, visibility: 'visible' });
+        if (freezeImg) gsap.set(freezeImg, { opacity: 0, visibility: 'hidden' });
+        if (phrase1) gsap.set(phrase1, { autoAlpha: 0, y: 28 });
         if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 0, y: 32, pointerEvents: 'none' });
         if (actionsGroup) gsap.set(actionsGroup, { autoAlpha: 0, y: 20, pointerEvents: 'none' });
 
-        if (video) {
-          video.muted = true;
-          video.defaultMuted = true;
-          video.playsInline = true;
-          video.playbackRate = 1.0;
-          gsap.set(video, { opacity: 0 });
-          video.preload = 'auto';
-          video.load();
-        }
-
-        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-        window.__heroTimeline = tl;
-
-        let videoPlaybackStarted = false;
         let isFrozen = false;
 
-        // Freeze hero helper
         // Freeze hero helper
         function freezeHero() {
           if (isFrozen) return;
@@ -3166,9 +3069,10 @@
 
           // Crossfade to freeze frame image seamlessly
           if (freezeImg) {
+            freezeImg.style.visibility = 'visible';
             gsap.to(freezeImg, {
               opacity: 1,
-              duration: 0.35,
+              duration: 0.40,
               ease: 'power2.out',
               onComplete: () => {
                 if (posterImg) gsap.set(posterImg, { opacity: 0 });
@@ -3190,13 +3094,7 @@
             });
           }
 
-          // Delayed Navigation Strip: Header drops down softly with subtle spring damping
-          document.documentElement.classList.remove('intro-active');
-          document.documentElement.classList.add('intro-seen');
-          try {
-            sessionStorage.setItem('edward_intro_seen', '1');
-          } catch (e) {}
-
+          // Reveal Monogram Header softly
           if (header) {
             header.style.transition = 'none';
             gsap.to(header, {
@@ -3220,21 +3118,53 @@
             window.removeEventListener('keydown', onKeySkip);
             window.removeEventListener('scroll', onScrollSkip);
             if (tl) tl.pause();
-            applySettledState();
+            freezeHero();
+            if (phrase1) gsap.set(phrase1, { autoAlpha: 0 });
+            if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
           }
         }
         window.addEventListener('keydown', onKeySkip);
 
-        // Natural scroll auto-settle: if visitor scrolls down into document flow before intro finishes, settle immediately
+        // Natural scroll auto-settle: if visitor scrolls down into document flow, settle immediately
         function onScrollSkip() {
-          if (window.scrollY > 150) {
+          if (window.scrollY > 120) {
             window.removeEventListener('scroll', onScrollSkip);
             freezeHero();
+            if (phrase1) gsap.set(phrase1, { autoAlpha: 0 });
+            if (statementWrapper) gsap.set(statementWrapper, { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
           }
         }
         window.addEventListener('scroll', onScrollSkip, { passive: true });
 
-        // Phrase 1 enters while on static image
+        // Prime video playback immediately on load
+        if (video) {
+          video.muted = true;
+          video.defaultMuted = true;
+          video.playsInline = true;
+          video.playbackRate = 1.0;
+          gsap.set(video, { opacity: 1 }); // video is ready behind posterImg
+          
+          const attemptPlay = () => {
+            if (video && video.paused && !isFrozen) {
+              const p = video.play();
+              if (p && p.catch) {
+                p.catch(() => {});
+              }
+            }
+          };
+
+          attemptPlay();
+
+          // Non-invasive universal touch fallback for strict iOS Low Power Mode
+          ['touchstart', 'touchend', 'pointerdown', 'click'].forEach(evt => {
+            window.addEventListener(evt, attemptPlay, { once: true, passive: true });
+          });
+        }
+
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        window.__heroTimeline = tl;
+
+        // 1. Phrase 1 enters while on static image (T = 0.35s)
         tl.to(phrase1, {
           autoAlpha: 1,
           y: 0,
@@ -3242,121 +3172,43 @@
           ease: 'power3.out'
         }, 0.35);
 
-        // Video start transition at 2.65s
-        tl.addLabel('videoStart', 2.65);
+        // 2. Phrase 1 dissolves softly at T = 2.40s
+        tl.to(phrase1, {
+          autoAlpha: 0,
+          y: -20,
+          duration: 0.55,
+          ease: 'power2.in'
+        }, 2.40);
 
-        tl.call(() => {
-          if (!video || videoPlaybackStarted || isFrozen) return;
-
-          function startVideoCrossfade() {
-            if (videoPlaybackStarted || isFrozen) return;
-            videoPlaybackStarted = true;
-
-            video.currentTime = 0;
-            video.playbackRate = 1.0;
-            video.muted = true;
-            video.defaultMuted = true;
-            video.playsInline = true;
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-              playPromise.then(() => {
-                video.classList.add('video-playing');
-                if (posterImg) {
-                  gsap.to(posterImg, {
-                    opacity: 0,
-                    duration: 0.70,
-                    ease: 'power2.inOut'
-                  });
-                }
-                if (video) {
-                  gsap.to(video, {
-                    opacity: 1,
-                    duration: 0.50,
-                    ease: 'power2.out'
-                  });
-                }
-              }).catch((err) => {
-                // Safari WebKit Low Power Mode: autoplay rejection recovery
-                // Keep poster image fully visible so the user never sees a black or blank surface
-                if (posterImg) gsap.set(posterImg, { opacity: 1 });
-                if (video) gsap.set(video, { opacity: 0 });
-
-                const onUserTouch = () => {
-                  window.removeEventListener('touchstart', onUserTouch);
-                  window.removeEventListener('click', onUserTouch);
-                  video.muted = true;
-                  video.play().then(() => {
-                    video.classList.add('video-playing');
-                    if (posterImg) gsap.to(posterImg, { opacity: 0, duration: 0.5 });
-                    gsap.to(video, { opacity: 1, duration: 0.5 });
-                  }).catch(() => {});
-                };
-                window.addEventListener('touchstart', onUserTouch, { once: true, passive: true });
-                window.addEventListener('click', onUserTouch, { once: true });
-
-                if (tl.paused()) tl.play();
-              });
-            } else {
-              // Legacy synchronous play fallback
-              video.classList.add('video-playing');
-              if (posterImg) gsap.to(posterImg, { opacity: 0, duration: 0.70 });
-              if (video) gsap.to(video, { opacity: 1, duration: 0.50 });
-            }
-
-            // Phrase 1 fades out
-            if (phrase1) {
-              gsap.to(phrase1, {
-                autoAlpha: 0,
-                y: -24,
-                duration: 0.50,
-                ease: 'power2.in'
-              });
+        // 3. Buttery smooth crossfade: poster dissolves to unveil living video at T = 2.50s
+        tl.to(posterImg, {
+          opacity: 0,
+          duration: 0.85,
+          ease: 'power2.inOut',
+          onStart: () => {
+            if (video && video.paused && !isFrozen) {
+              video.play().catch(() => {});
             }
           }
+        }, 2.50);
 
-          if (video.readyState >= 3) {
-            startVideoCrossfade();
-          } else {
-            tl.pause();
-            let resolved = false;
-            const onReady = () => {
-              if (resolved) return;
-              resolved = true;
-              video.removeEventListener('canplay', onReady);
-              video.removeEventListener('canplaythrough', onReady);
-              video.removeEventListener('playing', onReady);
-              startVideoCrossfade();
-              if (tl.paused()) tl.play();
-            };
-            video.addEventListener('canplay', onReady, { once: true });
-            video.addEventListener('canplaythrough', onReady, { once: true });
-            // Safari Low Power Mode safety timeout: never freeze timeline indefinitely
-            setTimeout(() => {
-              if (!resolved) {
-                onReady();
-              }
-            }, 1800);
-          }
-        }, null, 'videoStart');
-
-        // Phrase 2 / Permanent Statement enters at ~3.80s
+        // 4. Phrase 2 / Permanent Statement enters as video blooms into full motion at T = 3.20s
         tl.to(statementWrapper, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.90,
+          duration: 0.95,
           ease: 'power3.out',
           onComplete: () => {
             if (statementWrapper) statementWrapper.style.pointerEvents = 'auto';
           }
-        }, 3.80);
+        }, 3.20);
 
-        // Video deceleration and freeze listeners
+        // 5. Video deceleration curve and freeze frame synchronization
         if (video) {
           const onTimeUpdate = () => {
             if (isFrozen) return;
             const t = video.currentTime;
             // Video total duration is 11.0s. Freeze frame is at frame 254 (~10.58s)
-            // As video approaches final seconds (~9.6s - 10.58s), decelerate playbackRate smoothly
             if (t >= 9.6 && t < 10.58) {
               const p = (t - 9.6) / (10.58 - 9.6);
               const rate = Math.max(0.35, 1.0 - (0.65 * p));
@@ -3370,8 +3222,8 @@
           video.addEventListener('ended', freezeHero);
         }
 
-        // Fallback in master timeline at 15.0s (video starts at ~2.65s and takes ~10.9s to reach freeze frame)
-        tl.addLabel('freezeHeroFallback', 15.0);
+        // 6. Master safety settle at 14.5s
+        tl.addLabel('freezeHeroFallback', 14.5);
         tl.call(() => {
           if (!isFrozen) freezeHero();
         }, null, 'freezeHeroFallback');
@@ -3901,6 +3753,7 @@
           velocity.x = 0;
           velocity.y = 0;
           container.style.cursor = 'grabbing';
+          try { container.setPointerCapture(e.pointerId); } catch (_) {}
         });
 
         window.addEventListener('pointermove', (e) => {
@@ -3917,10 +3770,19 @@
           dragRotation.y += velocity.y;
         });
 
-        window.addEventListener('pointerup', () => {
+        window.addEventListener('pointerup', (e) => {
           if (isDragging) {
             isDragging = false;
             container.style.cursor = 'pointer';
+            try { container.releasePointerCapture(e.pointerId); } catch (_) {}
+          }
+        });
+
+        window.addEventListener('pointercancel', (e) => {
+          if (isDragging) {
+            isDragging = false;
+            container.style.cursor = 'pointer';
+            try { container.releasePointerCapture(e.pointerId); } catch (_) {}
           }
         });
 
