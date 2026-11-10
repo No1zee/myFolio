@@ -1569,13 +1569,13 @@
     }
 
     .mastromarino-sticky-viewport {
-      position: relative;
+      position: sticky;
       top: 0;
       left: 0;
       width: 100%;
       height: 100vh;
       height: 100dvh;
-      min-height: -webkit-fill-available;
+      max-height: 100dvh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1672,7 +1672,7 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      overflow: visible;
+      overflow: hidden;
       display: flex;
       align-items: center;
       transform-origin: center center;
@@ -4144,8 +4144,7 @@
             trigger: wrapper,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 0.8,
-            pin: container
+            scrub: 0.8
           }
         });
 
@@ -4746,8 +4745,7 @@
           scrollTrigger: {
             trigger: this.runway,
             start: 'top top',
-            end: 'bottom top',
-            pin: this.viewport,
+            end: 'bottom bottom',
             scrub: 1,
             invalidateOnRefresh: true,
             onEnter: () => {
