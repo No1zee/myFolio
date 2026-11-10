@@ -734,6 +734,26 @@
       overflow: hidden;
     }
 
+    .manifesto-stage-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: auto;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-left: clamp(1.5rem, 5vw, 4rem);
+      padding-right: clamp(1.5rem, 5vw, 4rem);
+      overflow: hidden;
+      pointer-events: auto;
+    }
+
     .heading-style-xl {
       font-family: var(--font-display);
       font-size: clamp(2.5rem, 5.5vw, 5.25rem);
@@ -1657,7 +1677,7 @@
       align-items: center;
       transform-origin: center center;
       will-change: clip-path;
-      clip-path: url(#mBalloonClip);
+      clip-path: inset(100% 0% 0% 0% round 45% 45% 0 0);
       background-color: #06130d;
       background: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
       border: none;
@@ -2784,6 +2804,7 @@
     <!-- ==================== 2. PINNED MANIFESTO RUNWAY & FLOATING PHYSICS CARDS ==================== -->
     <section id="manifesto" data-scroll-section="wrapper" class="copy_section_test">
       <div data-scroll-section="container" class="copy_section-inner">
+        <div class="manifesto-stage-viewport" id="manifestoStage">
         <div class="m-pebble-bed" aria-hidden="true"></div>
         <div class="m-showcase-stage-overlay" aria-hidden="true"></div>
         <!-- Seamless Organic SVG ClipPath for Zero-Seam Blue Ballooning Dome -->
@@ -2897,7 +2918,8 @@
 
         </div>
 
-      </div>
+      
+        </div></div>
     </section>
 
     <!-- ==================== 6. WORK EXPERIENCE ACCORDION ==================== -->
@@ -4014,8 +4036,9 @@
           { tilt: -8, offset: -0.04, origin: '50% 50%' }    // note
         ];
 
+        const stage = wrapper.querySelector('#manifestoStage') || container;
         cards.forEach((card, i) => {
-          container.appendChild(card);
+          stage.appendChild(card);
           card.style.position = 'absolute';
           card.style.zIndex = '5';
           card.style.willChange = 'transform, opacity';
@@ -4033,8 +4056,9 @@
 
         // Responsive Card Layout Engine
         function placeCards() {
-          const cW = container.clientWidth;
-          const cH = container.clientHeight;
+          const stageEl = wrapper.querySelector('#manifestoStage') || container;
+          const cW = stageEl.clientWidth;
+          const cH = stageEl.clientHeight;
 
           if (cW >= 960) {
             layoutMode = 'row';
@@ -4089,21 +4113,16 @@
         placeCards();
         window.addEventListener('resize', placeCards);
 
-        // Seamless Organic Blue Balloon via SVG clip-path
-        const blueClipPath = document.getElementById('mBlueBalloonClipPath');
+        // Seamless Organic Blue Balloon via Hardware-Accelerated CSS Inset
         const cover = document.createElement('div');
-        cover.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;background:#4D65FF;z-index:10;pointer-events:none;will-change:clip-path;overflow:visible;clip-path:url(#mBlueBalloonClip);';
-        container.appendChild(cover);
+        cover.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;background:#4D65FF;z-index:10;pointer-events:none;will-change:clip-path;overflow:visible;clip-path:inset(100% 0% 0% 0% round 45% 45% 0 0);';
+        stage.appendChild(cover);
 
         // Persistent tactile pebble leather bed directly inside blue sheet
         const bluePebble = document.createElement('div');
         bluePebble.className = 'm-pebble-bed';
         bluePebble.setAttribute('aria-hidden', 'true');
         cover.appendChild(bluePebble);
-
-        if (blueClipPath) {
-          blueClipPath.setAttribute('d', 'M 0 1 Q 0.5 1 1 1 L 1 1 L 0 1 Z');
-        }
 
         if (overlay) {
           cover.appendChild(overlay);
@@ -4174,7 +4193,7 @@
           }
         }, null, 2.95);
 
-        // 3. Blue Sheet engulfs viewport via 100% organic Bezier clip-path
+        // 3. Blue Sheet engulfs viewport via Hardware-Accelerated CSS Inset
         const blueClipObj = { progress: 0 };
         tl.to(blueClipObj, {
           progress: 1,
@@ -4182,17 +4201,12 @@
           ease: 'power2.inOut',
           onUpdate: function() {
             const p = blueClipObj.progress;
-            if (p >= 0.999) {
+            if (p >= 0.99) {
               cover.style.clipPath = 'none';
-              return;
-            }
-            cover.style.clipPath = 'url(#mBlueBalloonClip)';
-            const y = 1 - p;
-            const dome = Math.sin(p * Math.PI) * 0.28;
-            const controlY = Math.max(-0.06, y - dome);
-            const d = `M 0 ${y.toFixed(4)} Q 0.5 ${controlY.toFixed(4)} 1 ${y.toFixed(4)} L 1 1 L 0 1 Z`;
-            if (blueClipPath) {
-              blueClipPath.setAttribute('d', d);
+            } else {
+              const insetTop = (1 - p) * 100;
+              const curve = Math.sin(p * Math.PI) * 45;
+              cover.style.clipPath = `inset(${insetTop.toFixed(2)}% 0% 0% 0% round ${curve.toFixed(1)}% ${curve.toFixed(1)}% 0 0)`;
             }
           }
         }, 4.4);
@@ -4268,8 +4282,9 @@
           }, 10.0);
         }
       }
-      initManifestoRunway();
-      initSamariaCoin();
+      // Export to window so they can be initialized in strict DOM order after MastromarinoShowcase
+      window.initManifestoRunway = initManifestoRunway;
+      window.initSamariaCoin = initSamariaCoin;
 
       // ------------------------------------------------------------------------
       // 6. SYNCED PROCESS STEPS ACCORDION
@@ -4715,16 +4730,15 @@
         const getDistance = () => (totalSlides - 1) * window.innerWidth;
 
         // Stage begins with organic clip-path at bottom (100% seamless, zero friction lines)
-        if (this.stageWrapper && this.balloonClipPath) {
+        if (this.stageWrapper) {
           gsap.set(this.stageWrapper, {
             yPercent: 0,
             scale: 1,
             borderRadius: '0px',
             boxShadow: 'none',
-            clipPath: 'url(#mBalloonClip)',
+            clipPath: 'inset(100% 0% 0% 0% round 45% 45% 0 0)',
             transformOrigin: 'center center'
           });
-          this.balloonClipPath.setAttribute('d', 'M 0 1 Q 0.5 1 1 1 L 1 1 L 0 1 Z');
         }
 
         // Master pinned ScrollTrigger timeline
@@ -4778,8 +4792,8 @@
           }, 0.7);
         }
 
-        // Beat 3 (0.9 -> 1.83): Organic balloon swelling into full bleed
-        if (this.stageWrapper && this.balloonClipPath) {
+        // Beat 3 (0.9 -> 1.83): Organic balloon swelling into full bleed (Hardware-Accelerated CSS Inset)
+        if (this.stageWrapper) {
           const clipObj = { progress: 0 };
           this.masterTl.to(clipObj, {
             progress: 1,
@@ -4787,16 +4801,13 @@
             ease: 'power2.inOut',
             onUpdate: () => {
               const p = clipObj.progress;
-              if (p >= 0.999) {
+              if (p >= 0.99) {
                 this.stageWrapper.style.clipPath = 'none';
-                return;
+              } else {
+                const insetTop = (1 - p) * 100;
+                const curve = Math.sin(p * Math.PI) * 45;
+                this.stageWrapper.style.clipPath = `inset(${insetTop.toFixed(2)}% 0% 0% 0% round ${curve.toFixed(1)}% ${curve.toFixed(1)}% 0 0)`;
               }
-              this.stageWrapper.style.clipPath = 'url(#mBalloonClip)';
-              const y = 1 - p;
-              const dome = Math.sin(p * Math.PI) * 0.24;
-              const controlY = Math.max(-0.06, y - dome);
-              const d = `M 0 ${y.toFixed(4)} Q 0.5 ${controlY.toFixed(4)} 1 ${y.toFixed(4)} L 1 1 L 0 1 Z`;
-              this.balloonClipPath.setAttribute('d', d);
             }
           }, 0.9);
         }
@@ -5246,10 +5257,13 @@
         });
       }
     }
-    // Initialize engines
+    // Initialize engines in natural DOM order (Showcase -> Manifesto Runway -> Coin)
     document.addEventListener('DOMContentLoaded', () => {
       window.magneticCursor = new MagneticCursorEngine();
       window.mastromarinoShowcase = new MastromarinoShowcase();
+      if (window.initManifestoRunway) window.initManifestoRunway();
+      if (window.initSamariaCoin) window.initSamariaCoin();
+      ScrollTrigger.refresh();
     });
 
   </script>
