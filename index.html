@@ -1573,8 +1573,9 @@
 
     .mastromarino-runway {
       position: relative;
-      height: 280vh;
-      background-color: var(--bg-canvas, #090a0f);
+      height: 330vh;
+      background-color: #06130d;
+      background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
       border-top: none;
       border-bottom: none;
       margin-top: 0;
@@ -1794,37 +1795,39 @@
       width: 100%;
       height: 100%;
       position: relative;
+      background: transparent !important;
+      background-image: none !important;
     }
 
-    /* Continuous Project Backgrounds across entire scroll canvas */
-    .m-showcase-slide[data-project-id="zru"] .m-slide-scroll-canvas {
-      background-color: #06130d;
-      background-image: radial-gradient(circle at 60% 40vh, #173522 0%, #06130d 55%, #040e09 100%);
-      background-attachment: fixed;
+    /* Continuous Project Backgrounds ONLY active when a slide is expanded */
+    .m-showcase-slide.is-expanded[data-project-id="zru"] .m-slide-scroll-canvas {
+      background-color: #06130d !important;
+      background-image: radial-gradient(circle at 60% 40vh, #173522 0%, #06130d 55%, #040e09 100%) !important;
+      background-attachment: scroll;
     }
 
-    .m-showcase-slide[data-project-id="kinetik"] .m-slide-scroll-canvas {
-      background-color: #090d1f;
-      background-image: radial-gradient(circle at 60% 40vh, #161e47 0%, #090d1f 55%, #050813 100%);
-      background-attachment: fixed;
+    .m-showcase-slide.is-expanded[data-project-id="kinetik"] .m-slide-scroll-canvas {
+      background-color: #090d1f !important;
+      background-image: radial-gradient(circle at 60% 40vh, #161e47 0%, #090d1f 55%, #050813 100%) !important;
+      background-attachment: scroll;
     }
 
-    .m-showcase-slide[data-project-id="clinic"] .m-slide-scroll-canvas {
-      background-color: #081318;
-      background-image: radial-gradient(circle at 60% 40vh, #122c36 0%, #081318 55%, #040c10 100%);
-      background-attachment: fixed;
+    .m-showcase-slide.is-expanded[data-project-id="clinic"] .m-slide-scroll-canvas {
+      background-color: #081318 !important;
+      background-image: radial-gradient(circle at 60% 40vh, #122c36 0%, #081318 55%, #040c10 100%) !important;
+      background-attachment: scroll;
     }
 
-    .m-showcase-slide[data-project-id="pipeline"] .m-slide-scroll-canvas {
-      background-color: #0d0818;
-      background-image: radial-gradient(circle at 60% 40vh, #211336 0%, #0d0818 55%, #07040d 100%);
-      background-attachment: fixed;
+    .m-showcase-slide.is-expanded[data-project-id="pipeline"] .m-slide-scroll-canvas {
+      background-color: #0d0818 !important;
+      background-image: radial-gradient(circle at 60% 40vh, #211336 0%, #0d0818 55%, #07040d 100%) !important;
+      background-attachment: scroll;
     }
 
-    .m-showcase-slide[data-project-id="traffic"] .m-slide-scroll-canvas {
-      background-color: #130e06;
-      background-image: radial-gradient(circle at 60% 40vh, #2b1f0c 0%, #130e06 55%, #0a0703 100%);
-      background-attachment: fixed;
+    .m-showcase-slide.is-expanded[data-project-id="traffic"] .m-slide-scroll-canvas {
+      background-color: #130e06 !important;
+      background-image: radial-gradient(circle at 60% 40vh, #2b1f0c 0%, #130e06 55%, #0a0703 100%) !important;
+      background-attachment: scroll;
     }
 
     .m-slide-hero-face {
@@ -1994,13 +1997,20 @@
       overflow: hidden;
       box-sizing: border-box;
       padding: 0 !important;
-      cursor: pointer;
-      background: transparent;
+      cursor: default !important;
+      background: transparent !important;
+    }
+
+    .m-showcase-slide.is-central {
+      cursor: pointer !important;
+    }
+
+    .m-showcase-slide.is-expanded {
+      cursor: default !important;
     }
 
     .m-showcase-slide .m-showcase-display-title,
     .m-showcase-slide .m-project-meta-bottom {
-      transition: transform 0.12s ease-out;
       will-change: transform;
     }
 
@@ -4679,13 +4689,13 @@
           });
         }
 
-        // Master pinned ScrollTrigger timeline
+        // Master pinned ScrollTrigger timeline with crisp 0.5 scrub
         this.masterTl = gsap.timeline({
           scrollTrigger: {
             trigger: this.runway,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 1,
+            scrub: 0.5,
             pin: this.viewport,
             invalidateOnRefresh: true,
             onEnter: () => {
@@ -4739,14 +4749,44 @@
           }, 0.0);
         }
 
-        // Beat 2 (0.25 -> 2.85): Snappy, responsive horizontal scroll across all 5 slides
+        // Beat 2 (0.25 -> 3.55): Magnetic Detents & Dwell Inertia across all 5 projects
+        // Each slide dwells in the center so user enjoys reading it and can click it without sliding past!
+        const getSlideX = (i) => -(i * window.innerWidth);
+        // Slide 0: Dwell at x = 0 (0.25 to 0.55)
+        // Transition 0 -> 1: (0.55 to 1.00)
         this.masterTl.to(this.track, {
-          x: () => -getDistance(),
-          duration: 2.6,
-          ease: 'none'
-        }, 0.25);
+          x: () => getSlideX(1),
+          duration: 0.45,
+          ease: 'power2.inOut'
+        }, 0.55);
 
-        // Beat 3 (2.85 -> 3.10): Settle & clean transition into Manifesto
+        // Slide 1: Dwell at x = -1 * vw (1.00 to 1.30)
+        // Transition 1 -> 2 (Clinical): (1.30 to 1.75)
+        this.masterTl.to(this.track, {
+          x: () => getSlideX(2),
+          duration: 0.45,
+          ease: 'power2.inOut'
+        }, 1.30);
+
+        // Slide 2: Dwell at x = -2 * vw (1.75 to 2.05)
+        // Transition 2 -> 3 (Pipeline): (2.05 to 2.50)
+        this.masterTl.to(this.track, {
+          x: () => getSlideX(3),
+          duration: 0.45,
+          ease: 'power2.inOut'
+        }, 2.05);
+
+        // Slide 3: Dwell at x = -3 * vw (2.50 to 2.80)
+        // Transition 3 -> 4 (Telemetry): (2.80 to 3.25)
+        this.masterTl.to(this.track, {
+          x: () => getSlideX(4),
+          duration: 0.45,
+          ease: 'power2.inOut'
+        }, 2.80);
+
+        // Slide 4: Dwell at x = -4 * vw (3.25 to 3.55)
+
+        // Beat 3 (3.55 -> 3.80): Settle & clean transition into Manifesto
         const slide4Title = this.slides[4]?.querySelector('.m-showcase-display-title');
         const slide4Meta = this.slides[4]?.querySelector('.m-project-meta-bottom');
         if (slide4Title && slide4Meta) {
@@ -4755,14 +4795,14 @@
             y: -30,
             duration: 0.25,
             ease: 'power2.in'
-          }, 2.85);
+          }, 3.55);
         }
         if (this.dotsPager) {
           this.masterTl.to(this.dotsPager, {
             autoAlpha: 0,
             duration: 0.25,
             ease: 'power2.in'
-          }, 2.85);
+          }, 3.55);
         }
 
         // Continuous velocity decay loop: returns skew cleanly to 0 when scroll stops
@@ -4782,34 +4822,35 @@
           }
         }
 
-        // Elastic velocity distortion tracking
+        // Elastic velocity tracking
         const vel = self.getVelocity() * 0.001;
         this.targetVelocity = vel;
 
-        // TEXT-FIRST SLIDE TRANSITION: Parallax lead for titles and meta
-        const vpWidth = window.innerWidth;
-        this.slides.forEach((slide) => {
-          const sRect = slide.getBoundingClientRect();
-          // Culling offscreen slides to prevent phantom text rendering and ghost lines
-          if (sRect.right < -100 || sRect.left > vpWidth + 100) {
-            slide.style.visibility = 'hidden';
+        // TEXT-FIRST SLIDE TRANSITION: Zero reflow mathematical parallax lead
+        const vpWidth = window.innerWidth || 1;
+        const currentTrackX = gsap.getProperty(this.track, 'x') || 0;
+
+        this.slides.forEach((slide, idx) => {
+          const slideX = idx * vpWidth + currentTrackX;
+          const normDist = slideX / vpWidth; // 0 when centered, -1 left, +1 right
+
+          // Strict Invariant: Click authorized ONLY when centralized
+          const isCentral = Math.abs(normDist) < 0.12;
+          if (isCentral) {
+            slide.classList.add('is-central');
           } else {
-            slide.style.visibility = 'visible';
+            slide.classList.remove('is-central');
           }
 
-          const slideCenter = sRect.left + sRect.width / 2;
-          const vpCenter = vpWidth / 2;
-          const normDist = (slideCenter - vpCenter) / vpWidth; // -1 left, 0 center, +1 right
           const title = slide.querySelector('.m-showcase-display-title');
           const meta = slide.querySelector('.m-project-meta-bottom');
 
-          // Text slides across first (high-velocity parallax lead)
           if (title) {
-            const titleShift = normDist * (vpWidth * 0.35);
+            const titleShift = normDist * (vpWidth * 0.28);
             title.style.transform = `translateX(${titleShift.toFixed(2)}px)`;
           }
           if (meta) {
-            const metaShift = normDist * (vpWidth * 0.18);
+            const metaShift = normDist * (vpWidth * 0.14);
             meta.style.transform = `translateX(${metaShift.toFixed(2)}px)`;
           }
         });
@@ -4824,7 +4865,6 @@
         ];
 
         function lerpColor(c1, c2, t) {
-          // Hermite smoothstep for buttery, organic color gradient blending
           const st = t * t * (3 - 2 * t);
           const r = Math.round(c1[0] + (c2[0] - c1[0]) * st);
           const g = Math.round(c1[1] + (c2[1] - c1[1]) * st);
@@ -4832,14 +4872,9 @@
           return `rgb(${r}, ${g}, ${b})`;
         }
 
-        let floatIdx = 0;
-        const hStart = 0.08;
-        const hEnd = 0.92;
-        if (progress > hStart) {
-          const horizNorm = Math.min(1, Math.max(0, (progress - hStart) / (hEnd - hStart)));
-          floatIdx = horizNorm * (this.slides.length - 1);
-        }
-
+        // Float index tied 1:1 with real physical track position
+        const absTrackX = Math.abs(currentTrackX);
+        const floatIdx = Math.max(0, Math.min(this.slides.length - 1, absTrackX / vpWidth));
         const activeIndex = Math.min(this.slides.length - 1, Math.round(floatIdx));
 
         // Update counter if present
@@ -4854,7 +4889,7 @@
         const activeGlow = lerpColor(PALETTE[segIdx].glow, PALETTE[segIdx + 1].glow, segT);
         const activeGrad = `radial-gradient(circle at 60% 40%, ${activeGlow} 0%, ${activeColor} 100%)`;
 
-        if (progress >= 0.08) {
+        if (progress >= 0.06) {
           if (this.viewport) {
             this.viewport.style.backgroundColor = activeColor;
             this.viewport.style.backgroundImage = activeGrad;
@@ -4870,7 +4905,6 @@
             this.stageWrapper.style.backgroundImage = activeGrad;
             this.stageWrapper.style.backgroundAttachment = 'scroll';
           }
-
         } else {
           if (this.viewport) {
             this.viewport.style.backgroundColor = 'rgb(6, 19, 13)';
@@ -4880,7 +4914,6 @@
             this.stageWrapper.style.backgroundColor = 'rgb(6, 19, 13)';
             this.stageWrapper.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%)';
           }
-
         }
 
         // Fade out dots pager during Telemetry exit
@@ -4889,6 +4922,7 @@
             this.dotsPager.style.opacity = '0';
             this.dotsPager.style.pointerEvents = 'none';
           } else {
+            this.dotsPager.style.opacity = '1';
             this.dotsPager.style.pointerEvents = '';
           }
         }
@@ -4904,34 +4938,30 @@
       }
 
       updateElasticDistortion() {
-        // Smoothly interpolate towards target velocity and decay towards zero
+        // If stationary, early return to conserve 100% CPU and prevent any micro-jitter
+        if (Math.abs(this.currentVelocity) < 0.0001 && Math.abs(this.targetVelocity) < 0.0001) {
+          if (this.currentVelocity !== 0 || this.targetVelocity !== 0) {
+            this.currentVelocity = 0;
+            this.targetVelocity = 0;
+            this.slides.forEach((slide) => {
+              const stageBg = slide.querySelector('.m-showcase-stage-bg');
+              if (stageBg) stageBg.style.transform = '';
+            });
+          }
+          return;
+        }
+
+        // Smoothly decay velocity
         this.currentVelocity += (this.targetVelocity - this.currentVelocity) * 0.22;
         this.targetVelocity *= 0.82;
 
-        if (Math.abs(this.currentVelocity) < 0.0005 && Math.abs(this.targetVelocity) < 0.0005) {
-          this.currentVelocity = 0;
-          this.targetVelocity = 0;
-        }
-
-        const clampedSkew = Math.max(-8, Math.min(8, this.currentVelocity * 1.2));
-        const clampedRotateY = Math.max(-10, Math.min(10, this.currentVelocity * 1.4));
-        const vpWidth = window.innerWidth;
+        const clampedSkew = Math.max(-5, Math.min(5, this.currentVelocity * 0.9));
+        const clampedRotateY = Math.max(-7, Math.min(7, this.currentVelocity * 1.1));
 
         this.slides.forEach((slide) => {
-          const sRect = slide.getBoundingClientRect();
-          if (sRect.right < -100 || sRect.left > vpWidth + 100) {
-            slide.style.visibility = 'hidden';
-          } else {
-            slide.style.visibility = 'visible';
-          }
-
           const stageBg = slide.querySelector('.m-showcase-stage-bg');
           if (stageBg) {
-            stageBg.style.transform = `skewX(${clampedSkew.toFixed(4)}deg) rotateY(${clampedRotateY.toFixed(4)}deg) scale(1.02)`;
-          }
-          const stage = slide.querySelector('.m-showcase-stage');
-          if (stage && stage.style.transform) {
-            stage.style.transform = '';
+            stageBg.style.transform = `skewX(${clampedSkew.toFixed(3)}deg) rotateY(${clampedRotateY.toFixed(3)}deg)`;
           }
         });
       }
@@ -4991,7 +5021,7 @@
       }
 
       bindEvents() {
-        // Clicking on the slide expands it inline so user can scroll down
+        // Clicking on the slide expands it inline ONLY when centralized
         this.slides.forEach((slide) => {
           slide.addEventListener('click', (e) => {
             if (e.target.closest('#mSlideCloseBtn') || e.target.closest('#mDotsPager')) return;
@@ -5002,6 +5032,15 @@
             if (slide.classList.contains('is-expanded')) {
               return;
             }
+
+            // Strict Invariant: Clicking on a slide ONLY works when centralized in the viewport
+            const sRect = slide.getBoundingClientRect();
+            const sCenter = sRect.left + sRect.width / 2;
+            const vpCenter = window.innerWidth / 2;
+            if (Math.abs(sCenter - vpCenter) > window.innerWidth * 0.12) {
+              return; // Prohibit click! Slide is off-center or moving
+            }
+
             this.openSlideDetail(slide);
           });
 
@@ -5037,14 +5076,16 @@
           }
         });
 
-        // Dots pager click navigation
+        // Dots pager click navigation aligns to dwell plateaus
+        const dwellTimes = [0.40, 1.15, 1.90, 2.65, 3.40];
+        const totalTlDuration = 3.80;
         this.dots.forEach((dot) => {
           dot.addEventListener('click', () => {
             const index = parseInt(dot.dataset.dotIndex, 10);
             if (isNaN(index)) return;
             const runwayTop = this.runway.offsetTop;
             const runwayScrollable = this.runway.offsetHeight - window.innerHeight;
-            const targetProgress = 0.183 + (index / (this.slides.length - 1)) * (0.875 - 0.183);
+            const targetProgress = dwellTimes[index] / totalTlDuration;
             const targetScroll = runwayTop + targetProgress * runwayScrollable;
             if (window.lenis) {
               window.lenis.scrollTo(targetScroll, { duration: 1.2 });
