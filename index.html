@@ -1739,79 +1739,49 @@
 
     
     /* ==========================================================================
-       INLINE EXPANDED SLIDER DETAIL VIEW & TOP CLOSE X
+       INLINE EXPANDED SLIDER DETAIL VIEW & TOP CENTRAL CLOSE X
        ========================================================================== */
     .m-slide-close-btn {
-      position: absolute;
-      top: clamp(1.5rem, 3.5vh, 2.75rem);
-      right: clamp(1.5rem, 4vw, 3.5rem);
-      width: 38px;
-      height: 38px;
-      border: none !important;
-      background: transparent !important;
-      box-shadow: none !important;
+      position: fixed;
+      top: calc(env(safe-area-inset-top, 0px) + clamp(1.2rem, 3vh, 2.2rem));
+      left: 50%;
+      transform: translate(-50%, -10px) scale(0.85);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      background: rgba(14, 18, 24, 0.72) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
       outline: none;
       padding: 0;
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(255, 255, 255, 0.9);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      z-index: 1200;
+      z-index: 2500;
       opacity: 0;
       pointer-events: none;
-      transform: scale(0.6) rotate(-90deg);
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.2s ease,
+                  border-color 0.2s ease,
                   color 0.2s ease;
     }
 
     .m-slide-close-btn:hover {
+      background: rgba(26, 32, 44, 0.95) !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
       color: #ffffff;
-      transform: scale(1.2) rotate(0deg);
-    }
-
-    /* Animated Down-Arrow indicating scroll capability */
-    .m-slide-scroll-indicator {
-      position: absolute;
-      bottom: clamp(1.5rem, 3.5vh, 2.5rem);
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255, 255, 255, 0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 1200;
-      opacity: 0;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-
-    .has-expanded-slide .m-slide-scroll-indicator {
-      opacity: 1;
-      animation: m-arrow-bob 1.8s ease-in-out infinite;
-    }
-
-    .has-expanded-slide .m-slide-scroll-indicator.is-hidden {
-      opacity: 0 !important;
-      transform: translate(-50%, 12px) !important;
-    }
-
-    @keyframes m-arrow-bob {
-      0%, 100% {
-        transform: translate(-50%, 0);
-        opacity: 0.7;
-      }
-      50% {
-        transform: translate(-50%, 8px);
-        opacity: 1;
-      }
+      transform: translate(-50%, 0) scale(1.08);
     }
 
     .has-expanded-slide .m-slide-close-btn {
       opacity: 1;
       pointer-events: auto;
-      transform: scale(1) rotate(0deg);
+      transform: translate(-50%, 0) scale(1);
     }
 
     .has-expanded-slide #mDotsPager {
@@ -1826,6 +1796,37 @@
       position: relative;
     }
 
+    /* Continuous Project Backgrounds across entire scroll canvas */
+    .m-showcase-slide[data-project-id="zru"] .m-slide-scroll-canvas {
+      background-color: #06130d;
+      background-image: radial-gradient(circle at 60% 40vh, #173522 0%, #06130d 55%, #040e09 100%);
+      background-attachment: fixed;
+    }
+
+    .m-showcase-slide[data-project-id="kinetik"] .m-slide-scroll-canvas {
+      background-color: #090d1f;
+      background-image: radial-gradient(circle at 60% 40vh, #161e47 0%, #090d1f 55%, #050813 100%);
+      background-attachment: fixed;
+    }
+
+    .m-showcase-slide[data-project-id="clinic"] .m-slide-scroll-canvas {
+      background-color: #081318;
+      background-image: radial-gradient(circle at 60% 40vh, #122c36 0%, #081318 55%, #040c10 100%);
+      background-attachment: fixed;
+    }
+
+    .m-showcase-slide[data-project-id="pipeline"] .m-slide-scroll-canvas {
+      background-color: #0d0818;
+      background-image: radial-gradient(circle at 60% 40vh, #211336 0%, #0d0818 55%, #07040d 100%);
+      background-attachment: fixed;
+    }
+
+    .m-showcase-slide[data-project-id="traffic"] .m-slide-scroll-canvas {
+      background-color: #130e06;
+      background-image: radial-gradient(circle at 60% 40vh, #2b1f0c 0%, #130e06 55%, #0a0703 100%);
+      background-attachment: fixed;
+    }
+
     .m-slide-hero-face {
       width: 100vw;
       height: 100vh;
@@ -1836,25 +1837,20 @@
       justify-content: center;
     }
 
-    /* Unlocked vertical scrolling when expanded */
+    /* Unlocked vertical scrolling when expanded (ZERO layout shift) */
     .m-showcase-slide.is-expanded {
       overflow-y: auto !important;
       overflow-x: hidden !important;
       cursor: default;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
     }
 
     .m-showcase-slide.is-expanded::-webkit-scrollbar {
-      width: 6px;
-    }
-    .m-showcase-slide.is-expanded::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .m-showcase-slide.is-expanded::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 9999px;
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     .m-showcase-slide.is-expanded .m-slide-scroll-canvas {
@@ -1862,7 +1858,7 @@
       min-height: 190vh;
     }
 
-    /* Long detail pane underneath hero face on the exact same background */
+    /* Long detail pane underneath hero face on the exact same continuous background */
     .m-slide-detail-pane {
       position: relative;
       width: 100%;
@@ -1873,6 +1869,7 @@
       flex-direction: column;
       align-items: center;
       z-index: 10;
+      background: transparent;
     }
 
     .m-slide-detail-inner {
@@ -2483,20 +2480,13 @@
     <section class="mastromarino-runway" id="projects" data-m-runway>
       <div class="m-pebble-bed" aria-hidden="true"></div>
       <div class="mastromarino-sticky-viewport" id="mStickyViewport">
-        <!-- The Little Borderless X on top of the slider -->
-        <button class="m-slide-close-btn" id="mSlideCloseBtn" aria-label="Close project details" data-magnetic>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+        <!-- Minimal Central Top X Close Button -->
+        <button class="m-slide-close-btn" id="mSlideCloseBtn" aria-label="Close project view" data-magnetic>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="2" y1="2" x2="12" y2="12"></line>
+            <line x1="12" y1="2" x2="2" y2="12"></line>
           </svg>
         </button>
-
-        <!-- The Animated Scroll Down Arrow -->
-        <div class="m-slide-scroll-indicator" id="mSlideScrollIndicator" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </div>
         
         
 
@@ -4953,10 +4943,13 @@
         // Close any currently open slide
         this.slides.forEach(s => {
           s.classList.remove('is-expanded');
+          s.removeAttribute('data-lenis-prevent');
           s.scrollTop = 0;
         });
 
         slide.classList.add('is-expanded');
+        slide.setAttribute('data-lenis-prevent', 'true');
+        slide.scrollTop = 0;
         this.viewport.classList.add('has-expanded-slide');
         document.body.classList.add('slide-detail-active');
 
@@ -4977,24 +4970,23 @@
         }
 
         const slide = this.activeExpandedSlide;
-        const indicator = document.getElementById('mSlideScrollIndicator');
-        if (indicator) indicator.classList.remove('is-hidden');
-
-        if (slide.scrollTop > 0) {
-          slide.scrollTo({ top: 0, behavior: 'smooth' });
-          setTimeout(() => {
-            slide.classList.remove('is-expanded');
-            this.viewport.classList.remove('has-expanded-slide');
-            document.body.classList.remove('slide-detail-active');
-            if (window.lenis) window.lenis.start();
-            this.activeExpandedSlide = null;
-          }, 260);
-        } else {
+        const finalizeClose = () => {
           slide.classList.remove('is-expanded');
+          slide.removeAttribute('data-lenis-prevent');
+          slide.scrollTop = 0;
           this.viewport.classList.remove('has-expanded-slide');
           document.body.classList.remove('slide-detail-active');
-          if (window.lenis) window.lenis.start();
+          if (window.lenis) {
+            window.lenis.start();
+          }
           this.activeExpandedSlide = null;
+        };
+
+        if (slide.scrollTop > 10) {
+          slide.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(finalizeClose, 280);
+        } else {
+          finalizeClose();
         }
       }
 
@@ -5013,30 +5005,19 @@
             this.openSlideDetail(slide);
           });
 
-          // Track scrolling inside the expanded slide to hide the down arrow
-          slide.addEventListener('scroll', () => {
-            const indicator = document.getElementById('mSlideScrollIndicator');
-            if (indicator) {
-              if (slide.scrollTop > 20) {
-                indicator.classList.add('is-hidden');
-              } else {
-                indicator.classList.remove('is-hidden');
-              }
-            }
-          }, { passive: true });
-
-          // Ensure wheel scrolling stays inside the expanded slide
+          // Ensure wheel scrolling stays inside the expanded slide and doesn't scroll page
           slide.addEventListener('wheel', (e) => {
             if (slide.classList.contains('is-expanded')) {
               e.stopPropagation();
             }
-          }, { passive: true });
+          }, { passive: false });
         });
 
-        // Little X on top of slider closes detail view
+        // Little X on central top of slider closes detail view
         const topCloseBtn = document.getElementById('mSlideCloseBtn');
         if (topCloseBtn) {
           topCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
             this.closeSlideDetail();
           });
