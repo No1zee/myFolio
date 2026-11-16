@@ -801,12 +801,13 @@
     .copy_section-card-inner.whatsapp {
       background-color: #d0fecf;
       color: #0b141a;
-      padding-top: 0.8em;
-      padding-bottom: 0.5em;
-      padding-left: 1.1em;
-      padding-right: 1.1em;
+      padding: 0.9em 1.1em 0.6em;
       font-weight: 500;
-      max-width: 22ch;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
     }
 
     .whatsapp_bubble-tail {
@@ -824,7 +825,7 @@
       gap: 0.3em;
       font-size: 0.72em;
       color: rgba(11, 20, 26, 0.6);
-      margin-top: 0.3em;
+      margin-top: 0.4em;
     }
 
     .whatsapp_bubble-check {
@@ -836,22 +837,27 @@
     .copy_section-card-inner.claude {
       background-color: #ffffff;
       color: #131313;
-      min-width: 22em;
-      max-width: 26em;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      box-sizing: border-box;
       border: none !important;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
       display: flex;
       flex-direction: column;
-      gap: 0.75em;
+      gap: 0.65em;
+      padding: 1.1em 1.2em;
     }
 
     .claude_bubble {
       background-color: #f4f4f5;
-      border-radius: 1em;
-      align-self: flex-end;
-      padding: 0.6em 0.9em;
-      font-size: 0.9em;
+      border-radius: 0.85em;
+      align-self: flex-start;
+      padding: 0.55em 0.8em;
+      font-size: 0.85rem;
+      font-weight: 600;
       color: #27272a;
+      line-height: 1.35;
     }
 
     .claude_logo-wrap {
@@ -867,8 +873,8 @@
     }
 
     .claude_reply {
-      font-size: 0.92rem;
-      line-height: 1.4;
+      font-size: 0.88rem;
+      line-height: 1.42;
       color: #18181b;
       font-weight: 500;
     }
@@ -908,7 +914,10 @@
 
     /* Docs Card (Clean borderless aesthetic) */
     .copy_section-card-inner.docs {
-      width: 24em;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      box-sizing: border-box;
       border: none !important;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
       border-radius: 0.75em;
@@ -936,10 +945,10 @@
     }
 
     .docs_body {
-      padding: 1.2em 1.5em;
+      padding: 1.1em 1.25em;
       color: #212529;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      font-size: 0.86rem;
+      line-height: 1.48;
     }
 
     /* Sticky Note */
@@ -949,11 +958,14 @@
       border-radius: 0;
       box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.25);
       font-family: 'Indie Flower', cursive;
-      font-size: 1.2rem;
+      font-size: 1.05rem;
       font-weight: 600;
       line-height: 1.35;
-      max-width: 20ch;
-      padding: 1.5em;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+      padding: 1.25em 1.15em;
+      min-height: 190px;
     }
 
     /* Shimmering "Thinking..." CSS animation */
@@ -2822,30 +2834,30 @@
           </defs>
         </svg>
         <h2 data-scroll-section="heading-1" class="heading-style-xl">
-          What in the world wide web has happened to websites?
+          My career history, told through 2 AM alerts and uptime saves.
         </h2>
 
         <!-- The 4 Reference Floating Cards (Incroy 1:1) -->
         <div data-scroll-section="cards" class="copy_section-cards">
           
-          <!-- Card 1: WhatsApp -->
+          <!-- Card 1: WhatsApp (Aviation Ground Services) -->
           <div class="copy_section-card-inner whatsapp" data-card-kind="whatsapp">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 19" fill="none" class="whatsapp_bubble-tail">
               <path d="M7.5 4L7.5 0L0 0L0 14C3.65938 17.2528 10.6252 17.8604 13.1 17.9739C13.4071 17.988 13.5646 17.6021 13.3479 17.3841C11.7002 15.727 7.5 10.8328 7.5 4Z" fill="currentColor"/>
             </svg>
-            <div>Your brother-in-law says he knows a guy in Israel.</div>
+            <div>Harare Airport dispatch: &ldquo;Flight Emirates check-in is freezing at gate 3. Eddie, are you awake?&rdquo;</div>
             <div class="whatsapp_bubble-meta">
-              <div>8:21</div>
+              <div>05:42</div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17" fill="none" class="whatsapp_bubble-check">
                 <path d="M9.626 3.847C9.874 3.539 10.324 3.489 10.632 3.737C10.94 3.984 10.99 4.434 10.743 4.742L4.558 12.448C4.431 12.606 4.242 12.703 4.039 12.714C3.836 12.725 3.638 12.65 3.494 12.506L0.994 10.006C0.715 9.727 0.714 9.273 0.993 8.993C1.273 8.714 1.727 8.714 2.006 8.993L3.942 10.929L9.626 3.847ZM13.712 3.847C13.96 3.539 14.411 3.489 14.719 3.737C15.027 3.984 15.076 4.434 14.829 4.742L8.644 12.448C8.516 12.606 8.328 12.703 8.125 12.714C7.922 12.725 7.724 12.65 7.58 12.506L6.58 11.507C6.301 11.228 6.3 10.774 6.579 10.494C6.859 10.215 7.312 10.214 7.592 10.493L8.028 10.928L13.712 3.847Z" fill="#007BFC"/>
               </svg>
             </div>
           </div>
 
-          <!-- Card 2: Claude Chat -->
+          <!-- Card 2: Claude Chat (Samaria Tech) -->
           <div class="copy_section-card-inner claude" data-card-kind="claude">
             <div class="claude_bubble">
-              <div>Can you generate me a high-converting website?</div>
+              <div>Co-Founder &amp; Lead AI Engineer at Samaria Tech (2024&ndash;Present)</div>
             </div>
             <div class="claude_logo-wrap">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="none" class="claude_logo">
@@ -2855,38 +2867,38 @@
             </div>
             <div class="claude_reply-wrap">
               <div class="claude_reply">
-                I’ve designed an award-winning layout with tailored physics, fluid animations, and zero boilerplate.
+                Building autonomous agents and shipping web platforms that solve real problems.
               </div>
               <div class="claude_bottom">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="none" class="claude_icon">
                   <path d="M9.53 5.47V2.5C9.53 2.07 9.18 1.72 8.75 1.72H2.5C2.07 1.72 1.72 2.07 1.72 2.5V8.75C1.72 9.18 2.07 9.53 2.5 9.53H5.47M6.25 5.47H12.5C12.93 5.47 13.28 5.82 13.28 6.25V12.5C13.28 12.93 12.93 13.28 12.5 13.28H6.25C5.82 13.28 5.47 12.93 5.47 12.5V6.25C5.47 5.82 5.82 5.47 6.25 5.47Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <div class="claude_meta">Just now</div>
+                <div class="claude_meta">2024 &ndash; Present</div>
               </div>
             </div>
           </div>
 
-          <!-- Card 3: Google Docs -->
+          <!-- Card 3: Google Docs (Advance Medical Africa) -->
           <div class="copy_section-card-inner docs" data-card-kind="docs">
             <div class="docs_header">
               <div class="docs_tab">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285F4">
                   <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
                 </svg>
-                PRD_v4_final_FINAL.docx
+                advance_medical_ehr_ops.docx
               </div>
             </div>
             <div class="docs_body">
-              <strong>Section 4.1: Technical Scope</strong><br/>
-              The web infrastructure shall deliver sub-50ms interaction latency, custom physics simulation, and zero unverified dependencies.
+              <strong>Advance Medical Africa (2025&ndash;Present)</strong><br/>
+              Lead IT Systems &amp; Operations Engineer. Directing multi-branch clinical infrastructure, EHR systems, and sustaining 99.99% uptime so doctors can treat patients without system crashes.
             </div>
           </div>
 
-          <!-- Card 4: Sticky Note -->
+          <!-- Card 4: Sticky Note (Vernomas ICT) -->
           <div class="copy_section-card-inner note" data-card-kind="note">
             <div>
-              Launch Friday or else.<br/><br/>
-              Whenever that might be.
+              Vernomas ICT (2023)<br/><br/>
+              Infrastructure Consultant: Migrated physical racks to VMware ESXi virtual clusters without dropping a single packet. And labeled every cable.
             </div>
           </div>
 
@@ -4041,15 +4053,15 @@
 
           if (cW >= 960) {
             layoutMode = 'row';
-            const gapX = 24;
-            const totalCardsW = Math.min(cW * 0.9, 1100);
+            const gapX = 22;
+            const totalCardsW = Math.min(cW * 0.94, 1340);
             const startX = (cW - totalCardsW) / 2;
             const cardW = (totalCardsW - gapX * 3) / 4;
 
             cards.forEach((card, i) => {
               const cfg = cardConfigs[i];
               const x = startX + i * (cardW + gapX);
-              const y = cH * 0.52 + cfg.offset * 120;
+              const y = cH * 0.53 + cfg.offset * 70;
               card.style.left = `${x}px`;
               card.style.top = `${y}px`;
               card.style.width = `${cardW}px`;
