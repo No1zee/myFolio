@@ -143,7 +143,8 @@
       height: 100%;
       z-index: 10;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(3.0rem, 7.5vh, 5.2rem));
       pointer-events: none;
     }
 
@@ -154,12 +155,12 @@
     }
 
     .hero_caption-box {
-      max-width: 860px;
+      max-width: 960px;
       position: relative;
-      min-height: 180px;
+      min-height: auto;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
     }
 
     .hero_phrase {
@@ -171,8 +172,9 @@
     .hero_phrase--intro {
       position: absolute;
       left: 0;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: 0;
+      top: auto;
+      transform: none;
       width: 100%;
       opacity: 0;
       visibility: hidden;
@@ -211,7 +213,7 @@
       display: flex;
       gap: 1.15rem;
       align-items: center;
-      margin-top: clamp(1.8rem, 3.8vh, 2.75rem);
+      margin-top: clamp(1.2rem, 2.5vh, 2rem);
       pointer-events: auto;
       opacity: 0;
       visibility: hidden;
@@ -4152,18 +4154,23 @@
             scale: 1,
             rotation: cfg.tilt,
             y: 0,
-            duration: 0.65,
-            ease: 'back.out(1.4)'
+            duration: 0.5,
+            ease: 'back.out(1.4)',
+            onStart: () => {
+              if (layoutMode === 'pile') {
+                card.style.zIndex = String(10 + i);
+              }
+            }
           }, at);
 
-          // In pile mode, card lifts and fades as next one arrives
+          // In pile mode, card lifts and cleanly vanishes before next card arrives
           if (i < cards.length - 1) {
             tl.to(card, {
               autoAlpha: () => (layoutMode === 'pile' ? 0 : 1),
-              y: () => (layoutMode === 'pile' ? -30 : 0),
-              duration: 0.4,
+              y: () => (layoutMode === 'pile' ? -25 : 0),
+              duration: 0.2,
               ease: 'power2.in'
-            }, at + 0.25);
+            }, at + 0.20);
           }
         });
 
