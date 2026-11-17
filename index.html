@@ -725,20 +725,75 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 240px;
+      height: 380px;
       pointer-events: none;
-      background: linear-gradient(to bottom, transparent 0%, #090a0f 100%);
-      z-index: 5;
+      background: linear-gradient(to bottom, rgba(9, 10, 15, 0) 0%, rgba(9, 10, 15, 0.7) 60%, #090a0f 100%);
+      z-index: 25;
     }
 
     .copy_section_test {
-      height: 260vh;
+      height: 330vh;
       position: relative;
-      background-color: #0c0803;
-      background-image: radial-gradient(circle at 60% 40%, #221608 0%, #0c0803 100%);
+      background-color: #130e06;
+      background-image: radial-gradient(circle at 60% 40%, #2b1f0c 0%, #130e06 100%);
       background-attachment: scroll;
       text-align: center;
       display: block;
+    }
+
+    /* The Signature Blue Balloon Dome (Hardware Accelerated Organic Swell) */
+    .manifesto-balloon-cover {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      will-change: clip-path, background, opacity;
+      overflow: hidden;
+      clip-path: inset(100% 0% 0% 0% round 45% 45% 0 0);
+      background-color: #2b49e6;
+      background-image: radial-gradient(circle at 50% 45%, #4d6aff 0%, #2b49e6 60%, #172fa8 100%);
+    }
+
+    .balloon-message-box {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(2rem, 6vw, 5rem);
+      max-width: 880px;
+      margin: 0 auto;
+      z-index: 5;
+      opacity: 0;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .balloon-badge {
+      font-family: var(--font-mono, monospace);
+      font-size: clamp(0.75rem, 0.9vw, 0.88rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 1.25rem;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .balloon-headline {
+      font-family: var(--font-display, 'Syne', sans-serif);
+      font-size: clamp(2.2rem, 4.8vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      color: #ffffff;
+      margin: 0;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
     }
 
     .copy_section-inner {
@@ -1200,11 +1255,12 @@
        6. SYNCED PROCESS STEPS ACCORDION (We keep it simple)
        ========================================================================== */
     .services_section {
-      padding-top: clamp(3.5rem, 6vh, 5.5rem);
+      padding-top: clamp(4.5rem, 8vh, 6.5rem);
       padding-bottom: clamp(5rem, 9vw, 8rem);
       border-top: none;
       border-bottom: none;
-      background: var(--bg-canvas, #090a0f);
+      background-color: #090a0f;
+      background-image: none;
       position: relative;
     }
 
@@ -4132,7 +4188,32 @@
         placeCards();
         window.addEventListener('resize', placeCards);
 
-        // Master Scrubbed ScrollTrigger Timeline for IT Work History Cards
+        // Signature Organic Blue Balloon Dome Container
+        const cover = document.createElement('div');
+        cover.className = 'manifesto-balloon-cover';
+        stage.appendChild(cover);
+
+        // Persistent tactile pebble leather texture directly inside blue balloon
+        const bluePebble = document.createElement('div');
+        bluePebble.className = 'm-pebble-bed';
+        bluePebble.setAttribute('aria-hidden', 'true');
+        cover.appendChild(bluePebble);
+
+        // Balloon editorial message box
+        const msgBox = document.createElement('div');
+        msgBox.className = 'balloon-message-box';
+        msgBox.innerHTML = `
+          <span class="balloon-badge">Samaria Tech &bull; 2026</span>
+          <h3 class="balloon-headline">Turning messy, complex workflows into clean, reliable software that just works.</h3>
+        `;
+        cover.appendChild(msgBox);
+
+        // Zero-seam feather blend to guarantee buttery smooth junction into #services
+        const bottomFeather = document.createElement('div');
+        bottomFeather.style.cssText = 'position:absolute;left:0;right:0;bottom:0;height:320px;pointer-events:none;background:linear-gradient(to bottom, transparent 0%, rgba(9,10,15,0.6) 65%, #090a0f 100%);z-index:6;';
+        cover.appendChild(bottomFeather);
+
+        // Master Scrubbed ScrollTrigger Timeline (Extended 330vh duration)
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: wrapper,
@@ -4192,20 +4273,94 @@
           }
         }, null, 1.4);
 
-        // 3. Cards dwell serenely (2.2 to 2.8) so user reads them clearly on dark pebble leather
-        // 4. Settle & clean transition into #services (Dark Canvas #090a0f)
-        tl.to([heading1, ...cards], {
+        // 3. Signature Blue Balloon Dome swells up organically from bottom (1.9 -> 3.0)
+        const blueClipObj = { progress: 0 };
+        tl.to(blueClipObj, {
+          progress: 1,
+          duration: 1.1,
+          ease: 'power2.inOut',
+          onUpdate: function() {
+            const p = blueClipObj.progress;
+            if (p >= 0.99) {
+              cover.style.clipPath = 'none';
+            } else {
+              const insetTop = (1 - p) * 100;
+              const curve = Math.sin(p * Math.PI) * 45;
+              cover.style.clipPath = `inset(${insetTop.toFixed(2)}% 0% 0% 0% round ${curve.toFixed(1)}% ${curve.toFixed(1)}% 0 0)`;
+            }
+          }
+        }, 1.9);
+
+        // Softly fade cards & heading underneath balloon as it covers the viewport
+        tl.to([heading1, ...cards], { autoAlpha: 0, duration: 0.4 }, 2.3);
+
+        // Reveal balloon editorial statement
+        tl.fromTo(msgBox,
+          { autoAlpha: 0, y: 25 },
+          { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+          2.6
+        );
+
+        // 4. Message gently lifts and dissolves as chromatic transition begins
+        tl.to(msgBox, {
           autoAlpha: 0,
           y: -20,
-          duration: 0.5,
+          duration: 0.45,
           ease: 'power2.in'
-        }, 2.9);
+        }, 3.3);
+
+        // 5. BUTTERY SMOOTH CHROMATIC MORPH: Electric Blue -> Midnight Cobalt -> Obsidian Indigo -> Dark Canvas #090a0f
+        const colorObj = { t: 0 };
+        tl.to(colorObj, {
+          t: 1,
+          duration: 1.4,
+          ease: 'sine.inOut',
+          onUpdate: () => {
+            const t = colorObj.t;
+            function lerp(c1, c2, factor) {
+              const st = factor * factor * (3 - 2 * factor);
+              const r = Math.round(c1[0] + (c2[0] - c1[0]) * st);
+              const g = Math.round(c1[1] + (c2[1] - c1[1]) * st);
+              const b = Math.round(c1[2] + (c2[2] - c1[2]) * st);
+              return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            let base, glow;
+            if (t < 0.42) {
+              const subT = t / 0.42;
+              base = lerp([43, 73, 230], [22, 34, 110], subT);
+              glow = lerp([77, 106, 255], [42, 60, 168], subT);
+            } else if (t < 0.78) {
+              const subT = (t - 0.42) / 0.36;
+              base = lerp([22, 34, 110], [14, 18, 52], subT);
+              glow = lerp([42, 60, 168], [22, 28, 78], subT);
+            } else {
+              const subT = (t - 0.78) / 0.22;
+              base = lerp([14, 18, 52], [9, 10, 15], subT);
+              glow = lerp([22, 28, 78], [18, 22, 38], subT);
+            }
+
+            const grad = `radial-gradient(circle at 50% 45%, ${glow} 0%, ${base} 70%, #090a0f 100%)`;
+            cover.style.backgroundColor = base;
+            cover.style.backgroundImage = grad;
+            wrapper.style.backgroundColor = base;
+            wrapper.style.backgroundImage = grad;
+          }
+        }, 3.3);
+
+        // 6. Seamless settle & dissolve into #services
+        tl.to(cover, {
+          autoAlpha: 0,
+          duration: 0.4,
+          ease: 'power1.out'
+        }, 4.8);
 
         tl.to(wrapper, {
           backgroundColor: '#090a0f',
-          duration: 0.5,
-          ease: 'power2.inOut'
-        }, 2.9);
+          backgroundImage: 'none',
+          duration: 0.4,
+          ease: 'power1.out'
+        }, 4.8);
       }
       // Export to window so they can be initialized in strict DOM order after MastromarinoShowcase
       window.initManifestoRunway = initManifestoRunway;
