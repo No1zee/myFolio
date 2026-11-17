@@ -56,7 +56,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center center;
+      object-position: center 16%;
       margin: 0;
       padding: 0;
       border: none;
@@ -66,12 +66,16 @@
       z-index: 2;
       opacity: 1;
       will-change: opacity;
+      object-fit: cover;
+      object-position: center 16%;
     }
 
     .hero_freeze-frame {
       z-index: 2;
       opacity: 0;
       will-change: opacity;
+      object-fit: cover;
+      object-position: center 16%;
     }
 
     .hero_video-element {
@@ -144,7 +148,7 @@
       z-index: 10;
       display: flex;
       align-items: flex-end;
-      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(3.0rem, 7.5vh, 5.2rem));
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.8rem, 4.2vh, 3.5rem));
       pointer-events: none;
     }
 
@@ -310,7 +314,11 @@
       }
       .hero_content-overlay {
         align-items: flex-end;
-        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(3.8rem, 8.5vh, 5.5rem));
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.8rem, 4.0vh, 3.0rem));
+      }
+      .hero_phrase-text {
+        font-size: clamp(1.9rem, 7.2vw, 2.7rem) !important;
+        line-height: 1.12 !important;
       }
       .hero_caption-box {
         min-height: auto;
@@ -1585,14 +1593,71 @@
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
+    /* ==========================================================================
+       SHOWCASE INTRO EDITORIAL SECTION (A Site for Sore Eyes)
+       ========================================================================== */
+    .showcase-intro-section {
+      position: relative;
+      width: 100%;
+      background-color: #080d0a;
+      background-image: radial-gradient(circle at 60% 50%, #11261a 0%, #080d0a 100%);
+      padding: clamp(3.5rem, 7vh, 5.5rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vh, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-sizing: border-box;
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    .showcase-intro-inner {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .showcase-intro-tag {
+      font-family: var(--font-mono, monospace);
+      font-size: clamp(0.75rem, 0.9vw, 0.88rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 600;
+    }
+
+    .showcase-intro-title {
+      font-family: var(--font-display, 'Syne', sans-serif);
+      font-size: clamp(2.6rem, 5.8vw, 4.8rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      color: #ffffff;
+      margin: 0;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .showcase-intro-subtitle {
+      font-family: var(--font-body, 'Inter', sans-serif);
+      font-size: clamp(1.0rem, 1.3vw, 1.25rem);
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: -0.01em;
+      margin: 0.25rem 0 0;
+    }
+
     .mastromarino-runway {
       position: relative;
       height: 330vh;
       background-color: #06130d;
       background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
-      border-top: none;
-      border-bottom: none;
-      margin-top: 0;
+      border: none;
+      margin: 0;
+      padding: 0;
     }
 
     .mastromarino-sticky-viewport {
@@ -1606,7 +1671,8 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      background-color: var(--bg-canvas, #090a0f);
+      background-color: #06130d;
+      background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
       z-index: 1200;
     }
 
@@ -1693,34 +1759,22 @@
 
     .m-stage-wrapper {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       display: flex;
       align-items: center;
       transform-origin: center center;
-      will-change: clip-path;
-      clip-path: inset(14% 5% 0% 5% round 24px 24px 0 0);
-      background-color: #06130d;
-      background: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
+      clip-path: none !important;
+      background: transparent !important;
       border: none;
       outline: none;
     }
 
-    /* Fixed Top HUD: Tag at Top-Left, Counter at Top-Right */
+    /* Fixed Top HUD: Tag at Top-Left hidden to declutter slides */
     .m-showcase-header {
-      position: absolute;
-      top: calc(env(safe-area-inset-top, 0px) + clamp(1.2rem, 3vh, 2rem));
-      left: clamp(4.5rem, 7.5vw, 7rem);
-      right: clamp(2rem, 5vw, 4.5rem);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 30;
-      pointer-events: none;
+      display: none !important;
     }
 
     .m-showcase-tag {
@@ -2061,16 +2115,9 @@
       border: none !important;
     }
 
-    /* Transparent stage background so card color is carried seamlessly by stageWrapper */
+    /* Transparent stage background so card color is carried seamlessly by stationary stage */
     .m-showcase-stage-bg {
-      position: absolute;
-      top: -6%;
-      left: -6%;
-      width: 112%;
-      height: 112%;
-      background: transparent !important;
-      will-change: transform;
-      pointer-events: none;
+      display: none !important;
     }
 
     .m-showcase-stage-overlay {
@@ -2498,10 +2545,20 @@
       </a>
     </section>
 
+    <!-- ==================== A SITE FOR SORE EYES EDITORIAL HEADER ==================== -->
+    <section class="showcase-intro-section" id="projects">
+      <div class="m-pebble-bed" aria-hidden="true"></div>
+      <div class="container-custom showcase-intro-inner">
+        <span class="showcase-intro-tag">Selected Works</span>
+        <h2 class="showcase-intro-title">A Site for Sore Eyes</h2>
+        <p class="showcase-intro-subtitle">some projects I've worked on this year</p>
+      </div>
+    </section>
+
     <!-- ==========================================================================
-         FLAGSHIP FULL-BLEED EDITORIAL SHOWCASE (SITES FOR SORE EYES)
+         FLAGSHIP FULL-BLEED EDITORIAL SHOWCASE RUNWAY
          ========================================================================== -->
-    <section class="mastromarino-runway" id="projects" data-m-runway>
+    <section class="mastromarino-runway" data-m-runway>
       <div class="m-pebble-bed" aria-hidden="true"></div>
       <div class="mastromarino-sticky-viewport" id="mStickyViewport">
         <!-- Minimal Central Top X Close Button -->
@@ -2511,26 +2568,11 @@
             <line x1="12" y1="2" x2="2" y2="12"></line>
           </svg>
         </button>
-        
-        
 
-        <!-- Ballooning Stage Wrapper (balloons from card to 100vw x 100vh viewport) -->
+        <!-- Full-Bleed Stationary Exhibition Stage Wrapper -->
         <div class="m-stage-wrapper" id="mStageWrapper">
           <!-- Tactile Pebble Leather Exhibition Bed (Concept B) -->
           <div class="m-pebble-bed" id="mPebbleBed" aria-hidden="true"></div>
-          <!-- Seamless Organic SVG ClipPath for Zero-Seam Ballooning Dome -->
-          <svg width="0" height="0" style="position: absolute; pointer-events: none;" aria-hidden="true">
-            <defs>
-              <clipPath id="mBalloonClip" clipPathUnits="objectBoundingBox">
-                <path id="mBalloonClipPath" d="M 0 1 Q 0.5 1 1 1 L 1 1 L 0 1 Z"></path>
-              </clipPath>
-            </defs>
-          </svg>
-
-          <!-- Fixed Header HUD: Tag at Top-Left (Counter removed for immersion) -->
-          <div class="m-showcase-header">
-            <span class="m-showcase-tag">A Site for Sore Eyes</span>
-          </div>
 
           <!-- Horizontal Track: exactly 500vw for 5 Slides -->
           <div class="m-showcase-track" id="mShowcaseTrack">
@@ -2906,23 +2948,7 @@
 
         </div>
 
-                <!-- Engulfing Brand Blue Sheet Overlay Content -->
-        <div data-scroll-section="overlay" class="copy_section-overlay">
-          
-          <!-- STAGE 1: 3D Samaria Coin + Story Paragraph 1 -->
-          <div class="manifesto-stage-1" data-manifesto-stage="1">
-            <a href="https://samariatech.co.zw" target="_blank" rel="noopener noreferrer" class="samaria-coin-link" data-cursor-hover data-cursor-text="Samaria" aria-label="Visit Samaria Tech Website">
-              <div class="samaria-coin-container" id="samariaCoinContainer">
-                <canvas id="samariaCoinCanvas"></canvas>
-              </div>
-            </a>
-            
-            <p class="text-size-medium manifesto-p1" data-scroll-section="paragraph-1">
-              This year has been all about building things that actually get used. I teamed up to start Samaria.tech, where we ship client platforms from scratch and spend hundreds of hours turning clunky workflows into fast, clean software.
-            </p>
-          </div>
-
-        </div>
+        
 
       
         </div></div>
@@ -4106,27 +4132,7 @@
         placeCards();
         window.addEventListener('resize', placeCards);
 
-        // Seamless Organic Blue Balloon via Hardware-Accelerated CSS Inset
-        const cover = document.createElement('div');
-        cover.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;background:#4D65FF;z-index:10;pointer-events:none;will-change:clip-path;overflow:visible;clip-path:inset(100% 0% 0% 0% round 45% 45% 0 0);';
-        stage.appendChild(cover);
-
-        // Persistent tactile pebble leather bed directly inside blue sheet
-        const bluePebble = document.createElement('div');
-        bluePebble.className = 'm-pebble-bed';
-        bluePebble.setAttribute('aria-hidden', 'true');
-        cover.appendChild(bluePebble);
-
-        if (overlay) {
-          cover.appendChild(overlay);
-          gsap.set(overlay, { autoAlpha: 1 });
-        }
-
-        // Set initial states for stages
-        if (coinLink) gsap.set(coinLink, { autoAlpha: 0, scale: 0.7, y: 25 });
-        if (p1) gsap.set(p1, { autoAlpha: 0, y: 20 });
-
-        // Master Scrubbed ScrollTrigger Timeline (Streamlined 260vh duration)
+        // Master Scrubbed ScrollTrigger Timeline for IT Work History Cards
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: wrapper,
@@ -4137,17 +4143,17 @@
           }
         });
 
-        // 1. Serene entrance rest beat on warm brown canvas, then Heading 1 character-by-character reveal
+        // 1. Serene entrance on continuous dark leather, then Heading character-by-character reveal
         tl.fromTo(h1Chars,
           { autoAlpha: 0, y: '0.3em' },
           { autoAlpha: 1, y: '0em', duration: 0.8, stagger: { amount: 0.5 }, ease: 'power2.out' },
           0.2
         );
 
-        // 2. The 4 Cards Enter after Heading 1 has settled
+        // 2. The 4 Witty IT Cards Enter sequentially and dwell so user can enjoy reading them
         cards.forEach((card, i) => {
           const cfg = cardConfigs[i];
-          const at = 0.9 + i * 0.22;
+          const at = 0.9 + i * 0.28;
 
           tl.to(card, {
             autoAlpha: 1,
@@ -4168,9 +4174,9 @@
             tl.to(card, {
               autoAlpha: () => (layoutMode === 'pile' ? 0 : 1),
               y: () => (layoutMode === 'pile' ? -25 : 0),
-              duration: 0.2,
+              duration: 0.25,
               ease: 'power2.in'
-            }, at + 0.20);
+            }, at + 0.24);
           }
         });
 
@@ -4186,68 +4192,20 @@
           }
         }, null, 1.4);
 
-        // 3. Blue Sheet engulfs viewport via Hardware-Accelerated CSS Inset
-        const blueClipObj = { progress: 0 };
-        tl.to(blueClipObj, {
-          progress: 1,
-          duration: 1.1,
-          ease: 'power2.inOut',
-          onUpdate: function() {
-            const p = blueClipObj.progress;
-            if (p >= 0.99) {
-              cover.style.clipPath = 'none';
-            } else {
-              const insetTop = (1 - p) * 100;
-              const curve = Math.sin(p * Math.PI) * 45;
-              cover.style.clipPath = `inset(${insetTop.toFixed(2)}% 0% 0% 0% round ${curve.toFixed(1)}% ${curve.toFixed(1)}% 0 0)`;
-            }
-          }
-        }, 1.9);
-
-        // Hide cards & heading1 underneath blue sheet
-        tl.to([heading1, ...cards], { autoAlpha: 0, duration: 0.35 }, 2.4);
-
-        // 4. STAGE 1: 3D Samaria Coin + Paragraph reveal
-        if (coinLink) {
-          tl.to(coinLink, {
-            autoAlpha: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.65,
-            ease: 'back.out(1.4)'
-          }, 2.8);
-        }
-
-        if (p1) {
-          tl.fromTo(p1,
-            { autoAlpha: 0, y: 20 },
-            { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-            2.9
-          );
-        }
-
-        // 5. User scrolls: Coin & Narrative text fade out TOGETHER in unified unison (ZERO stray floating words!)
-        const coinAndText = [coinLink, p1].filter(Boolean);
-        tl.to(coinAndText, {
+        // 3. Cards dwell serenely (2.2 to 2.8) so user reads them clearly on dark pebble leather
+        // 4. Settle & clean transition into #services (Dark Canvas #090a0f)
+        tl.to([heading1, ...cards], {
           autoAlpha: 0,
-          scale: 0.92,
-          y: -18,
-          duration: 0.45,
-          ease: 'power2.in'
-        }, 3.8);
-
-        // 6. Seamless color & texture bridge into #services (Dark Canvas #090a0f with tactile pebble bed)
-        tl.to(cover, {
-          autoAlpha: 0,
+          y: -20,
           duration: 0.5,
-          ease: 'power2.inOut'
-        }, 4.1);
+          ease: 'power2.in'
+        }, 2.9);
 
         tl.to(wrapper, {
           backgroundColor: '#090a0f',
           duration: 0.5,
           ease: 'power2.inOut'
-        }, 4.1);
+        }, 2.9);
       }
       // Export to window so they can be initialized in strict DOM order after MastromarinoShowcase
       window.initManifestoRunway = initManifestoRunway;
@@ -4696,15 +4654,14 @@
         const totalSlides = this.slides.length;
         const getDistance = () => (totalSlides - 1) * window.innerWidth;
 
-        // Stage begins with organic clip-path at bottom (100% seamless, zero friction lines)
+        // Full-bleed stationary exhibition stage - 100% seamless, zero clipping, zero dead space
         if (this.stageWrapper) {
           gsap.set(this.stageWrapper, {
-            yPercent: 0,
-            scale: 1,
+            clipPath: 'none',
             borderRadius: '0px',
             boxShadow: 'none',
-            clipPath: 'inset(100% 0% 0% 0% round 45% 45% 0 0)',
-            transformOrigin: 'center center'
+            yPercent: 0,
+            scale: 1
           });
         }
 
@@ -4722,15 +4679,15 @@
             },
             onLeave: () => {
               document.body.classList.remove('showcase-active');
-              // Seamless telemetry brown persistence into manifesto
+              // Seamless telemetry warm brown persistence into manifesto
               if (this.runway) {
-                this.runway.style.backgroundColor = '#0c0803';
-                this.runway.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #221608 0%, #0c0803 100%)';
+                this.runway.style.backgroundColor = '#130e06';
+                this.runway.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #2b1f0c 0%, #130e06 100%)';
                 this.runway.style.backgroundAttachment = 'scroll';
               }
               if (this.viewport) {
-                this.viewport.style.backgroundColor = '#0c0803';
-                this.viewport.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #221608 0%, #0c0803 100%)';
+                this.viewport.style.backgroundColor = '#130e06';
+                this.viewport.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #2b1f0c 0%, #130e06 100%)';
                 this.viewport.style.backgroundAttachment = 'scroll';
               }
             },
@@ -4746,83 +4703,43 @@
           }
         });
 
-        // Streamlined Runway: Zero Dead Space, Direct Swell into Active Project Slider
-        // Beat 1 (0.0 -> 0.25): Fast organic balloon swelling from preview card to full viewport
-        if (this.stageWrapper) {
-          const clipObj = { progress: 0 };
-          this.masterTl.to(clipObj, {
-            progress: 1,
-            duration: 0.25,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-              const p = clipObj.progress;
-              if (p >= 0.99) {
-                this.stageWrapper.style.clipPath = 'none';
-              } else {
-                const insetTop = (1 - p) * 14;
-                const insetX = (1 - p) * 5;
-                const curve = (1 - p) * 24;
-                this.stageWrapper.style.clipPath = `inset(${insetTop.toFixed(2)}% ${insetX.toFixed(2)}% 0% ${insetX.toFixed(2)}% round ${curve.toFixed(1)}px ${curve.toFixed(1)}px 0 0)`;
-              }
-            }
-          }, 0.0);
-        }
-
-        // Beat 2 (0.25 -> 3.55): Magnetic Detents & Dwell Inertia across all 5 projects
+        // Magnetic Detents & Dwell Inertia across all 5 projects
         // Each slide dwells in the center so user enjoys reading it and can click it without sliding past!
         const getSlideX = (i) => -(i * window.innerWidth);
-        // Slide 0: Dwell at x = 0 (0.25 to 0.55)
-        // Transition 0 -> 1: (0.55 to 1.00)
+        // Slide 0 (ZRU): Dwells from 0.00 to 0.35
+        // Transition 0 -> 1 (ZRU -> Kinetik): 0.35 to 0.75
         this.masterTl.to(this.track, {
           x: () => getSlideX(1),
-          duration: 0.45,
+          duration: 0.40,
           ease: 'power2.inOut'
-        }, 0.55);
+        }, 0.35);
 
-        // Slide 1: Dwell at x = -1 * vw (1.00 to 1.30)
-        // Transition 1 -> 2 (Clinical): (1.30 to 1.75)
+        // Slide 1 (Kinetik): Dwells from 0.75 to 1.10
+        // Transition 1 -> 2 (Kinetik -> Clinical): 1.10 to 1.50
         this.masterTl.to(this.track, {
           x: () => getSlideX(2),
-          duration: 0.45,
+          duration: 0.40,
           ease: 'power2.inOut'
-        }, 1.30);
+        }, 1.10);
 
-        // Slide 2: Dwell at x = -2 * vw (1.75 to 2.05)
-        // Transition 2 -> 3 (Pipeline): (2.05 to 2.50)
+        // Slide 2 (Clinical): Dwells from 1.50 to 1.85
+        // Transition 2 -> 3 (Clinical -> Pipeline): 1.85 to 2.25
         this.masterTl.to(this.track, {
           x: () => getSlideX(3),
-          duration: 0.45,
+          duration: 0.40,
           ease: 'power2.inOut'
-        }, 2.05);
+        }, 1.85);
 
-        // Slide 3: Dwell at x = -3 * vw (2.50 to 2.80)
-        // Transition 3 -> 4 (Telemetry): (2.80 to 3.25)
+        // Slide 3 (Pipeline): Dwells from 2.25 to 2.60
+        // Transition 3 -> 4 (Pipeline -> Telemetry): 2.60 to 3.00
         this.masterTl.to(this.track, {
           x: () => getSlideX(4),
-          duration: 0.45,
+          duration: 0.40,
           ease: 'power2.inOut'
-        }, 2.80);
+        }, 2.60);
 
-        // Slide 4: Dwell at x = -4 * vw (3.25 to 3.55)
-
-        // Beat 3 (3.55 -> 3.80): Settle & clean transition into Manifesto
-        const slide4Title = this.slides[4]?.querySelector('.m-showcase-display-title');
-        const slide4Meta = this.slides[4]?.querySelector('.m-project-meta-bottom');
-        if (slide4Title && slide4Meta) {
-          this.masterTl.to([slide4Title, slide4Meta], {
-            autoAlpha: 0,
-            y: -30,
-            duration: 0.25,
-            ease: 'power2.in'
-          }, 3.55);
-        }
-        if (this.dotsPager) {
-          this.masterTl.to(this.dotsPager, {
-            autoAlpha: 0,
-            duration: 0.25,
-            ease: 'power2.in'
-          }, 3.55);
-        }
+        // Slide 4 (Telemetry): Generous dwell from 3.00 to 3.45 (Stays 100% visible, zero premature fadeout!)
+        this.masterTl.to({}, { duration: 0.45 }, 3.00);
 
         // Continuous velocity decay loop: returns skew cleanly to 0 when scroll stops
         gsap.ticker.add(() => {
