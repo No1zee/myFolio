@@ -226,19 +226,19 @@
 
     @media (max-width: 991px) {
       .hero_section {
-        background-position: 50% 20%;
+        background-position: center 8% !important;
       }
       .hero_video-poster,
       .hero_freeze-frame,
       .hero_video-element {
-        object-position: 50% 20%;
+        object-position: center 8% !important;
       }
       .hero_caption-box {
-        min-height: 140px;
+        min-height: auto;
         max-width: 100%;
       }
       .hero_phrase-text {
-        font-size: clamp(2.1rem, 6.8vw, 3.4rem);
+        font-size: clamp(1.9rem, 6.5vw, 3.0rem);
       }
     }
 
@@ -312,13 +312,14 @@
         min-height: 100dvh;
         min-height: -webkit-fill-available;
       }
+      .hero_video-poster,
+      .hero_freeze-frame,
+      .hero_video-element {
+        object-position: center 8% !important;
+      }
       .hero_content-overlay {
         align-items: flex-end;
-        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.8rem, 4.0vh, 3.0rem));
-      }
-      .hero_phrase-text {
-        font-size: clamp(1.9rem, 7.2vw, 2.7rem) !important;
-        line-height: 1.12 !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.2rem, 3.0vh, 2.0rem)) !important;
       }
       .hero_caption-box {
         min-height: auto;
@@ -331,13 +332,14 @@
         transform: none;
       }
       .hero_phrase-text {
-        font-size: clamp(2.0rem, 6.2vw, 3.0rem);
+        font-size: clamp(1.65rem, 5.8vw, 2.25rem) !important;
+        line-height: 1.14 !important;
       }
       .hero_actions {
-        margin-top: clamp(1.2rem, 2.5vh, 2rem);
+        margin-top: 0.75rem !important;
       }
       .hero_scroll-indicator {
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
+        display: none !important;
       }
     }
 
@@ -720,15 +722,7 @@
        2. PINNED MANIFESTO RUNWAY & FLOATING PHYSICS CARDS
        ========================================================================== */
     .copy_section_test::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 380px;
-      pointer-events: none;
-      background: linear-gradient(to bottom, rgba(9, 10, 15, 0) 0%, rgba(9, 10, 15, 0.7) 60%, #090a0f 100%);
-      z-index: 25;
+      display: none !important;
     }
 
     .copy_section_test {
@@ -1077,73 +1071,6 @@
       border-color: transparent;
       transform: scale(1.08);
       opacity: 0.85;
-    }
-
-    /* 3D Samaria Coin Link & Canvas */
-    .samaria-coin-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      cursor: pointer;
-      position: relative;
-      z-index: 30;
-      margin-bottom: 1.5rem;
-      pointer-events: auto;
-    }
-
-    .samaria-coin-container {
-      width: clamp(120px, 14vw, 150px);
-      height: clamp(120px, 14vw, 150px);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: pan-y;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.5));
-    }
-
-    .samaria-coin-container:hover {
-      transform: scale(1.1) translateY(-4px);
-      filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.35));
-    }
-
-    #samariaCoinCanvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-      pointer-events: none;
-    }
-
-    .samaria-coin-callout {
-      margin-top: 1.5rem;
-      font-family: var(--font-mono, monospace);
-      font-size: clamp(0.85rem, 1.8vw, 1.05rem);
-      letter-spacing: 0.04em;
-      font-weight: 600;
-      color: #ffd700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 1.25rem;
-      border-radius: 999px;
-      background: rgba(255, 215, 0, 0.08);
-      border: 1px solid rgba(255, 215, 0, 0.28);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-      pointer-events: auto;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(16px);
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-    }
-    .samaria-coin-callout:hover {
-      background: rgba(255, 215, 0, 0.18);
-      border-color: rgba(255, 215, 0, 0.6);
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 6px 24px rgba(255, 215, 0, 0.25);
-      color: #ffffff;
     }
 
     /* Manifesto Multi-Stage Story Layout */
@@ -1655,9 +1582,9 @@
     .showcase-intro-section {
       position: relative;
       width: 100%;
-      background-color: #080d0a;
-      background-image: radial-gradient(circle at 60% 50%, #11261a 0%, #080d0a 100%);
-      padding: clamp(3.5rem, 7vh, 5.5rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vh, 3rem);
+      background-color: #06130d !important;
+      background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%) !important;
+      padding: clamp(2.5rem, 5vh, 4rem) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1904,9 +1831,9 @@
     }
 
     .has-expanded-slide .m-slide-close-btn {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, 0) scale(1);
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translate(-50%, 0) scale(1) !important;
     }
 
     .has-expanded-slide #mDotsPager {
@@ -2190,7 +2117,7 @@
     .m-showcase-display-title {
       position: relative;
       font-family: var(--font-display, sans-serif);
-      font-size: clamp(2.4rem, 8vw, 8.8rem);
+      font-size: clamp(1.8rem, 6.8vw, 7.2rem) !important;
       font-weight: 900;
       line-height: 0.95;
       letter-spacing: -0.04em;
@@ -2201,10 +2128,12 @@
       text-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
-      padding: 0 1.5rem;
-      max-width: 100vw;
+      padding: 0 1.0rem;
+      max-width: 96vw !important;
       box-sizing: border-box;
       white-space: nowrap !important;
+      word-break: keep-all !important;
+      overflow-wrap: normal !important;
       user-select: none;
       -webkit-user-select: none;
     }
@@ -2477,8 +2406,10 @@
 
     @media (max-width: 860px) {
       .m-showcase-display-title {
-        font-size: clamp(1.6rem, 7.8vw, 3.8rem);
+        font-size: clamp(1.5rem, 6.5vw, 3.2rem) !important;
         white-space: nowrap !important;
+        word-break: keep-all !important;
+        overflow-wrap: normal !important;
         padding: 0 0.5rem;
       }
       .m-modal__grid {
@@ -2638,8 +2569,7 @@
       <div class="m-slide-scroll-canvas">
         <div class="m-slide-hero-face">
           <div class="m-showcase-stage" data-flip-stage>
-                <div class="m-pebble-bed" aria-hidden="true"></div>
-                <div class="m-showcase-stage-bg" style="background: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);"></div>
+                
                 <div class="m-showcase-stage-overlay"></div>
                 <h2 class="m-showcase-display-title">ZRU MOCK</h2>
               </div>
@@ -2692,8 +2622,7 @@
       <div class="m-slide-scroll-canvas">
         <div class="m-slide-hero-face">
           <div class="m-showcase-stage" data-flip-stage>
-                <div class="m-pebble-bed" aria-hidden="true"></div>
-                <div class="m-showcase-stage-bg" style="background: radial-gradient(circle at 60% 40%, #161e47 0%, #090d1f 100%);"></div>
+                
                 <div class="m-showcase-stage-overlay"></div>
                 <h2 class="m-showcase-display-title">KINETIK</h2>
               </div>
@@ -2746,8 +2675,7 @@
       <div class="m-slide-scroll-canvas">
         <div class="m-slide-hero-face">
           <div class="m-showcase-stage" data-flip-stage>
-                <div class="m-pebble-bed" aria-hidden="true"></div>
-                <div class="m-showcase-stage-bg" style="background: radial-gradient(circle at 60% 40%, #122c36 0%, #081318 100%);"></div>
+                
                 <div class="m-showcase-stage-overlay"></div>
                 <h2 class="m-showcase-display-title">CLINICAL</h2>
               </div>
@@ -2800,8 +2728,7 @@
       <div class="m-slide-scroll-canvas">
         <div class="m-slide-hero-face">
           <div class="m-showcase-stage" data-flip-stage>
-                <div class="m-pebble-bed" aria-hidden="true"></div>
-                <div class="m-showcase-stage-bg" style="background: radial-gradient(circle at 60% 40%, #2a134a 0%, #0d0818 100%);"></div>
+                
                 <div class="m-showcase-stage-overlay"></div>
                 <h2 class="m-showcase-display-title">PIPELINE</h2>
               </div>
@@ -2854,8 +2781,7 @@
       <div class="m-slide-scroll-canvas">
         <div class="m-slide-hero-face">
           <div class="m-showcase-stage" data-flip-stage>
-                <div class="m-pebble-bed" aria-hidden="true"></div>
-                <div class="m-showcase-stage-bg" style="background: radial-gradient(circle at 60% 40%, #221608 0%, #0c0803 100%);"></div>
+                
                 <div class="m-showcase-stage-overlay"></div>
                 <h2 class="m-showcase-display-title">TELEMETRY</h2>
               </div>
@@ -3382,41 +3308,41 @@
         tl.to(phrase1, {
           autoAlpha: 0,
           y: -18,
-          duration: 0.50,
+          duration: 0.35,
           ease: 'power2.in'
-        }, 2.10);
+        }, 1.35);
 
         // 3. Phrase 2 ("I like building things that work") enters seamlessly at T = 2.65s
         tl.to(statementWrapper, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.95,
+          duration: 0.75,
           ease: 'power3.out',
           onComplete: () => {
             if (statementWrapper) statementWrapper.style.pointerEvents = 'auto';
           }
-        }, 2.65);
+        }, 1.60);
 
         // 4. Reveal Monogram Header "E" at T = 3.20s in sync with statement
-        tl.call(revealHeader, null, 3.20);
+        tl.call(revealHeader, null, 1.85);
 
         // 4b. Reveal CTAs and Animated Scroll Indicator in sync with statement settle
         tl.to(actionsGroup, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.70,
+          duration: 0.60,
           ease: 'power2.out',
           onComplete: () => {
             if (actionsGroup) actionsGroup.style.pointerEvents = 'auto';
           }
-        }, 3.20);
+        }, 1.85);
 
         tl.to(scrollIndicator, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.70,
+          duration: 0.60,
           ease: 'power2.out'
-        }, 3.40);
+        }, 2.05);
 
         // 5. Video deceleration curve and freeze frame synchronization
         if (video) {
@@ -3822,240 +3748,7 @@
       // 2. PINNED MANIFESTO RUNWAY & FLOATING PHYSICS CARDS
       // ------------------------------------------------------------------------
       
-      // ========================================================================
-      // 3D SAMARIA SOVEREIGN GOLD COIN ENGINE (Three.js)
-      // ========================================================================
-      function initSamariaCoin() {
-        const container = document.getElementById('samariaCoinContainer');
-        const canvas = document.getElementById('samariaCoinCanvas');
-        if (!container || !canvas || typeof THREE === 'undefined') return;
-
-        const w = container.clientWidth || 140;
-        const h = container.clientHeight || 140;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 50);
-        camera.position.set(0, 0, 4.4);
-
-        const renderer = new THREE.WebGLRenderer({
-          canvas: canvas,
-          alpha: true,
-          antialias: true,
-          powerPreference: 'high-performance'
-        });
-        renderer.setSize(w, h);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // 4-Point Studio Lighting Calibrated for 22K Sovereign Gold
-        const keyLight = new THREE.DirectionalLight(0xfffae8, 3.2);
-        keyLight.position.set(4.0, 5.0, 5.0);
-        scene.add(keyLight);
-
-        const fillLight = new THREE.DirectionalLight(0xffe8aa, 1.8);
-        fillLight.position.set(-4.0, -1.5, 3.5);
-        scene.add(fillLight);
-
-        const rimLight = new THREE.DirectionalLight(0xffffff, 2.5);
-        rimLight.position.set(-2.0, 4.0, -4.5);
-        scene.add(rimLight);
-
-        const gleamLight = new THREE.PointLight(0xfff5d8, 2.0, 15);
-        gleamLight.position.set(0, 2.5, 3.5);
-        scene.add(gleamLight);
-
-        const ambientLight = new THREE.AmbientLight(0xfff4d6, 0.85);
-        scene.add(ambientLight);
-
-        // Load Authentic 22K Sovereign Gold Textures from Samaria Production
-        const textureLoader = new THREE.TextureLoader();
-        const diffuseFront = textureLoader.load('./assets/coin/sovereign_diffuse.png', () => renderer.render(scene, camera));
-        const normalFront = textureLoader.load('./assets/coin/sovereign_normal.png', () => renderer.render(scene, camera));
-        const roughnessFront = textureLoader.load('./assets/coin/sovereign_roughness.png');
-
-        const diffuseBack = textureLoader.load('./assets/coin/sovereign_back_diffuse.png', () => renderer.render(scene, camera));
-        const normalBack = textureLoader.load('./assets/coin/sovereign_back_normal.png', () => renderer.render(scene, camera));
-        const roughnessBack = textureLoader.load('./assets/coin/sovereign_back_roughness.png');
-
-        const edgeDiffuse = textureLoader.load('./assets/coin/sovereign_edge_diffuse.png', () => renderer.render(scene, camera));
-
-        if (renderer.outputColorSpace) {
-          diffuseFront.colorSpace = THREE.SRGBColorSpace;
-          diffuseBack.colorSpace = THREE.SRGBColorSpace;
-          edgeDiffuse.colorSpace = THREE.SRGBColorSpace;
-        }
-        edgeDiffuse.wrapS = THREE.RepeatWrapping;
-        edgeDiffuse.repeat.set(6, 1);
-
-        const SOVEREIGN_GOLD = 0xdeb34a; // Authentic 22K Crown Gold alloy
-
-        const frontMaterial = new THREE.MeshPhysicalMaterial({
-          color: SOVEREIGN_GOLD,
-          metalness: 0.88,
-          roughness: 0.28,
-          roughnessMap: roughnessFront,
-          map: diffuseFront,
-          normalMap: normalFront,
-          normalScale: new THREE.Vector2(1.2, 1.2),
-          clearcoat: 0.35,
-          clearcoatRoughness: 0.2,
-          envMapIntensity: 1.4,
-        });
-
-        const backMaterial = new THREE.MeshPhysicalMaterial({
-          color: SOVEREIGN_GOLD,
-          metalness: 0.88,
-          roughness: 0.28,
-          roughnessMap: roughnessBack,
-          map: diffuseBack,
-          normalMap: normalBack,
-          normalScale: new THREE.Vector2(1.2, 1.2),
-          clearcoat: 0.35,
-          clearcoatRoughness: 0.2,
-          envMapIntensity: 1.4,
-        });
-
-        const edgeMaterial = new THREE.MeshPhysicalMaterial({
-          color: 0xc89d38,
-          metalness: 0.90,
-          roughness: 0.35,
-          map: edgeDiffuse,
-          bumpMap: edgeDiffuse,
-          bumpScale: 0.02,
-          envMapIntensity: 1.2,
-        });
-
-        // Cylinder Geometry with Explicit Planar UV Mapping
-        const COIN_RADIUS = 1.30;
-        const COIN_THICKNESS = 0.125;
-        const geometry = new THREE.CylinderGeometry(COIN_RADIUS, COIN_RADIUS, COIN_THICKNESS, 128, 1);
-        geometry.rotateX(Math.PI / 2);
-
-        const pos = geometry.attributes.position;
-        const uvs = geometry.attributes.uv;
-        for (let i = 0; i < pos.count; i++) {
-          const z = pos.getZ(i);
-          const x = pos.getX(i);
-          const y = pos.getY(i);
-          if (z > COIN_THICKNESS * 0.2) {
-            // Front face (Z+): perfectly upright, top at +Y
-            uvs.setXY(i, (x / (2 * COIN_RADIUS)) + 0.5, (y / (2 * COIN_RADIUS)) + 0.5);
-          } else if (z < -COIN_THICKNESS * 0.2) {
-            // Back face (Z-): perfectly upright & un-mirrored
-            uvs.setXY(i, (-x / (2 * COIN_RADIUS)) + 0.5, (y / (2 * COIN_RADIUS)) + 0.5);
-          }
-        }
-        uvs.needsUpdate = true;
-
-        const materials = [edgeMaterial, frontMaterial, backMaterial];
-        const coin = new THREE.Mesh(geometry, materials);
-        scene.add(coin);
-
-        // Raised Upset Rim Ring on both faces
-        const rimGeo = new THREE.TorusGeometry(COIN_RADIUS - 0.012, 0.018, 24, 128);
-        const rimMat = new THREE.MeshPhysicalMaterial({
-          color: 0xdeb34a,
-          metalness: 0.90,
-          roughness: 0.25,
-          clearcoat: 0.4,
-          envMapIntensity: 1.5,
-        });
-        const frontRim = new THREE.Mesh(rimGeo, rimMat);
-        frontRim.position.z = COIN_THICKNESS / 2;
-        coin.add(frontRim);
-
-        const backRim = new THREE.Mesh(rimGeo, rimMat);
-        backRim.position.z = -COIN_THICKNESS / 2;
-        coin.add(backRim);
-
-        // Initial orientation
-        coin.rotation.set(0.12, 0.25, 0.0);
-
-        // Interactive Drag & Tilt Physics
-        let isDragging = false;
-        let pointerStart = { x: 0, y: 0 };
-        let velocity = { x: 0, y: 0 };
-        let dragRotation = { x: 0.12, y: 0.25 };
-        let totalDragDistance = 0;
-
-        function getPoint(e) {
-          if (e.touches && e.touches.length > 0) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-          }
-          return { x: e.clientX, y: e.clientY };
-        }
-
-        container.addEventListener('pointerdown', (e) => {
-          isDragging = true;
-          totalDragDistance = 0;
-          const p = getPoint(e);
-          pointerStart.x = p.x;
-          pointerStart.y = p.y;
-          velocity.x = 0;
-          velocity.y = 0;
-          container.style.cursor = 'grabbing';
-          try { container.setPointerCapture(e.pointerId); } catch (_) {}
-        });
-
-        window.addEventListener('pointermove', (e) => {
-          if (!isDragging) return;
-          const p = getPoint(e);
-          const dx = p.x - pointerStart.x;
-          const dy = p.y - pointerStart.y;
-          totalDragDistance += Math.hypot(dx, dy);
-          pointerStart.x = p.x;
-          pointerStart.y = p.y;
-          velocity.x = dy * 0.005;
-          velocity.y = dx * 0.005;
-          dragRotation.x += velocity.x;
-          dragRotation.y += velocity.y;
-        });
-
-        window.addEventListener('pointerup', (e) => {
-          if (isDragging) {
-            isDragging = false;
-            container.style.cursor = 'pointer';
-            try { container.releasePointerCapture(e.pointerId); } catch (_) {}
-          }
-        });
-
-        window.addEventListener('pointercancel', (e) => {
-          if (isDragging) {
-            isDragging = false;
-            container.style.cursor = 'pointer';
-            try { container.releasePointerCapture(e.pointerId); } catch (_) {}
-          }
-        });
-
-        const coinLinkEl = container.closest('.samaria-coin-link') || container.parentElement;
-        if (coinLinkEl && coinLinkEl.tagName === 'A') {
-          coinLinkEl.addEventListener('click', (e) => {
-            if (totalDragDistance > 8) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          });
-        }
-
-        function animateCoin() {
-          requestAnimationFrame(animateCoin);
-
-          if (!isDragging) {
-            // Continuous idle spin
-            dragRotation.y += 0.012;
-            velocity.x *= 0.95;
-            velocity.y *= 0.95;
-            dragRotation.x += velocity.x;
-            dragRotation.y += velocity.y;
-          }
-
-          coin.rotation.x = dragRotation.x;
-          coin.rotation.y = dragRotation.y;
-
-          renderer.render(scene, camera);
-        }
-
-        animateCoin();
-      }
+      
 
       function initManifestoRunway() {
         const wrapper = document.querySelector('[data-scroll-section="wrapper"]');
@@ -4067,8 +3760,7 @@
         const overlay = wrapper.querySelector('[data-scroll-section="overlay"]');
         const stage1 = wrapper.querySelector('[data-manifesto-stage="1"]');
         const stage2 = wrapper.querySelector('[data-manifesto-stage="2"]');
-        const coinLink = wrapper.querySelector('.samaria-coin-link');
-        const p1 = wrapper.querySelector('[data-scroll-section="paragraph-1"]');
+                const p1 = wrapper.querySelector('[data-scroll-section="paragraph-1"]');
         const p2 = wrapper.querySelector('[data-scroll-section="paragraph-2"]');
         if (!container || !heading1) return;
 
@@ -4364,8 +4056,7 @@
       }
       // Export to window so they can be initialized in strict DOM order after MastromarinoShowcase
       window.initManifestoRunway = initManifestoRunway;
-      window.initSamariaCoin = initSamariaCoin;
-
+      
       // ------------------------------------------------------------------------
       // 6. SYNCED PROCESS STEPS ACCORDION
       // ------------------------------------------------------------------------
@@ -4456,25 +4147,24 @@
           gsap.from(['.services_h2', '.services_desc'], {
             scrollTrigger: {
               trigger: '#services',
-              start: 'top 80%'
+              start: 'top 85%'
             },
-            y: 35,
-            autoAlpha: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out'
+            y: 25,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power2.out'
           });
 
+          // Keep steps visible and stable (no artificial zero-alpha blackout)
           gsap.from(steps, {
             scrollTrigger: {
               trigger: '.process_accordion',
-              start: 'top 80%'
+              start: 'top 85%'
             },
-            y: 40,
-            autoAlpha: 0,
-            duration: 0.7,
-            stagger: 0.12,
-            ease: 'power3.out'
+            y: 20,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: 'power2.out'
           });
 
           // Scroll-driven auto-advancement through steps 01-04 as user scrolls through #services
@@ -4834,6 +4524,7 @@
             },
             onLeave: () => {
               document.body.classList.remove('showcase-active');
+              document.body.style.backgroundColor = '#130e06';
               // Seamless telemetry warm brown persistence into manifesto
               if (this.runway) {
                 this.runway.style.backgroundColor = '#130e06';
@@ -4851,6 +4542,7 @@
             },
             onLeaveBack: () => {
               document.body.classList.remove('showcase-active');
+              document.body.style.backgroundColor = '#090a0f';
             },
             onUpdate: (self) => {
               this.onScrollUpdate(self);
@@ -4859,42 +4551,42 @@
         });
 
         // Magnetic Detents & Dwell Inertia across all 5 projects
-        // Each slide dwells in the center so user enjoys reading it and can click it without sliding past!
+        // Generous plateau on every slide so inertia kicks in and user enjoys seamless dwell
         const getSlideX = (i) => -(i * window.innerWidth);
-        // Slide 0 (ZRU): Dwells from 0.00 to 0.35
-        // Transition 0 -> 1 (ZRU -> Kinetik): 0.35 to 0.75
+        // Slide 0 (ZRU): Dwells from 0.00 to 0.50
+        // Transition 0 -> 1 (ZRU -> Kinetik): 0.50 to 1.10
         this.masterTl.to(this.track, {
           x: () => getSlideX(1),
-          duration: 0.40,
+          duration: 0.60,
           ease: 'power2.inOut'
-        }, 0.35);
+        }, 0.50);
 
-        // Slide 1 (Kinetik): Dwells from 0.75 to 1.10
-        // Transition 1 -> 2 (Kinetik -> Clinical): 1.10 to 1.50
+        // Slide 1 (Kinetik): Dwells from 1.10 to 1.60
+        // Transition 1 -> 2 (Kinetik -> Clinical): 1.60 to 2.20
         this.masterTl.to(this.track, {
           x: () => getSlideX(2),
-          duration: 0.40,
+          duration: 0.60,
           ease: 'power2.inOut'
-        }, 1.10);
+        }, 1.60);
 
-        // Slide 2 (Clinical): Dwells from 1.50 to 1.85
-        // Transition 2 -> 3 (Clinical -> Pipeline): 1.85 to 2.25
+        // Slide 2 (Clinical): Dwells from 2.20 to 2.70
+        // Transition 2 -> 3 (Clinical -> Pipeline): 2.70 to 3.30
         this.masterTl.to(this.track, {
           x: () => getSlideX(3),
-          duration: 0.40,
+          duration: 0.60,
           ease: 'power2.inOut'
-        }, 1.85);
+        }, 2.70);
 
-        // Slide 3 (Pipeline): Dwells from 2.25 to 2.60
-        // Transition 3 -> 4 (Pipeline -> Telemetry): 2.60 to 3.00
+        // Slide 3 (Pipeline): Dwells from 3.30 to 3.80
+        // Transition 3 -> 4 (Pipeline -> Telemetry): 3.80 to 4.40
         this.masterTl.to(this.track, {
           x: () => getSlideX(4),
-          duration: 0.40,
+          duration: 0.60,
           ease: 'power2.inOut'
-        }, 2.60);
+        }, 3.80);
 
-        // Slide 4 (Telemetry): Generous dwell from 3.00 to 3.45 (Stays 100% visible, zero premature fadeout!)
-        this.masterTl.to({}, { duration: 0.45 }, 3.00);
+        // Slide 4 (Telemetry): Generous dwell from 4.40 to 5.00
+        this.masterTl.to({}, { duration: 0.60 }, 4.40);
 
         // Continuous velocity decay loop: returns skew cleanly to 0 when scroll stops
         gsap.ticker.add(() => {
@@ -4980,31 +4672,19 @@
         const activeGlow = lerpColor(PALETTE[segIdx].glow, PALETTE[segIdx + 1].glow, segT);
         const activeGrad = `radial-gradient(circle at 60% 40%, ${activeGlow} 0%, ${activeColor} 100%)`;
 
-        if (progress >= 0.06) {
-          if (this.viewport) {
-            this.viewport.style.backgroundColor = activeColor;
-            this.viewport.style.backgroundImage = activeGrad;
-            this.viewport.style.backgroundAttachment = 'scroll';
-            if (this.runway) {
-              this.runway.style.backgroundColor = activeColor;
-              this.runway.style.backgroundImage = activeGrad;
-              this.runway.style.backgroundAttachment = 'scroll';
-            }
-          }
-          if (this.stageWrapper) {
-            this.stageWrapper.style.backgroundColor = activeColor;
-            this.stageWrapper.style.backgroundImage = activeGrad;
-            this.stageWrapper.style.backgroundAttachment = 'scroll';
-          }
-        } else {
-          if (this.viewport) {
-            this.viewport.style.backgroundColor = 'rgb(6, 19, 13)';
-            this.viewport.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%)';
-          }
-          if (this.stageWrapper) {
-            this.stageWrapper.style.backgroundColor = 'rgb(6, 19, 13)';
-            this.stageWrapper.style.backgroundImage = 'radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%)';
-          }
+        // Seamlessly update viewport, runway, and body background color
+        document.body.style.backgroundColor = activeColor;
+        if (this.viewport) {
+          this.viewport.style.backgroundColor = activeColor;
+          this.viewport.style.backgroundImage = activeGrad;
+        }
+        if (this.runway) {
+          this.runway.style.backgroundColor = activeColor;
+          this.runway.style.backgroundImage = activeGrad;
+        }
+        if (this.stageWrapper) {
+          this.stageWrapper.style.backgroundColor = activeColor;
+          this.stageWrapper.style.backgroundImage = activeGrad;
         }
 
         // Fade out dots pager during Telemetry exit
@@ -5296,8 +4976,7 @@
       window.magneticCursor = new MagneticCursorEngine();
       window.mastromarinoShowcase = new MastromarinoShowcase();
       if (window.initManifestoRunway) window.initManifestoRunway();
-      if (window.initSamariaCoin) window.initSamariaCoin();
-      ScrollTrigger.refresh();
+            ScrollTrigger.refresh();
     });
 
   </script>
