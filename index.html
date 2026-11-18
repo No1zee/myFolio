@@ -1657,6 +1657,8 @@
       background-color: #06130d;
       background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
       z-index: 1200;
+      perspective: 1200px;
+      perspective-origin: 50% 50%;
     }
 
     /* Pretext Headline in Dark Space Before Balloon Engulfment */
@@ -1753,6 +1755,7 @@
       background: transparent !important;
       border: none;
       outline: none;
+      transform-style: preserve-3d;
     }
 
     /* Fixed Top HUD: Tag at Top-Left hidden to declutter slides */
@@ -1787,6 +1790,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      transform-style: preserve-3d;
     }
 
     
@@ -2050,6 +2054,7 @@
       padding: 0 !important;
       cursor: default !important;
       background: transparent !important;
+      transform-style: preserve-3d;
     }
 
     .m-showcase-slide.is-central {
@@ -2086,6 +2091,8 @@
       transform-style: preserve-3d;
       perspective: 1200px;
       will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2125,6 +2132,9 @@
       color: #ffffff;
       pointer-events: none;
       z-index: 4;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      overflow-wrap: normal !important;
       text-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
@@ -4437,8 +4447,16 @@
         this.header = document.querySelector('header');
         if (!this.runway || !this.track || typeof gsap === 'undefined') return;
 
-        this.currentVelocity = 0;
-        this.targetVelocity = 0;
+        // Robin Mastromarino Elastic Cylindrical Drum Physics State
+        this.drumPhysics = {
+          distortion: 0,
+          velocity: 0,
+          target: 0,
+          isIdle: true,
+          stiffness: 0.14,
+          damping: 0.60
+        };
+        this.activeExpandedSlide = null;
         this.activeOriginStage = null;
         this.colors = ['#06130d', '#090d1f', '#081318', '#0d0818', '#130e06'];
         this.gradients = [
@@ -4512,6 +4530,9 @@
 
         // Master pinned ScrollTrigger timeline with crisp 0.5 scrub
         this.masterTl = gsap.timeline({
+          onUpdate: () => {
+            this.onScrollUpdate(this.masterTl ? this.masterTl.scrollTrigger : null);
+          },
           scrollTrigger: {
             trigger: this.runway,
             start: 'top top',
@@ -4605,9 +4626,17 @@
           }
         }
 
-        // Elastic velocity tracking
-        const vel = self.getVelocity() * 0.001;
-        this.targetVelocity = vel;
+        // 3D Elastic Cylindrical Drum Velocity Tracking
+        if (!this.activeExpandedSlide) {
+          const scrollVel = (self && typeof self.getVelocity === 'function') ? self.getVelocity() : 0;
+          const normVel = scrollVel * 0.0009;
+          const clampedVel = Math.max(-2.4, Math.min(2.4, normVel));
+
+          if (Math.abs(clampedVel) > 0.002 || Math.abs(this.drumPhysics.distortion) > 0.001) {
+            this.drumPhysics.target = clampedVel;
+            this.drumPhysics.isIdle = false;
+          }
+        }
 
         // TEXT-FIRST SLIDE TRANSITION: Zero reflow mathematical parallax lead
         const vpWidth = window.innerWidth || 1;
@@ -4709,30 +4738,103 @@
       }
 
       updateElasticDistortion() {
-        // If stationary, early return to conserve 100% CPU and prevent any micro-jitter
-        if (Math.abs(this.currentVelocity) < 0.0001 && Math.abs(this.targetVelocity) < 0.0001) {
-          if (this.currentVelocity !== 0 || this.targetVelocity !== 0) {
-            this.currentVelocity = 0;
-            this.targetVelocity = 0;
-            this.slides.forEach((slide) => {
-              const stageBg = slide.querySelector('.m-showcase-stage-bg');
-              if (stageBg) stageBg.style.transform = '';
-            });
+        // If a slide is currently expanded, lock all transforms flat and conserve CPU
+        if (this.activeExpandedSlide) {
+          if (!this.drumPhysics.isIdle) {
+            this.resetSlideDistortions();
+            this.drumPhysics.distortion = 0;
+            this.drumPhysics.velocity = 0;
+            this.drumPhysics.target = 0;
+            this.drumPhysics.isIdle = true;
           }
           return;
         }
 
-        // Smoothly decay velocity
-        this.currentVelocity += (this.targetVelocity - this.currentVelocity) * 0.22;
-        this.targetVelocity *= 0.82;
+        // 100% idle conservation when motion has settled
+        if (this.drumPhysics.isIdle) {
+          return;
+        }
 
-        const clampedSkew = Math.max(-5, Math.min(5, this.currentVelocity * 0.9));
-        const clampedRotateY = Math.max(-7, Math.min(7, this.currentVelocity * 1.1));
+        // Smoothly decay target velocity when scroll input pauses
+        this.drumPhysics.target *= 0.50;
+        if (Math.abs(this.drumPhysics.target) < 0.003) {
+          this.drumPhysics.target = 0;
+        }
 
+        // Damped harmonic oscillator with calibrated spring overshoot (back.out feel)
+        const force = (this.drumPhysics.target - this.drumPhysics.distortion) * this.drumPhysics.stiffness;
+        this.drumPhysics.velocity = (this.drumPhysics.velocity + force) * this.drumPhysics.damping;
+        this.drumPhysics.distortion += this.drumPhysics.velocity;
+
+        // Snapping back flat to normal when spring settles
+        if (
+          Math.abs(this.drumPhysics.target) < 0.004 &&
+          Math.abs(this.drumPhysics.distortion) < 0.008 &&
+          Math.abs(this.drumPhysics.velocity) < 0.005
+        ) {
+          this.drumPhysics.distortion = 0;
+          this.drumPhysics.velocity = 0;
+          this.drumPhysics.target = 0;
+          this.drumPhysics.isIdle = true;
+          this.resetSlideDistortions();
+          return;
+        }
+
+        // Render 3D cylindrical drum distortion onto stage elements
+        this.renderCylindricalDrum(this.drumPhysics.distortion);
+      }
+
+      renderCylindricalDrum(v) {
+        const vpWidth = window.innerWidth || 1;
+        const isMobile = vpWidth < 768;
+        const currentTrackX = gsap.getProperty(this.track, 'x') || 0;
+        const absV = Math.abs(v);
+
+        // Elastic shear skewX proportional to velocity
+        const skewFactor = isMobile ? 1.4 : 2.2;
+        const skewX = -v * skewFactor;
+
+        // Angular tilt & cylindrical curvature factors
+        const rotTiltFactor = isMobile ? 2.2 : 3.2;
+        const drumCurveFactor = isMobile ? 4.8 : 7.2;
+
+        this.slides.forEach((slide, idx) => {
+          if (slide.classList.contains('is-expanded')) return;
+
+          const slideX = idx * vpWidth + currentTrackX;
+          const normDist = slideX / vpWidth; // 0 when centered, -1 left, +1 right
+
+          // Viewport culling: only transform slides in or immediately adjacent to viewport
+          if (normDist < -1.8 || normDist > 1.8) {
+            const stage = slide.querySelector('.m-showcase-stage');
+            if (stage && stage.style.transform) stage.style.transform = '';
+            return;
+          }
+
+          // Elastic Cylindrical Drum Formula:
+          // Δz = -k * vx * (x - x_center)^2
+          // Off-center sections curve backwards into depth proportional to normDist^2
+          const normDistSq = normDist * normDist;
+          const tzCurve = isMobile ? 80 : 120;
+          const tz = -absV * (tzCurve * normDistSq);
+
+          // rotateY: Drum tangent curvature + kinetic velocity tilt
+          // Elements to the right (normDist > 0) rotate positive to follow receding drum curvature
+          // Elements to the left (normDist < 0) rotate negative
+          const rotY = -v * rotTiltFactor + normDist * absV * drumCurveFactor;
+
+          const stage = slide.querySelector('.m-showcase-stage');
+          if (stage) {
+            stage.style.transform = `perspective(1200px) translate3d(0, 0, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) skewX(${skewX.toFixed(2)}deg)`;
+          }
+        });
+      }
+
+      resetSlideDistortions() {
         this.slides.forEach((slide) => {
-          const stageBg = slide.querySelector('.m-showcase-stage-bg');
-          if (stageBg) {
-            stageBg.style.transform = `skewX(${clampedSkew.toFixed(3)}deg) rotateY(${clampedRotateY.toFixed(3)}deg)`;
+          const stage = slide.querySelector('.m-showcase-stage');
+          if (stage && stage.style.transform) {
+            stage.style.transform = '';
           }
         });
       }
@@ -4740,6 +4842,13 @@
       openSlideDetail(slide) {
         if (!slide) return;
         if (slide.classList.contains('is-expanded')) return;
+
+        // Reset all slide distortions immediately so expanded reading mode is 100% flat
+        this.resetSlideDistortions();
+        this.drumPhysics.distortion = 0;
+        this.drumPhysics.velocity = 0;
+        this.drumPhysics.target = 0;
+        this.drumPhysics.isIdle = true;
 
         // Close any currently open slide
         this.slides.forEach(s => {
@@ -4781,6 +4890,11 @@
             window.lenis.start();
           }
           this.activeExpandedSlide = null;
+          this.resetSlideDistortions();
+          this.drumPhysics.distortion = 0;
+          this.drumPhysics.velocity = 0;
+          this.drumPhysics.target = 0;
+          this.drumPhysics.isIdle = true;
         };
 
         if (slide.scrollTop > 10) {
@@ -4848,8 +4962,8 @@
         });
 
         // Dots pager click navigation aligns to dwell plateaus
-        const dwellTimes = [0.40, 1.15, 1.90, 2.65, 3.40];
-        const totalTlDuration = 3.80;
+        const dwellTimes = [0.25, 1.35, 2.45, 3.55, 4.70];
+        const totalTlDuration = 5.00;
         this.dots.forEach((dot) => {
           dot.addEventListener('click', () => {
             const index = parseInt(dot.dataset.dotIndex, 10);
