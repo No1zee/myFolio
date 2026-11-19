@@ -28,6 +28,7 @@
       border: none;
       background: #090a0f url('./assets/edward_intro_poster.jpg') no-repeat center center / cover;
       overflow: hidden;
+      touch-action: pan-y;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -410,7 +411,17 @@
       padding: 0;
     }
 
-    html, body {
+    html {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      min-height: 100dvh;
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
       min-height: 100vh;
       min-height: -webkit-fill-available;
       min-height: 100dvh;
@@ -418,9 +429,7 @@
       background-color: var(--bg-canvas);
       color: var(--color-text-primary);
       font-family: var(--font-body);
-      overflow-x: hidden;
-      overscroll-behavior: none;
-      overscroll-behavior-y: none;
+      overflow-x: clip;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -736,7 +745,6 @@
       background-attachment: scroll;
       text-align: center;
       display: block;
-      overscroll-behavior: none;
     }
 
     /* The Signature Blue Balloon Dome (Hardware Accelerated Organic Swell) */
@@ -827,7 +835,6 @@
       padding-left: clamp(1.5rem, 5vw, 4rem);
       padding-right: clamp(1.5rem, 5vw, 4rem);
       overflow: hidden;
-      overscroll-behavior: none;
       pointer-events: auto;
     }
 
@@ -1643,7 +1650,6 @@
       border: none;
       margin: 0;
       padding: 0;
-      overscroll-behavior: none;
     }
 
     .mastromarino-sticky-viewport {
@@ -1664,7 +1670,6 @@
       -webkit-perspective: 1200px;
       perspective-origin: 50% 50%;
       -webkit-perspective-origin: 50% 50%;
-      overscroll-behavior: none;
     }
 
     /* Pretext Headline in Dark Space Before Balloon Engulfment */
@@ -3316,7 +3321,7 @@
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        smoothTouch: false,
+        syncTouch: true,
         prevent: (node) => {
           const el = (node && node.nodeType === 1) ? node : (node && node.parentElement);
           return Boolean(el && typeof el.closest === 'function' && el.closest('.is-expanded'));
