@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="lenis lenis-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0" />
@@ -21,13 +21,13 @@
       height: 100vh;
       height: 100dvh;
       min-height: 100vh;
-      min-height: -webkit-fill-available;
       min-height: 100dvh;
       margin: 0;
       padding: 0;
       border: none;
       background: #090a0f url('./assets/edward_intro_poster.jpg') no-repeat center center / cover;
-      overflow: hidden;
+      overflow: visible;
+      overflow-x: clip;
       touch-action: pan-y;
       display: flex;
       align-items: center;
@@ -311,8 +311,9 @@
     @media (max-width: 768px) {
       .hero_section {
         min-height: 100vh;
-        min-height: -webkit-fill-available;
         min-height: 100dvh;
+        overflow: visible;
+        overflow-x: clip;
       }
       .hero_video-poster,
       .hero_freeze-frame,
@@ -412,26 +413,27 @@
     }
 
     html {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      min-height: 100dvh;
       width: 100%;
-      overflow-x: hidden;
+      min-height: 100%;
+      -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      min-height: 100dvh;
       width: 100%;
+      min-height: 100%;
       background-color: var(--bg-canvas);
       color: var(--color-text-primary);
       font-family: var(--font-body);
-      overflow-x: clip;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    main {
+      width: 100%;
+      overflow-x: clip;
+      position: relative;
     }
 
     ::selection {
@@ -835,6 +837,7 @@
       padding-left: clamp(1.5rem, 5vw, 4rem);
       padding-right: clamp(1.5rem, 5vw, 4rem);
       overflow: hidden;
+      touch-action: pan-y;
       pointer-events: auto;
     }
 
@@ -1660,6 +1663,7 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
+      touch-action: pan-y;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -3315,25 +3319,32 @@
       ScrollTrigger.config({ ignoreMobileResize: true });
       initHeroVideoChoreography();
 
-      // 8. ENGINE SYNCHRONIZATION: LENIS + GSAP TICKER
+      // 8. ENGINE SYNCHRONIZATION: LENIS (DESKTOP) + NATIVE 120HZ TOUCH (MOBILE)
       // ------------------------------------------------------------------------
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        syncTouch: true,
-        prevent: (node) => {
-          const el = (node && node.nodeType === 1) ? node : (node && node.parentElement);
-          return Boolean(el && typeof el.closest === 'function' && el.closest('.is-expanded'));
-        }
-      });
-      window.lenis = lenis;
+      const isMobileTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
+      let lenis = null;
+      if (!isMobileTouch && typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          syncTouch: false,
+          prevent: (node) => {
+            const el = (node && node.nodeType === 1) ? node : (node && node.parentElement);
+            return Boolean(el && typeof el.closest === 'function' && el.closest('.is-expanded'));
+          }
+        });
+        window.lenis = lenis;
+
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        window.lenis = null;
+      }
 
       // ------------------------------------------------------------------------
       // 7. DYNAMIC MAGNETIC FLUID CURSOR WITH CAPSULE TEXT PILL
