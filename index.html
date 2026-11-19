@@ -21,8 +21,8 @@
       height: 100vh;
       height: 100dvh;
       min-height: 100vh;
-      min-height: 100dvh;
       min-height: -webkit-fill-available;
+      min-height: 100dvh;
       margin: 0;
       padding: 0;
       border: none;
@@ -310,8 +310,8 @@
     @media (max-width: 768px) {
       .hero_section {
         min-height: 100vh;
-        min-height: 100dvh;
         min-height: -webkit-fill-available;
+        min-height: 100dvh;
       }
       .hero_video-poster,
       .hero_freeze-frame,
@@ -412,13 +412,14 @@
 
     html, body {
       min-height: 100vh;
-      min-height: 100dvh;
       min-height: -webkit-fill-available;
+      min-height: 100dvh;
       width: 100%;
       background-color: var(--bg-canvas);
       color: var(--color-text-primary);
       font-family: var(--font-body);
       overflow-x: hidden;
+      overscroll-behavior: none;
       overscroll-behavior-y: none;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -735,6 +736,7 @@
       background-attachment: scroll;
       text-align: center;
       display: block;
+      overscroll-behavior: none;
     }
 
     /* The Signature Blue Balloon Dome (Hardware Accelerated Organic Swell) */
@@ -825,6 +827,7 @@
       padding-left: clamp(1.5rem, 5vw, 4rem);
       padding-right: clamp(1.5rem, 5vw, 4rem);
       overflow: hidden;
+      overscroll-behavior: none;
       pointer-events: auto;
     }
 
@@ -1658,7 +1661,9 @@
       background-image: radial-gradient(circle at 60% 40%, #173522 0%, #06130d 100%);
       z-index: 1200;
       perspective: 1200px;
+      -webkit-perspective: 1200px;
       perspective-origin: 50% 50%;
+      -webkit-perspective-origin: 50% 50%;
       overscroll-behavior: none;
     }
 
@@ -1859,6 +1864,10 @@
       position: relative;
       background: transparent !important;
       background-image: none !important;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     /* Continuous Project Backgrounds ONLY active when a slide is expanded */
@@ -1900,6 +1909,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
@@ -1911,6 +1922,7 @@
       cursor: default;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
+      touch-action: pan-y;
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
@@ -2106,6 +2118,9 @@
       transform-style: preserve-3d;
       -webkit-transform-style: preserve-3d;
       perspective: 1200px;
+      -webkit-perspective: 1200px;
+      perspective-origin: 50% 50%;
+      -webkit-perspective-origin: 50% 50%;
       will-change: transform;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
@@ -3302,7 +3317,10 @@
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         smoothTouch: false,
-        prevent: (node) => node.closest('.is-expanded') !== null
+        prevent: (node) => {
+          const el = (node && node.nodeType === 1) ? node : (node && node.parentElement);
+          return Boolean(el && typeof el.closest === 'function' && el.closest('.is-expanded'));
+        }
       });
       window.lenis = lenis;
 
@@ -4498,13 +4516,15 @@
           const title = slide.querySelector('.m-showcase-display-title');
           const meta = slide.querySelector('.m-project-meta-bottom');
 
-          if (title) {
-            const titleShift = normDist * (vpWidth * 0.28);
-            title.style.transform = `translateX(${titleShift.toFixed(2)}px)`;
-          }
-          if (meta) {
-            const metaShift = normDist * (vpWidth * 0.14);
-            meta.style.transform = `translateX(${metaShift.toFixed(2)}px)`;
+          if (!slide.classList.contains('is-expanded')) {
+            if (title) {
+              const titleShift = normDist * (vpWidth * 0.28);
+              title.style.transform = `translate3d(${titleShift.toFixed(2)}px, 0, 0)`;
+            }
+            if (meta) {
+              const metaShift = normDist * (vpWidth * 0.14);
+              meta.style.transform = `translate3d(${metaShift.toFixed(2)}px, 0, 0)`;
+            }
           }
         });
 
@@ -4676,6 +4696,14 @@
           const stage = slide.querySelector('.m-showcase-stage');
           if (stage && stage.style.transform) {
             stage.style.transform = '';
+          }
+          const title = slide.querySelector('.m-showcase-display-title');
+          if (title && title.style.transform) {
+            title.style.transform = '';
+          }
+          const meta = slide.querySelector('.m-project-meta-bottom');
+          if (meta && meta.style.transform) {
+            meta.style.transform = '';
           }
         });
       }
